@@ -12,6 +12,14 @@
 
 set -euo pipefail
 
+# ─── Load .env if present ─────────────────────────────────────
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f "$SCRIPT_DIR/.env" ]]; then
+    set -a
+    source "$SCRIPT_DIR/.env"
+    set +a
+fi
+
 # ─── Config ───────────────────────────────────────────────────
 RESOURCE_GROUP="perf-agent-website-rg"
 CONTAINER_APP_NAME="perf-agent-website"
@@ -130,7 +138,7 @@ deploy_website() {
         --name "$CONTAINER_APP_NAME" \
         --resource-group "$RESOURCE_GROUP" \
         --image "${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG}" \
-        --set-env-vars NODE_ENV=production PORT=8000 \
+        --set-env-vars NODE_ENV=production PORT=8000 GITHUB_TOKEN="${GITHUB_TOKEN:-}" \
         -o none
 
     ok "Container App updated"
@@ -166,7 +174,7 @@ deploy_full() {
         --name "$CONTAINER_APP_NAME" \
         --resource-group "$RESOURCE_GROUP" \
         --image "${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG}" \
-        --set-env-vars NODE_ENV=production PORT=8000 \
+        --set-env-vars NODE_ENV=production PORT=8000 GITHUB_TOKEN="${GITHUB_TOKEN:-}" \
         -o none
 
     ok "Container App updated"

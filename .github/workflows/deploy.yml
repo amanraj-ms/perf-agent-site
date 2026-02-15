@@ -123,7 +123,7 @@ jobs:
           --name ${{ env.CONTAINER_APP_NAME }} \
           --resource-group ${{ env.RESOURCE_GROUP }} \
           --image ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.image_tag }} \
-          --set-env-vars NODE_ENV=production PORT=8000
+          --set-env-vars NODE_ENV=production PORT=8000 GITHUB_TOKEN=${{ secrets.GH_RELEASES_TOKEN }}
 
     - name: 🔧 Configure Ingress
       run: |

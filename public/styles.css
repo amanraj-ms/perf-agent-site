@@ -251,6 +251,68 @@ img { max-width: 100%; display: block; }
   background: var(--primary-dark); border-color: var(--primary-dark); color: #fff;
 }
 .dl-btn--primary:hover { background: var(--primary); border-color: var(--primary); }
+.dl-btn--sm { padding: 4px 10px; font-size: 0.75rem; }
+.dl-loading { text-align: center; padding: 24px; color: var(--text-muted); font-size: 0.9rem; }
+.dl-error { color: #ef4444; }
+.dl-platform-hint { display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+.dl-downloads { font-size: 0.82rem; color: var(--text-muted); white-space: nowrap; }
+
+/* Release badge */
+.release-badge {
+  display: flex; align-items: center; gap: 12px; justify-content: center;
+  margin-bottom: 24px;
+}
+.release-badge__tag {
+  background: var(--primary-dark); color: #fff; padding: 4px 14px;
+  border-radius: var(--radius-xs); font-weight: 700; font-size: 0.9rem;
+}
+.release-badge__date { color: var(--text-muted); font-size: 0.85rem; }
+
+/* Releases history */
+.releases-history {
+  margin-top: 48px; background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 32px;
+}
+.releases-history h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; }
+.releases-list { display: flex; flex-direction: column; gap: 12px; }
+
+.release-card {
+  border: 1px solid var(--border); border-radius: var(--radius-xs);
+  overflow: hidden; transition: border-color var(--transition);
+}
+.release-card[open] { border-color: var(--primary-dark); }
+.release-card__header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 20px; cursor: pointer; user-select: none;
+  background: var(--bg); transition: background var(--transition);
+}
+.release-card__header:hover { background: rgba(99, 102, 241, 0.04); }
+.release-card__title { display: flex; align-items: center; gap: 10px; }
+.release-card__tag { font-weight: 700; font-size: 0.95rem; }
+.release-card__badge {
+  background: var(--accent); color: #fff; padding: 2px 8px;
+  border-radius: 9999px; font-size: 0.7rem; font-weight: 700;
+}
+.release-card__badge--pre { background: #f59e0b; }
+.release-card__date { color: var(--text-muted); font-size: 0.82rem; }
+.release-card__body { padding: 16px 20px; border-top: 1px solid var(--border); }
+.release-card__notes {
+  font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.release-card__notes h3, .release-card__notes h4 { color: var(--text); margin: 12px 0 6px; font-size: 0.95rem; }
+.release-card__notes ul { padding-left: 20px; margin: 8px 0; }
+.release-card__notes li { margin: 4px 0; }
+.release-card__notes code { background: var(--bg-alt); padding: 1px 5px; border-radius: 3px; font-size: 0.82rem; }
+.release-card__assets h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 10px; color: var(--text-muted); }
+.release-asset {
+  display: flex; align-items: center; gap: 12px; padding: 8px 12px;
+  border: 1px solid var(--border); border-radius: var(--radius-xs);
+  margin-bottom: 6px; font-size: 0.82rem;
+}
+.release-asset__name { font-family: 'JetBrains Mono', monospace; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.release-asset__size { color: var(--text-muted); white-space: nowrap; }
+.release-asset__count { color: var(--text-muted); white-space: nowrap; font-size: 0.75rem; }
 
 /* Install Instructions (redesigned) */
 .install-instructions {
@@ -732,6 +794,11 @@ img { max-width: 100%; display: block; }
   .dl-row td { padding: 10px 12px; }
   .dl-os span { display: none; }
   .dl-btn { padding: 4px 10px; font-size: 0.78rem; }
+
+  .release-asset { flex-wrap: wrap; gap: 6px; }
+  .release-asset__name { min-width: 100%; }
+  .release-card__header { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .releases-history { padding: 20px; }
 
   .nav-links { 
     display: none; flex-direction: column; position: absolute;
