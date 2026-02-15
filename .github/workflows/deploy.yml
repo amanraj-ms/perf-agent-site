@@ -1,0 +1,185 @@
+name: 🚀 Deploy Performance Agent Website
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy (type any branch name)'
+        required: true
+        default: 'main'
+        type: string
+      deploy_mode:
+        description: 'Deployment mode'
+        required: true
+        default: 'website'
+        type: choice
+        options:
+          - website
+          - full
+
+env:
+  RESOURCE_GROUP: perf-agent-website-rg
+  CONTAINER_APP_NAME: perf-agent-website
+  ACR_NAME: perfagentwebsite
+  IMAGE_NAME: perf-agent-website
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # ── Resolve branch & mode ─────────────────────────────────
+    - name: 🎯 Determine branch & mode
+      id: config
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          BRANCH="${{ inputs.branch }}"
+          MODE="${{ inputs.deploy_mode }}"
+        else
+          BRANCH="${{ github.ref_name }}"
+          MODE="auto"
+        fi
+        echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+        echo "mode=$MODE"     >> $GITHUB_OUTPUT
+        echo "📍 Branch: $BRANCH | Mode: $MODE"
+
+    # ── Checkout ──────────────────────────────────────────────
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ steps.config.outputs.branch }}
+        fetch-depth: 2
+
+    # ── Auto-detect mode on push ──────────────────────────────
+    - name: 🔍 Auto-detect deploy mode (push only)
+      id: detect
+      run: |
+        MODE="${{ steps.config.outputs.mode }}"
+        if [ "$MODE" = "auto" ]; then
+          CHANGED=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
+          if echo "$CHANGED" | grep -qE '^(package\.json|package-lock\.json)'; then
+            MODE="full"
+            echo "📦 package.json changed → full rebuild"
+          else
+            MODE="website"
+            echo "🌐 No dependency changes → website-only deploy"
+          fi
+        fi
+        echo "mode=$MODE" >> $GITHUB_OUTPUT
+        echo "✅ Deploy mode: $MODE"
+
+    # ── Azure login ───────────────────────────────────────────
+    - name: ☁️ Log in to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: 🔐 Log in to ACR
+      run: az acr login --name ${{ env.ACR_NAME }}
+
+    # ── Build: website-only (uses Docker layer cache) ─────────
+    - name: 🌐 Build image — website only (cached node_modules)
+      if: steps.detect.outputs.mode == 'website'
+      run: |
+        IMAGE_TAG="web-$(date +%Y%m%d%H%M%S)"
+        echo "image_tag=$IMAGE_TAG" >> $GITHUB_ENV
+
+        echo "🏗️ Building with layer cache (skip npm install)..."
+        docker build \
+          -t ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${IMAGE_TAG} \
+          -t ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest \
+          --cache-from ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest \
+          .
+
+        docker push ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${IMAGE_TAG}
+        docker push ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
+        echo "✅ Website-only image pushed"
+
+    # ── Build: full (no cache — fresh npm install) ────────────
+    - name: 📦 Build image — full rebuild (fresh node_modules)
+      if: steps.detect.outputs.mode == 'full'
+      run: |
+        IMAGE_TAG="full-$(date +%Y%m%d%H%M%S)"
+        echo "image_tag=$IMAGE_TAG" >> $GITHUB_ENV
+
+        echo "🏗️ Building without cache (fresh npm install)..."
+        docker build \
+          -t ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${IMAGE_TAG} \
+          -t ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest \
+          --no-cache \
+          .
+
+        docker push ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${IMAGE_TAG}
+        docker push ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
+        echo "✅ Full image pushed"
+
+    # ── Deploy ────────────────────────────────────────────────
+    - name: 🚀 Deploy to Azure Container Apps
+      run: |
+        az containerapp update \
+          --name ${{ env.CONTAINER_APP_NAME }} \
+          --resource-group ${{ env.RESOURCE_GROUP }} \
+          --image ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.image_tag }} \
+          --set-env-vars NODE_ENV=production PORT=8000
+
+    - name: 🔧 Configure Ingress
+      run: |
+        az containerapp ingress update \
+          --name ${{ env.CONTAINER_APP_NAME }} \
+          --resource-group ${{ env.RESOURCE_GROUP }} \
+          --target-port 8000
+
+    # ── Health check ──────────────────────────────────────────
+    - name: 🏥 Health check
+      run: |
+        APP_URL=$(az containerapp show \
+          --name ${{ env.CONTAINER_APP_NAME }} \
+          --resource-group ${{ env.RESOURCE_GROUP }} \
+          --query properties.configuration.ingress.fqdn -o tsv)
+
+        echo "⏳ Waiting 30s for new revision..."
+        sleep 30
+
+        for i in {1..5}; do
+          if curl -sf "https://$APP_URL/health" -o /dev/null; then
+            echo "✅ Health check passed!"
+            curl -s "https://$APP_URL/health" | jq '.' || true
+            break
+          fi
+          echo "⚠️ Attempt $i/5 failed, retrying in 10s..."
+          sleep 10
+          if [ $i -eq 5 ]; then
+            echo "❌ Health check failed"
+            az containerapp logs show \
+              --name ${{ env.CONTAINER_APP_NAME }} \
+              --resource-group ${{ env.RESOURCE_GROUP }} \
+              --tail 20 || true
+            exit 1
+          fi
+        done
+
+    # ── Summary ───────────────────────────────────────────────
+    - name: ✅ Deployment Summary
+      if: always()
+      run: |
+        APP_URL=$(az containerapp show \
+          --name ${{ env.CONTAINER_APP_NAME }} \
+          --resource-group ${{ env.RESOURCE_GROUP }} \
+          --query properties.configuration.ingress.fqdn -o tsv)
+
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        if [ "${{ job.status }}" = "success" ]; then
+          echo "✅ Deployment Successful!"
+        else
+          echo "❌ Deployment Failed!"
+        fi
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "  Branch: ${{ steps.config.outputs.branch }}"
+        echo "  Mode:   ${{ steps.detect.outputs.mode }}"
+        echo "  Image:  ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ env.image_tag }}"
+        echo "  URL:    https://$APP_URL"
+        echo "  Health: https://$APP_URL/health"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

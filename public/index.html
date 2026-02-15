@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Performance Agent — AI-Powered Developer Tools for VS Code</title>
+  <meta name="description" content="AI-powered code analysis, auto-fix, OpenAPI generation, and performance testing — all from GitHub Copilot Chat. Shift left with intelligent developer tools." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        <span class="logo-icon">⚡</span>
+        <span>Performance Agent</span>
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="#features">Features</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#tools">Tools</a>
+        <a href="#downloads">Downloads</a>
+        <a href="#getting-started">Get Started</a>
+        <a href="https://github.com/amanraj-ms/copilot-perf-agent" class="nav-btn" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">Open Source &middot; MCP Powered &middot; VS Code Extension &middot; Shift Left</div>
+        <h1>AI-Powered<br />Developer Tools</h1>
+        <p class="hero-subtitle">
+          Code analysis, auto-fix, OpenAPI generation, and performance testing &mdash;
+          all from GitHub Copilot Chat. Catch issues before they ship. No API keys needed.
+        </p>
+        <div class="hero-pipeline">
+          <span class="pipeline-step">Commit</span>
+          <span class="pipeline-arrow">&rarr;</span>
+          <span class="pipeline-step">Analyze</span>
+          <span class="pipeline-arrow">&rarr;</span>
+          <span class="pipeline-step">Fix</span>
+          <span class="pipeline-arrow">&rarr;</span>
+          <span class="pipeline-step">Generate</span>
+          <span class="pipeline-arrow">&rarr;</span>
+          <span class="pipeline-step">Test</span>
+          <span class="pipeline-arrow">&rarr;</span>
+          <span class="pipeline-step">Ship</span>
+        </div>
+        <div class="hero-actions">
+          <a href="#downloads" class="btn btn-primary">Download Extension</a>
+          <a href="#getting-started" class="btn btn-secondary">Get Started</a>
+          <a href="https://github.com/amanraj-ms/copilot-perf-agent" class="btn btn-secondary" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            GitHub
+          </a>
+        </div>
+        <div class="hero-install">
+          <code>npm install -g @performance-agent/mcp-server</code>
+          <button class="copy-btn" onclick="copyCommand(this)" aria-label="Copy command">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2>Everything You Need to Ship Better Code</h2>
+        <p>A complete developer toolkit that lives inside your IDE &mdash; from code analysis to load testing</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔍</div>
+          <h3>Git Diff Analysis &amp; Auto-Fix</h3>
+          <p>AI-powered analysis of your last commit for 25+ code quality and performance anti-patterns. Works for any language &mdash; Python, Go, Java, C#, TypeScript, Rust, and more.</p>
+          <ul class="feature-list">
+            <li>N+1 queries, blocking I/O, O(n&sup2;) loops</li>
+            <li>Architecture violations &amp; code smells</li>
+            <li>Auto-fix with unified diff patches</li>
+            <li>Shift left &mdash; catch issues before code review</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔧</div>
+          <h3>OpenAPI / Swagger Generation</h3>
+          <p>Generate OpenAPI 3.0 specs from Python source code. Full semantic analysis for FastAPI and Azure Functions (v1 &amp; v2). No manual spec writing.</p>
+          <ul class="feature-list">
+            <li>Pydantic model &amp; dataclass extraction</li>
+            <li>Auth detection (JWT, API Key, OAuth2)</li>
+            <li>Validation rules extraction</li>
+            <li>FastAPI &amp; Azure Functions v1/v2</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📝</div>
+          <h3>Test Script Generation</h3>
+          <p>Create JMeter JMX and k6 JavaScript test scripts from OpenAPI/Swagger specs. Template-based generation &mdash; no API keys required, works fully offline.</p>
+          <ul class="feature-list">
+            <li>JMeter (.jmx) and k6 (.js) support</li>
+            <li>Automatic script sanitization &amp; validation</li>
+            <li>Realistic load scenarios from API specs</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🖥️</div>
+          <h3>Local &amp; Cloud Execution</h3>
+          <p>Run tests locally or provision Azure VMs from natural language. Full automation from provisioning to teardown &mdash; a single chat command.</p>
+          <ul class="feature-list">
+            <li>Auto-detect local JMeter / k6</li>
+            <li>Natural language VM provisioning</li>
+            <li>Terraform-based infra &amp; auto-cleanup</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Result Analysis &amp; Metrics</h3>
+          <p>Comprehensive reports with response times, throughput, error rates, and correlated Azure VM metrics (CPU, memory, network, disk).</p>
+          <ul class="feature-list">
+            <li>p95/p99 percentile calculations</li>
+            <li>Infrastructure bottleneck detection</li>
+            <li>Actionable recommendations</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Pipeline Section -->
+  <section class="pipeline-section" id="pipeline">
+    <div class="container">
+      <div class="section-header">
+        <h2>How It Works</h2>
+        <p>From commit to confidence &mdash; multiple workflows, one tool, all from Copilot Chat</p>
+      </div>
+      <div class="pipeline-visual">
+        <div class="pipeline-item">
+          <div class="pipeline-num">1</div>
+          <div class="pipeline-info">
+            <h4>Commit Your Code</h4>
+            <p>Write code as usual. The agent works with any language &mdash; Python, Go, Java, C#, TypeScript, Rust, and more.</p>
+          </div>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-item">
+          <div class="pipeline-num">2</div>
+          <div class="pipeline-info">
+            <h4>Analyze &amp; Fix</h4>
+            <p>Ask the agent to analyze your last commit. It detects 25+ anti-patterns (performance smells, architecture violations) and offers auto-fix patches.</p>
+          </div>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-item">
+          <div class="pipeline-num">3</div>
+          <div class="pipeline-info">
+            <h4>Generate OpenAPI &amp; Tests</h4>
+            <p>Auto-generate Swagger specs from your Python code, then create JMeter/k6 test scripts from those specs &mdash; all template-based, fully offline.</p>
+          </div>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-item">
+          <div class="pipeline-num">4</div>
+          <div class="pipeline-info">
+            <h4>Execute &amp; Measure</h4>
+            <p>Run tests locally or on Azure VMs with a single chat command. Get p95/p99 percentiles, throughput, error rates, and correlated VM metrics.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Downloads Section -->
+  <section class="downloads-section" id="downloads">
+    <div class="container">
+      <div class="section-header">
+        <h2>Download VS Code Extension</h2>
+        <p>Platform-specific packages &mdash; each includes the native binary for your OS. No Node.js required at runtime.</p>
+      </div>
+
+      <!-- Downloads Table -->
+      <div class="downloads-table-wrapper">
+        <table class="dl-table">
+          <thead>
+            <tr>
+              <th>Platform</th>
+              <th>Architecture</th>
+              <th>Package</th>
+              <th>Size</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="dl-row dl-row--windows">
+              <td class="dl-os">
+                <svg class="dl-os-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M3 12V6.5l8-1.1V12H3zm0 .5h8v6.6l-8-1.1V12.5zM11.5 5.3l9.5-1.3v8h-9.5V5.3zm0 7.2h9.5v8l-9.5-1.3V12.5z"/></svg>
+                <span>Windows</span>
+              </td>
+              <td><span class="arch-badge">x64</span></td>
+              <td class="dl-filename"><code>performance-agent-1.0.0-win32-x64.vsix</code></td>
+              <td class="dl-size">~15 MB</td>
+              <td><a href="https://github.com/amanraj-ms/perf-agent/releases/latest/download/performance-agent-1.0.0-win32-x64.vsix" class="dl-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</a></td>
+            </tr>
+            <tr class="dl-row dl-row--windows">
+              <td class="dl-os">
+                <svg class="dl-os-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M3 12V6.5l8-1.1V12H3zm0 .5h8v6.6l-8-1.1V12.5zM11.5 5.3l9.5-1.3v8h-9.5V5.3zm0 7.2h9.5v8l-9.5-1.3V12.5z"/></svg>
+                <span>Windows</span>
+              </td>
+              <td><span class="arch-badge">ARM64</span></td>
+              <td class="dl-filename"><code>performance-agent-1.0.0-win32-arm64.vsix</code></td>
+              <td class="dl-size">~10 MB</td>
+              <td><a href="https://github.com/amanraj-ms/perf-agent/releases/latest/download/performance-agent-1.0.0-win32-arm64.vsix" class="dl-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</a></td>
+            </tr>
+            <tr class="dl-row dl-row--macos">
+              <td class="dl-os">
+                <svg class="dl-os-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                <span>macOS</span>
+              </td>
+              <td><span class="arch-badge">Intel x64</span></td>
+              <td class="dl-filename"><code>performance-agent-1.0.0-darwin-x64.vsix</code></td>
+              <td class="dl-size">~18 MB</td>
+              <td><a href="https://github.com/amanraj-ms/perf-agent/releases/latest/download/performance-agent-1.0.0-darwin-x64.vsix" class="dl-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</a></td>
+            </tr>
+            <tr class="dl-row dl-row--macos dl-row--featured">
+              <td class="dl-os">
+                <svg class="dl-os-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                <span>macOS</span>
+              </td>
+              <td><span class="arch-badge arch-badge--popular">Apple Silicon <span class="popular-tag">Popular</span></span></td>
+              <td class="dl-filename"><code>performance-agent-1.0.0-darwin-arm64.vsix</code></td>
+              <td class="dl-size">~17 MB</td>
+              <td><a href="https://github.com/amanraj-ms/perf-agent/releases/latest/download/performance-agent-1.0.0-darwin-arm64.vsix" class="dl-btn dl-btn--primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</a></td>
+            </tr>
+            <tr class="dl-row dl-row--linux">
+              <td class="dl-os">
+                <svg class="dl-os-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.368 1.884 1.43.39.03.8-.066 1.15-.267.39-.22.665-.545.865-.878.203-.346.378-.726.484-1.167.106-.434.143-.883.119-1.391-.012-.322-.04-.656-.07-.97a3.968 3.968 0 00.137-.291c.21-.462.355-.924.373-1.472.018-.549-.148-1.158-.554-1.811-.168-.274-.354-.541-.539-.808-.37-.536-.745-1.076-1.004-1.733-.26-.66-.355-1.412-.29-2.294.054-.49.155-1.061.175-1.595.022-.498-.027-1.013-.275-1.5-.381-.737-1.164-1.264-2.17-1.534-.35-.05-.76-.098-1.131-.13-.33-.03-.653-.053-.939-.063-.292-.013-.548-.015-.736-.011-.56.013-1.095.227-1.586.498-.08.044-.164.088-.244.133-.052-.14-.11-.267-.168-.382C14.378.587 13.513 0 12.504 0zm.085 1.087c.477 0 .844.364 1.2 1.084.174.356.318.637.456.788.144.157.347.207.537.212.157 0 .312-.013.476-.03.465-.04.991-.098 1.56.17.507.238.908.657 1.122 1.115.21.455.254.929.234 1.39-.02.465-.112 1.006-.17 1.522-.054.508-.128 1.078-.16 1.682-.064 1.031.084 1.927.41 2.753.33.834.753 1.449 1.145 2.017.196.284.38.56.526.795.347.561.49 1.03.478 1.44-.013.407-.126.79-.312 1.194-.075.16-.155.315-.24.466a1.93 1.93 0 01-.093-.252c-.093-.267-.143-.573-.204-.892l-.037-.188c-.077-.356-.18-.733-.381-1.057-.198-.318-.472-.569-.813-.651-.34-.082-.662.012-.933.15a2.6 2.6 0 00-.624.44 2.133 2.133 0 00-.476.677c-.147.33-.193.712-.198 1.106a5.55 5.55 0 00.067 1.042c.04.237.103.464.185.667-.007.002-.013.005-.02.009-.549.244-1.224.4-2.032.45-.735.05-1.372-.247-2.146-.2-1.041.064-1.574.26-2.328.327-.16-.103-.283-.25-.378-.418a1.39 1.39 0 01-.136-.515 3.545 3.545 0 01.005-.659c.022-.246.08-.482.18-.697a1.45 1.45 0 01.357-.476 2.1 2.1 0 01.471-.326c.18-.093.383-.137.6-.14.228-.004.414.043.586.127.172.084.327.196.502.345.356.299.777.585 1.31.537.265-.026.523-.162.698-.378a1.4 1.4 0 00.293-.7 2.52 2.52 0 00-.046-.84c-.04-.16-.086-.304-.122-.388-.144-.332-.236-.498-.27-.534-.038-.04-.098-.037-.181.013-.079.048-.163.12-.27.198-.428.315-.933.593-1.49.588a1.935 1.935 0 01-1.303-.544 2.674 2.674 0 01-.687-1.24 3.55 3.55 0 01-.125-1.182c.026-.386.114-.79.298-1.163-.162.084-.331.174-.503.259-.42.2-.876.373-1.248.425a1.58 1.58 0 01-.785-.079c-.192-.087-.36-.232-.428-.438-.09-.27-.018-.685.217-1.175.167-.342.388-.7.636-1.037A6.03 6.03 0 018.356 8.12c.734-.8 1.037-1.64 1.2-2.563a10.04 10.04 0 00.148-2.148c-.023-.753-.066-1.415.068-1.942.2-.788.601-1.298 1.145-1.55.354-.163.746-.27 1.186-.304.143-.01.287-.02.42-.026h.066z"/></svg>
+                <span>Linux</span>
+              </td>
+              <td><span class="arch-badge">x64</span></td>
+              <td class="dl-filename"><code>performance-agent-1.0.0-linux-x64.vsix</code></td>
+              <td class="dl-size">~19 MB</td>
+              <td><a href="https://github.com/amanraj-ms/perf-agent/releases/latest/download/performance-agent-1.0.0-linux-x64.vsix" class="dl-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</a></td>
+            </tr>
+            <tr class="dl-row dl-row--linux">
+              <td class="dl-os">
+                <svg class="dl-os-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.368 1.884 1.43.39.03.8-.066 1.15-.267.39-.22.665-.545.865-.878.203-.346.378-.726.484-1.167.106-.434.143-.883.119-1.391-.012-.322-.04-.656-.07-.97a3.968 3.968 0 00.137-.291c.21-.462.355-.924.373-1.472.018-.549-.148-1.158-.554-1.811-.168-.274-.354-.541-.539-.808-.37-.536-.745-1.076-1.004-1.733-.26-.66-.355-1.412-.29-2.294.054-.49.155-1.061.175-1.595.022-.498-.027-1.013-.275-1.5-.381-.737-1.164-1.264-2.17-1.534-.35-.05-.76-.098-1.131-.13-.33-.03-.653-.053-.939-.063-.292-.013-.548-.015-.736-.011-.56.013-1.095.227-1.586.498-.08.044-.164.088-.244.133-.052-.14-.11-.267-.168-.382C14.378.587 13.513 0 12.504 0zm.085 1.087c.477 0 .844.364 1.2 1.084.174.356.318.637.456.788.144.157.347.207.537.212.157 0 .312-.013.476-.03.465-.04.991-.098 1.56.17.507.238.908.657 1.122 1.115.21.455.254.929.234 1.39-.02.465-.112 1.006-.17 1.522-.054.508-.128 1.078-.16 1.682-.064 1.031.084 1.927.41 2.753.33.834.753 1.449 1.145 2.017.196.284.38.56.526.795.347.561.49 1.03.478 1.44-.013.407-.126.79-.312 1.194-.075.16-.155.315-.24.466a1.93 1.93 0 01-.093-.252c-.093-.267-.143-.573-.204-.892l-.037-.188c-.077-.356-.18-.733-.381-1.057-.198-.318-.472-.569-.813-.651-.34-.082-.662.012-.933.15a2.6 2.6 0 00-.624.44 2.133 2.133 0 00-.476.677c-.147.33-.193.712-.198 1.106a5.55 5.55 0 00.067 1.042c.04.237.103.464.185.667-.007.002-.013.005-.02.009-.549.244-1.224.4-2.032.45-.735.05-1.372-.247-2.146-.2-1.041.064-1.574.26-2.328.327-.16-.103-.283-.25-.378-.418a1.39 1.39 0 01-.136-.515 3.545 3.545 0 01.005-.659c.022-.246.08-.482.18-.697a1.45 1.45 0 01.357-.476 2.1 2.1 0 01.471-.326c.18-.093.383-.137.6-.14.228-.004.414.043.586.127.172.084.327.196.502.345.356.299.777.585 1.31.537.265-.026.523-.162.698-.378a1.4 1.4 0 00.293-.7 2.52 2.52 0 00-.046-.84c-.04-.16-.086-.304-.122-.388-.144-.332-.236-.498-.27-.534-.038-.04-.098-.037-.181.013-.079.048-.163.12-.27.198-.428.315-.933.593-1.49.588a1.935 1.935 0 01-1.303-.544 2.674 2.674 0 01-.687-1.24 3.55 3.55 0 01-.125-1.182c.026-.386.114-.79.298-1.163-.162.084-.331.174-.503.259-.42.2-.876.373-1.248.425a1.58 1.58 0 01-.785-.079c-.192-.087-.36-.232-.428-.438-.09-.27-.018-.685.217-1.175.167-.342.388-.7.636-1.037A6.03 6.03 0 018.356 8.12c.734-.8 1.037-1.64 1.2-2.563a10.04 10.04 0 00.148-2.148c-.023-.753-.066-1.415.068-1.942.2-.788.601-1.298 1.145-1.55.354-.163.746-.27 1.186-.304.143-.01.287-.02.42-.026h.066z"/></svg>
+                <span>Linux</span>
+              </td>
+              <td><span class="arch-badge">ARM64</span></td>
+              <td class="dl-filename"><code>performance-agent-1.0.0-linux-arm64.vsix</code></td>
+              <td class="dl-size">~18 MB</td>
+              <td><a href="https://github.com/amanraj-ms/perf-agent/releases/latest/download/performance-agent-1.0.0-linux-arm64.vsix" class="dl-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Install Instructions -->
+      <div class="install-instructions">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -3px; margin-right: 8px; color: var(--primary-light)"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          How to Install
+        </h3>
+        <div class="install-methods">
+          <div class="install-method install-method--visual">
+            <div class="install-method__header">
+              <span class="install-method__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              </span>
+              <h4>VS Code UI</h4>
+            </div>
+            <div class="install-steps">
+              <div class="install-step">
+                <span class="install-step__num">1</span>
+                <span>Download the <code>.vsix</code> for your platform above</span>
+              </div>
+              <div class="install-step">
+                <span class="install-step__num">2</span>
+                <span>Open VS Code &rarr; <strong>Extensions</strong> (<kbd>Cmd+Shift+X</kbd> / <kbd>Ctrl+Shift+X</kbd>)</span>
+              </div>
+              <div class="install-step">
+                <span class="install-step__num">3</span>
+                <span>Click <strong>&hellip;</strong> &rarr; <strong>Install from VSIX&hellip;</strong></span>
+              </div>
+              <div class="install-step">
+                <span class="install-step__num">4</span>
+                <span>Select the downloaded file &mdash; done!</span>
+              </div>
+            </div>
+          </div>
+          <div class="install-method install-method--visual">
+            <div class="install-method__header">
+              <span class="install-method__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+              </span>
+              <h4>Command Line</h4>
+            </div>
+            <div class="code-block">
+<pre><code># macOS Apple Silicon
+code --install-extension performance-agent-1.0.0-darwin-arm64.vsix
+
+# macOS Intel
+code --install-extension performance-agent-1.0.0-darwin-x64.vsix
+
+# Windows x64
+code --install-extension performance-agent-1.0.0-win32-x64.vsix
+
+# Linux x64
+code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="post-install">
+          <div class="post-install__header">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent)"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <h4>After Installation</h4>
+          </div>
+          <div class="post-install__steps">
+            <div class="post-install__step">
+              <span class="post-install__check">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span>Open Command Palette &rarr; <strong>MCP: List Servers</strong></span>
+            </div>
+            <div class="post-install__step">
+              <span class="post-install__check">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span>Select <strong>Performance Agent</strong> &rarr; <strong>Start Server</strong></span>
+            </div>
+            <div class="post-install__step">
+              <span class="post-install__check">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span>Or enable autostart: <code>"chat.mcp.autostart": "newAndOutdated"</code></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools Section -->
+  <section class="tools-section" id="tools">
+    <div class="container">
+      <div class="section-header">
+        <h2>MCP Tools Reference</h2>
+        <p>16 tools available through GitHub Copilot Agent Mode</p>
+      </div>
+      <div class="tools-grid">
+        <div class="tool-category">
+          <h3>🧪 Test Generation</h3>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>generatePerfScript</code>
+            </div>
+            <span>Generate JMeter (.jmx) or k6 (.js) performance test scripts from Swagger/OpenAPI specs. Template-based, no API keys required.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>prepareJMXForTest</code>
+            </div>
+            <span>Validate and sanitize JMX files before execution. Gets VM sizing recommendations.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>prepareK6ForTest</code>
+            </div>
+            <span>Auto-fix k6 scripts: missing JSON.stringify, invalid query params, zero VUs, missing imports.</span>
+          </div>
+        </div>
+        <div class="tool-category">
+          <h3>📄 OpenAPI / Swagger</h3>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>collectCodeForSwagger</code>
+            </div>
+            <span>Collect and analyze Python source code for OpenAPI spec generation. Scans project structure, extracts routes, models, and auth patterns.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>generateSwaggerFromCode</code>
+            </div>
+            <span>Generate OpenAPI 3.0 specs from Python code (FastAPI, Azure Functions v1 &amp; v2). Full semantic analysis with Pydantic model support, auth extraction, and output in JSON or YAML.</span>
+          </div>
+        </div>
+        <div class="tool-category">
+          <h3>🔍 Code Analysis</h3>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>collectCommitForAnalysis</code>
+            </div>
+            <span>Collect git diff and changed file contents from last commit for AI-powered performance analysis. Detects 25+ performance smell types across all languages.</span>
+          </div>
+        </div>
+        <div class="tool-category">
+          <h3>🖥️ Local Testing</h3>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>runLocalPerformanceTest</code>
+            </div>
+            <span>Execute JMeter or k6 tests on your local machine. Real-time output, automatic result collection.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>checkLocalToolAvailability</code>
+            </div>
+            <span>Check if JMeter or k6 is installed and available on your system.</span>
+          </div>
+        </div>
+        <div class="tool-category">
+          <h3>☁️ Azure Cloud Testing</h3>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>provisionAzureVM</code>
+            </div>
+            <span>Create Azure VMs from natural language descriptions. Supports 7 size presets, 6 OS options, Terraform generation.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>listAzureSubscriptions</code>
+            </div>
+            <span>List all Azure subscriptions for the logged-in user.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>setAzureSubscription</code>
+            </div>
+            <span>Set the active Azure subscription for provisioning.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>listAzureResourceGroups</code>
+            </div>
+            <span>List resource groups in the active subscription for reuse.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>runCloudPerformanceTest</code>
+            </div>
+            <span>Full automation: provision VM &rarr; install JMeter/k6 &rarr; run test &rarr; download results &rarr; cleanup.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>getCloudTestRecommendation</code>
+            </div>
+            <span>Analyze scripts and recommend optimal Azure VM size with cost estimates.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>cleanupAzureResources</code>
+            </div>
+            <span>Delete test infrastructure via Terraform destroy. Stop billing immediately.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>analyzeTestResults</code>
+            </div>
+            <span>Parse JMeter JTL or k6 JSON results. p95/p99, throughput, error rates, correlated VM metrics.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>getVMMetrics</code>
+            </div>
+            <span>Fetch Azure VM performance metrics: CPU, memory, network, disk with anomaly detection.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- VM Sizing Reference -->
+      <div class="reference-table vm-presets-table">
+        <div class="reference-table__header">
+          <div>
+            <h3>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -3px; margin-right: 6px; color: var(--primary-light)"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1" fill="currentColor"/><circle cx="6" cy="18" r="1" fill="currentColor"/></svg>
+              Azure VM Size Presets
+            </h3>
+            <p>Use natural language like <em>"Create a large Ubuntu VM in East US"</em> and the agent picks the right size.</p>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="styled-table">
+            <thead>
+              <tr><th>Preset</th><th>Azure Size</th><th>CPUs</th><th>RAM</th><th>Best For</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="preset-badge preset--sm">small</span></td>
+                <td><code>Standard_B1ms</code></td>
+                <td><span class="cpu-indicator"><span class="cpu-bar" style="width:14%"></span>1</span></td>
+                <td>2 GB</td>
+                <td><span class="usecase-tag">Testing, dev</span></td>
+              </tr>
+              <tr>
+                <td><span class="preset-badge preset--md">medium</span></td>
+                <td><code>Standard_D2s_v3</code></td>
+                <td><span class="cpu-indicator"><span class="cpu-bar" style="width:25%"></span>2</span></td>
+                <td>8 GB</td>
+                <td><span class="usecase-tag">General purpose</span></td>
+              </tr>
+              <tr>
+                <td><span class="preset-badge preset--lg">large</span></td>
+                <td><code>Standard_D4s_v3</code></td>
+                <td><span class="cpu-indicator"><span class="cpu-bar" style="width:50%"></span>4</span></td>
+                <td>16 GB</td>
+                <td><span class="usecase-tag">Production loads</span></td>
+              </tr>
+              <tr>
+                <td><span class="preset-badge preset--xl">xlarge</span></td>
+                <td><code>Standard_D8s_v3</code></td>
+                <td><span class="cpu-indicator"><span class="cpu-bar" style="width:100%"></span>8</span></td>
+                <td>32 GB</td>
+                <td><span class="usecase-tag">High performance</span></td>
+              </tr>
+              <tr>
+                <td><span class="preset-badge preset--compute">compute</span></td>
+                <td><code>Standard_F4s_v2</code></td>
+                <td><span class="cpu-indicator"><span class="cpu-bar" style="width:50%"></span>4</span></td>
+                <td>8 GB</td>
+                <td><span class="usecase-tag usecase--special">CPU-intensive</span></td>
+              </tr>
+              <tr>
+                <td><span class="preset-badge preset--memory">memory</span></td>
+                <td><code>Standard_E4s_v3</code></td>
+                <td><span class="cpu-indicator"><span class="cpu-bar" style="width:50%"></span>4</span></td>
+                <td>32 GB</td>
+                <td><span class="usecase-tag usecase--special">Databases, caches</span></td>
+              </tr>
+              <tr>
+                <td><span class="preset-badge preset--gpu">gpu</span></td>
+                <td><code>Standard_NC6s_v3</code></td>
+                <td><span class="cpu-indicator"><span class="cpu-bar" style="width:75%"></span>6</span></td>
+                <td>112 GB</td>
+                <td><span class="usecase-tag usecase--special">ML, AI</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VM Metrics Thresholds -->
+      <div class="reference-table vm-metrics-table">
+        <div class="reference-table__header">
+          <h3>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -3px; margin-right: 6px; color: var(--accent)"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            VM Metrics Thresholds
+          </h3>
+        </div>
+        <div class="metrics-cards">
+          <div class="metric-card">
+            <div class="metric-card__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+            </div>
+            <div class="metric-card__label">CPU</div>
+            <div class="metric-card__thresholds">
+              <span class="threshold threshold--ok">&lt; 70%</span>
+              <span class="threshold threshold--warn">70&ndash;80%</span>
+              <span class="threshold threshold--critical">&gt; 80%</span>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-card__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 19v-8a6 6 0 1112 0v8"/><path d="M6 19h12"/></svg>
+            </div>
+            <div class="metric-card__label">Memory</div>
+            <div class="metric-card__thresholds">
+              <span class="threshold threshold--ok">&lt; 80%</span>
+              <span class="threshold threshold--warn">80&ndash;90%</span>
+              <span class="threshold threshold--critical">&gt; 90%</span>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-card__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0114.08 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+            </div>
+            <div class="metric-card__label">Network</div>
+            <div class="metric-card__thresholds">
+              <span class="threshold threshold--ok">&lt; 100 MB/s</span>
+              <span class="threshold threshold--warn">100&ndash;500 MB/s</span>
+              <span class="threshold threshold--critical">&gt; 500 MB/s</span>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-card__icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            </div>
+            <div class="metric-card__label">Disk I/O</div>
+            <div class="metric-card__thresholds">
+              <span class="threshold threshold--ok">&lt; 50 MB/s</span>
+              <span class="threshold threshold--warn">50&ndash;100 MB/s</span>
+              <span class="threshold threshold--critical">&gt; 100 MB/s</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Getting Started Section -->
+  <section class="getting-started" id="getting-started">
+    <div class="container">
+      <div class="section-header">
+        <h2>Get Started</h2>
+        <p>Three ways to get started with Performance Agent</p>
+      </div>
+      <div class="install-options">
+        <div class="install-card">
+          <div class="install-badge">Recommended</div>
+          <h3>VS Code Extension</h3>
+          <p>One-click setup &mdash; bundles the MCP server automatically. Zero configuration.</p>
+          <ol>
+            <li>Download the <code>.vsix</code> from <a href="#downloads">Downloads</a></li>
+            <li>Open VS Code &rarr; Extensions &rarr; <strong>&hellip;</strong> &rarr; <strong>Install from VSIX</strong></li>
+            <li>Open GitHub Copilot Chat (<kbd>Cmd+Shift+I</kbd>)</li>
+            <li>Switch to <strong>Agent Mode</strong></li>
+            <li>Start using all developer tools!</li>
+          </ol>
+          <a href="#downloads" class="btn btn-primary">Download Extension</a>
+        </div>
+        <div class="install-card">
+          <h3>npm Package</h3>
+          <p>Install the MCP server globally via npm and configure manually.</p>
+          <div class="code-block">
+            <code>npm install -g @performance-agent/mcp-server</code>
+          </div>
+          <p>Then create <code>.vscode/mcp.json</code>:</p>
+          <div class="code-block">
+<pre><code>{
+  "servers": {
+    "performance-agent": {
+      "command": "npx",
+      "args": ["@performance-agent/mcp-server"]
+    }
+  }
+}</code></pre>
+          </div>
+          <p class="install-note">No API keys needed. Works offline for test generation.</p>
+        </div>
+        <div class="install-card">
+          <h3>Build from Source</h3>
+          <p>Clone and build for development or contributing.</p>
+          <div class="code-block">
+<pre><code>git clone https://github.com/amanraj-ms/copilot-perf-agent.git
+cd copilot-perf-agent/mcp-server
+npm install && npm run build</code></pre>
+          </div>
+          <p>Then create <code>.vscode/mcp.json</code>:</p>
+          <div class="code-block">
+<pre><code>{
+  "servers": {
+    "performance-agent": {
+      "command": "node",
+      "args": ["/path/to/mcp-server/dist/index.js"]
+    }
+  }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prerequisites -->
+      <div class="prereqs-block">
+        <h3>Prerequisites</h3>
+        <div class="prereqs-grid">
+          <div class="prereq-group">
+            <h4>Required</h4>
+            <div class="prereq-item required">
+              <span class="prereq-name">VS Code 1.95+</span>
+              <span class="prereq-tag">Required</span>
+            </div>
+            <div class="prereq-item required">
+              <span class="prereq-name">GitHub Copilot Chat</span>
+              <span class="prereq-tag">Required</span>
+            </div>
+            <div class="prereq-item required">
+              <span class="prereq-name">Node.js 18+</span>
+              <span class="prereq-tag">Required</span>
+            </div>
+          </div>
+          <div class="prereq-group">
+            <h4>Optional</h4>
+            <div class="prereq-item optional">
+              <span class="prereq-name">Azure CLI</span>
+              <span class="prereq-tag">Cloud testing</span>
+            </div>
+            <div class="prereq-item optional">
+              <span class="prereq-name">Terraform</span>
+              <span class="prereq-tag">VM provisioning</span>
+            </div>
+            <div class="prereq-item optional">
+              <span class="prereq-name">JMeter / k6</span>
+              <span class="prereq-tag">Local execution</span>
+            </div>
+            <div class="prereq-item optional">
+              <span class="prereq-name">Radon (pip)</span>
+              <span class="prereq-tag">Python analysis</span>
+            </div>
+          </div>
+        </div>
+        <p class="prereq-note">Platform support: <strong>Windows</strong>, <strong>macOS</strong>, and <strong>Linux</strong> fully supported.</p>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Troubleshooting Section -->
+  <section class="troubleshooting-section" id="troubleshooting">
+    <div class="container">
+      <div class="section-header">
+        <h2>Troubleshooting</h2>
+        <p>Common issues and solutions</p>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>MCP Server not loading / Tools don't appear in Copilot Chat</summary>
+          <div class="faq-answer">
+            <ol>
+              <li>Verify <code>.vscode/mcp.json</code> exists with the correct <strong>absolute path</strong> to <code>dist/index.js</code></li>
+              <li>Restart VS Code: <kbd>Cmd+Shift+P</kbd> &rarr; <em>Developer: Reload Window</em></li>
+              <li>Check the Output panel: <em>View &rarr; Output</em> &rarr; select <strong>"MCP: performance-agent"</strong></li>
+              <li>Ensure <code>npm run build</code> completed successfully and <code>dist/index.js</code> exists</li>
+              <li>Make sure you're in <strong>Agent Mode</strong>, not Ask or Edit mode</li>
+            </ol>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>JMX/k6 generation fails</summary>
+          <div class="faq-answer">
+            <ol>
+              <li>Verify your Swagger file is valid JSON: <code>cat swagger.json | jq .</code></li>
+              <li>Ensure the <code>paths</code> object exists and contains endpoints</li>
+              <li>Both Swagger 2.0 and OpenAPI 3.x formats are supported</li>
+              <li>Check file encoding is UTF-8 (no BOM)</li>
+            </ol>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Azure VM provisioning fails</summary>
+          <div class="faq-answer">
+            <ol>
+              <li>Login to Azure CLI: <code>az login</code> then <code>az account show</code></li>
+              <li>Check subscription quota: Azure Portal &rarr; Subscriptions &rarr; Usage + quotas</li>
+              <li>Try a different region or smaller VM size</li>
+              <li>Review Terraform logs in <code>.perf-output/terraform-logs/</code></li>
+            </ol>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>VM metrics return empty</summary>
+          <div class="faq-answer">
+            <ol>
+              <li>Wait 5&ndash;10 minutes after test completes (Azure Monitor delay)</li>
+              <li>Try a wider time range: <code>time_range: "6h"</code></li>
+              <li>Verify the VM is still running: <code>az vm show -g &lt;rg&gt; -n &lt;name&gt;</code></li>
+              <li>Ensure your account has "Monitoring Reader" role</li>
+            </ol>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>"radon not installed" warning</summary>
+          <div class="faq-answer">
+            <p>Radon is optional but recommended for Python analysis. Install with:</p>
+            <div class="code-block"><code>pip install radon</code></div>
+            <p>The analyzer works without radon (uses regex fallback) but gives more accurate results with it.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Security Section -->
+  <section class="security-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Security</h2>
+      </div>
+      <div class="security-grid">
+        <div class="security-item good">
+          <span class="security-icon">✅</span>
+          <span>All code analysis runs locally &mdash; no code sent to external services</span>
+        </div>
+        <div class="security-item good">
+          <span class="security-icon">✅</span>
+          <span>JMX/k6 generation runs fully offline &mdash; no AI API calls</span>
+        </div>
+        <div class="security-item good">
+          <span class="security-icon">✅</span>
+          <span>HTTPS for all Azure communication</span>
+        </div>
+        <div class="security-item good">
+          <span class="security-icon">✅</span>
+          <span>No sensitive data logging &mdash; credentials never logged</span>
+        </div>
+        <div class="security-item warn">
+          <span class="security-icon">⚠️</span>
+          <span>Terraform state may contain sensitive data &mdash; store securely</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to level up your development workflow?</h2>
+      <p>Open source. Code analysis, OpenAPI generation, and performance testing &mdash; all in one tool. Windows, macOS, and Linux.</p>
+      <div class="cta-actions">
+        <a href="#downloads" class="btn btn-primary btn-lg">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Extension
+        </a>
+        <a href="https://github.com/amanraj-ms/copilot-perf-agent" class="btn btn-secondary btn-lg" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          Star on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="logo-icon">⚡</span>
+          <span>Performance Agent</span>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/amanraj-ms/copilot-perf-agent" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/amanraj-ms/copilot-perf-agent/issues" target="_blank" rel="noopener">Report Issues</a>
+          <a href="https://www.npmjs.com/package/@performance-agent/mcp-server" target="_blank" rel="noopener">npm</a>
+          <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">MCP Docs</a>
+          <a href="https://github.com/amanraj-ms/copilot-perf-agent/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Performance Agent. Built with GitHub Copilot &amp; MCP.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
