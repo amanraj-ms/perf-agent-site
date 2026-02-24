@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTabs();
   initScrollEffects();
   initReleases();
+  initVideoPlayer();
 });
 
 // --- Navigation ---
@@ -304,3 +305,25 @@ async function loadAllReleases() {
   `;
   document.head.appendChild(style);
 })();
+
+// --- Video Player ---
+function initVideoPlayer() {
+  const video = document.getElementById('demo-video');
+  const overlay = document.getElementById('video-overlay');
+  if (!video || !overlay) return;
+
+  overlay.addEventListener('click', () => {
+    overlay.classList.add('hidden');
+    video.play();
+  });
+
+  video.addEventListener('pause', () => {
+    if (!video.ended) {
+      overlay.classList.remove('hidden');
+    }
+  });
+
+  video.addEventListener('ended', () => {
+    overlay.classList.remove('hidden');
+  });
+}
