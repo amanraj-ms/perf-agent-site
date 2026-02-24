@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTabs();
   initScrollEffects();
   initReleases();
+  initVideoPlayer();
 });
 
 // --- Navigation ---
@@ -304,3 +305,52 @@ async function loadAllReleases() {
   `;
   document.head.appendChild(style);
 })();
+
+// --- Video Player ---
+function initVideoPlayer() {
+  const video = document.getElementById('demo-video');
+  const overlay = document.getElementById('video-overlay');
+  if (!video || !overlay) return;
+
+  let videoLoaded = false;
+
+  function loadVideoSource() {
+    if (videoLoaded) return;
+    const src = video.dataset.src;
+    if (src) {
+      const source = document.createElement('source');
+      source.src = src;
+      source.type = 'video/mp4';
+      video.appendChild(source);
+      video.load();
+    }
+    videoLoaded = true;
+  }
+
+  // Start background download after page fully loads (images, styles, etc.)
+  // Uses requestIdleCallback if available, otherwise a 2s delay after load
+  window.addEventListener('load', () => {
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => loadVideoSource(), { timeout: 3000 });
+    } else {
+      setTimeout(loadVideoSource, 2000);
+    }
+  });
+
+  overlay.addEventListener('click', () => {
+    // If user clicks before background load finishes, load immediately
+    loadVideoSource();
+    overlay.classList.add('hidden');
+    video.play();
+  });
+
+  video.addEventListener('pause', () => {
+    if (!video.ended) {
+      overlay.classList.remove('hidden');
+    }
+  });
+
+  video.addEventListener('ended', () => {
+    overlay.classList.remove('hidden');
+  });
+}
