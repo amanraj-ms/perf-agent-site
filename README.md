@@ -71,3 +71,51 @@ website/
 │       └── deploy.yml   # CI/CD pipeline
 └── README.md
 ```
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/health` | Service health check — uptime, timestamp, config status |
+| GET | `/api/releases` | Lists up to 20 GitHub releases (cached 5 min) |
+| GET | `/api/releases/latest` | Returns the latest stable (non-prerelease) release |
+| GET | `/api/download/:assetId` | Proxies a release asset download from GitHub |
+| GET | `/api/perf-test` | Performance test target endpoint (see below) |
+
+### `GET /api/perf-test`
+
+A lightweight endpoint designed for performance testing with tools like JMeter or k6. Every request is logged with origin and user agent details.
+
+**Response:**
+
+```json
+{
+  "status": "ok",
+  "endpoint": "/api/perf-test",
+  "hit": 42,
+  "timestamp": "2026-02-25T17:30:00.000Z",
+  "response_time_ms": 2.35,
+  "request": {
+    "origin": "52.170.33.171",
+    "user_agent": "k6/0.45.0",
+    "referer": "direct",
+    "method": "GET"
+  },
+  "server": {
+    "uptime": 3600.5,
+    "memory_mb": 45.12
+  }
+}
+```
+
+**Log output** (visible in `az containerapp logs show`):
+
+```
+[PERF] #42 | GET /api/perf-test | 2.4ms | origin=52.170.33.171 | ua=k6/0.45.0
+```
+
+**Features:**
+- Hit counter to track total requests
+- Request origin IP, user agent, and referer logging
+- Server uptime and memory usage in response
+- 0–5ms simulated latency for realistic response time variance
