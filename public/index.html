@@ -21,8 +21,10 @@
       </a>
       <div class="nav-links" id="nav-links">
         <a href="#features">Features</a>
+        <a href="#upcoming">Roadmap</a>
         <a href="#pipeline">Pipeline</a>
         <a href="#tools">Tools</a>
+        <a href="#architecture">Execution Modes</a>
         <a href="#downloads">Downloads</a>
         <a href="#getting-started">Get Started</a>
         <a href="https://github.com/amanraj-ms/copilot-perf-agent" class="nav-btn" target="_blank" rel="noopener">
@@ -45,7 +47,7 @@
         <h1>AI-Powered<br />Developer Tools</h1>
         <p class="hero-subtitle">
           Code analysis, auto-fix, OpenAPI generation, and performance testing &mdash;
-          all from GitHub Copilot Chat. Catch issues before they ship. No API keys needed.
+          all from GitHub Copilot Chat. Local, cloud, or distributed. No API keys needed.
         </p>
         <div class="hero-pipeline">
           <span class="pipeline-step">Commit</span>
@@ -83,7 +85,7 @@
     <div class="container">
       <div class="section-header">
         <h2>Everything You Need to Ship Better Code</h2>
-        <p>A complete developer toolkit that lives inside your IDE &mdash; from code analysis to load testing</p>
+        <p>A complete developer toolkit that lives inside your IDE &mdash; from code analysis to distributed load testing</p>
       </div>
       <div class="features-grid">
         <div class="feature-card">
@@ -138,7 +140,65 @@
             <li>Actionable recommendations</li>
           </ul>
         </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3>Distributed Load Testing</h3>
+          <p>Master-agent architecture for heavy workloads. Provisions 1 master + N agent VMs in a shared VNet, installs JMeter, runs distributed tests, and downloads results &mdash; all from a single chat command.</p>
+          <ul class="feature-list">
+            <li>Auto-provisioned Azure VNet with private IPs</li>
+            <li>Parallel JMeter install via VNet SCP (10Gbps)</li>
+            <li>Cluster reuse for rapid re-runs (skip provisioning)</li>
+            <li>Terraform-based infra with auto-cleanup</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔌</div>
+          <h3>Bring Your Own Infrastructure</h3>
+          <p>Already have VMs or bare-metal servers? Run JMeter tests on any machine you can SSH into. No Azure provisioning needed &mdash; just provide the host, user, and key.</p>
+          <ul class="feature-list">
+            <li>Auto-detect or install JMeter via SSH</li>
+            <li>Upload JMX, execute, download results</li>
+            <li>Works with any cloud or on-prem server</li>
+            <li>Bearer token injection for auth endpoints</li>
+          </ul>
+        </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- Upcoming Features Section -->
+  <section class="upcoming-section" id="upcoming">
+    <div class="container">
+      <div class="section-header">
+        <h2>Coming Soon</h2>
+        <p>Features on our roadmap &mdash; shaping the future of developer performance tooling</p>
+      </div>
+      <div class="upcoming-grid">
+        <div class="upcoming-card">
+          <div class="upcoming-badge">Planned</div>
+          <div class="upcoming-icon">🏗️</div>
+          <h3>BYOI &mdash; Distributed Testing</h3>
+          <p>Bring Your Own Infrastructure for distributed load testing. Orchestrate tests across multiple VMs or agents simultaneously to generate massive traffic volumes from your own fleet.</p>
+        </div>
+        <div class="upcoming-card">
+          <div class="upcoming-badge">Planned</div>
+          <div class="upcoming-icon">☸️</div>
+          <h3>AKS &amp; Container Apps Support</h3>
+          <p>Native support for Azure Kubernetes Service and Azure Container Apps as test targets. Auto-discover endpoints, correlate pod-level metrics, and scale test infra alongside your workloads.</p>
+        </div>
+        <div class="upcoming-card">
+          <div class="upcoming-badge">In Progress</div>
+          <div class="upcoming-icon">🔗</div>
+          <h3>Correlation &amp; Tracing</h3>
+          <p>End-to-end correlation between load test requests and backend traces. Link JMeter/k6 transactions to Application Insights distributed traces for deep root-cause analysis.</p>
+        </div>
+        <div class="upcoming-card">
+          <div class="upcoming-badge">Planned</div>
+          <div class="upcoming-icon">⚙️</div>
+          <h3>Advanced JMX Capabilities</h3>
+          <p>Richer JMeter script generation &mdash; CSV data-driven tests, think times, assertions, correlation extractors, parameterized headers, and multi-step transaction controllers.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -179,7 +239,15 @@
           <div class="pipeline-num">4</div>
           <div class="pipeline-info">
             <h4>Execute &amp; Measure</h4>
-            <p>Run tests locally or on Azure VMs with a single chat command. Get p95/p99 percentiles, throughput, error rates, and correlated VM metrics.</p>
+            <p>Run tests locally, on a single Azure VM, or on a distributed cluster with a single chat command. Get p95/p99 percentiles, throughput, and error rates.</p>
+          </div>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-item">
+          <div class="pipeline-num">5</div>
+          <div class="pipeline-info">
+            <h4>Scale &amp; Re-Run</h4>
+            <p>Need more load? Reuse existing clusters to run heavier tests instantly &mdash; skip provisioning entirely. Or bring your own VMs for zero-cost execution.</p>
           </div>
         </div>
 
@@ -319,7 +387,7 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
     <div class="container">
       <div class="section-header">
         <h2>MCP Tools Reference</h2>
-        <p>16 tools available through GitHub Copilot Agent Mode</p>
+        <p>18 tools available through GitHub Copilot Agent Mode</p>
       </div>
       <div class="tools-grid">
         <div class="tool-category">
@@ -422,9 +490,21 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
           </div>
           <div class="tool-item">
             <div class="tool-header">
+              <code>runDistributedPerformanceTest</code>
+            </div>
+            <span>Master-agent distributed JMeter testing. Provisions master + N agents in a shared VNet, installs JMeter, runs distributed test, downloads results. Supports cluster reuse for instant re-runs.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>runTestOnExistingVM</code>
+            </div>
+            <span>BYOI: Run JMeter tests on any user-provided VM via SSH. Auto-detects or installs JMeter, uploads JMX, executes, downloads results. No Azure provisioning needed.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
               <code>cleanupAzureResources</code>
             </div>
-            <span>Delete test infrastructure via Terraform destroy. Stop billing immediately.</span>
+            <span>Delete test infrastructure via Terraform destroy. Works for single-VM and distributed clusters. Stop billing immediately.</span>
           </div>
           <div class="tool-item">
             <div class="tool-header">
@@ -743,6 +823,58 @@ npm install && npm run build</code></pre>
     </div>
   </section>
 
+  <!-- Architecture Section -->
+  <section class="architecture-section" id="architecture">
+    <div class="container">
+      <div class="section-header">
+        <h2>Test Execution Modes</h2>
+        <p>Choose the right execution mode for your workload &mdash; from local smoke tests to distributed load tests</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">💻</div>
+          <h3>Local</h3>
+          <p>Run JMeter or k6 on your machine. Zero setup if the tool is installed. Great for quick smoke tests and script validation.</p>
+          <ul class="feature-list">
+            <li>Auto-detect installed tools</li>
+            <li>Instant execution, no cloud needed</li>
+            <li>JMeter &amp; k6 supported</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">☁️</div>
+          <h3>Single VM (Azure)</h3>
+          <p>Provision a single Azure VM, run the test, download results, and clean up. Fully automated via Terraform.</p>
+          <ul class="feature-list">
+            <li>7 VM size presets (small to GPU)</li>
+            <li>Auto-provisioning &amp; teardown</li>
+            <li>Correlated VM metrics (CPU, mem, net)</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3>Distributed (Master + Agents)</h3>
+          <p>1 master VM + N agent VMs in a private VNet. JMeter distributed mode for heavy workloads (thousands of concurrent users).</p>
+          <ul class="feature-list">
+            <li>Auto-scaled agent clusters</li>
+            <li>VNet-based private communication</li>
+            <li>Cluster reuse for rapid re-runs</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔌</div>
+          <h3>BYOI (Bring Your Own)</h3>
+          <p>Run tests on any machine you can SSH into &mdash; your own VMs, bare-metal servers, or any cloud provider. No Azure required.</p>
+          <ul class="feature-list">
+            <li>Any cloud or on-prem server</li>
+            <li>Auto-install JMeter if missing</li>
+            <li>Just provide host, user, SSH key</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Security Section -->
   <section class="security-section">
     <div class="container">
@@ -778,7 +910,7 @@ npm install && npm run build</code></pre>
   <section class="cta-section">
     <div class="container">
       <h2>Ready to level up your development workflow?</h2>
-      <p>Open source. Code analysis, OpenAPI generation, and performance testing &mdash; all in one tool. Windows, macOS, and Linux.</p>
+      <p>Open source. Code analysis, OpenAPI generation, and performance testing &mdash; local, single-VM, distributed, or BYOI. Windows, macOS, and Linux.</p>
       <div class="cta-actions">
         <a href="#downloads" class="btn btn-primary btn-lg">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
