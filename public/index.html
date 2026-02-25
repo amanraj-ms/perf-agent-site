@@ -76,6 +76,29 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
           </button>
         </div>
+
+        <!-- Demo Video -->
+        <div class="hero-video">
+          <div class="hero-video__frame">
+            <video
+              id="demo-video"
+              controls
+              preload="none"
+              poster="https://perfagentdemo.blob.core.windows.net/demo-video/poster.jpg"
+              playsinline
+              data-src="https://perfagentdemo.blob.core.windows.net/demo-video/AgentPT.ai.mp4"
+            >
+              Your browser does not support HTML5 video.
+            </video>
+            <div class="hero-video__overlay" id="video-overlay">
+              <button class="hero-video__play" aria-label="Play demo video">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <span class="hero-video__label">Watch Demo</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
