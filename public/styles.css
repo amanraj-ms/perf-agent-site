@@ -248,6 +248,65 @@ img { max-width: 100%; display: block; }
 
 /* --- Pipeline --- */
 .pipeline-section { padding: 96px 0; }
+
+/* --- Upcoming Features --- */
+.upcoming-section {
+  padding: 96px 0;
+  background: var(--bg);
+}
+.upcoming-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.upcoming-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 24px;
+  text-align: center;
+  transition: border-color var(--transition), transform var(--transition);
+}
+.upcoming-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+.upcoming-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(129, 140, 248, 0.12);
+  color: var(--primary-light);
+  border: 1px solid rgba(129, 140, 248, 0.2);
+}
+.upcoming-card:nth-child(4) .upcoming-badge {
+  background: rgba(52, 211, 153, 0.12);
+  color: var(--accent);
+  border-color: rgba(52, 211, 153, 0.2);
+}
+.upcoming-icon {
+  font-size: 2.2rem;
+  margin-bottom: 16px;
+}
+.upcoming-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+.upcoming-card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
 .pipeline-visual { max-width: 700px; margin: 0 auto; }
 .pipeline-item {
   display: flex; gap: 20px; align-items: flex-start;
@@ -841,6 +900,7 @@ img { max-width: 100%; display: block; }
 /* --- Responsive --- */
 @media (max-width: 1024px) {
   .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .upcoming-grid { grid-template-columns: repeat(2, 1fr); }
   .install-options { grid-template-columns: 1fr; }
   .tools-grid { grid-template-columns: 1fr; }
   .action-content { grid-template-columns: 1fr; }
@@ -854,6 +914,7 @@ img { max-width: 100%; display: block; }
   .hero-subtitle { font-size: 1rem; }
   .section-header h2 { font-size: 1.7rem; }
   .features-grid { grid-template-columns: 1fr; }
+  .upcoming-grid { grid-template-columns: 1fr; }
   .prereqs-grid { grid-template-columns: 1fr; }
   .tab-nav { flex-wrap: nowrap; overflow-x: auto; }
   .tab-btn { font-size: 0.78rem; padding: 8px 12px; }

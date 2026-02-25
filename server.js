@@ -158,6 +158,44 @@ app.get('/health', (req, res) => {
   });
 });
 
+// ─── Perf test endpoint ─────────────────────────────────────
+let perfHitCount = 0;
+app.get('/api/perf-test', (req, res) => {
+  perfHitCount++;
+  const start = process.hrtime.bigint();
+
+  const origin = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
+  const userAgent = req.headers['user-agent'] || 'unknown';
+  const referer = req.headers['referer'] || req.headers['origin'] || 'direct';
+
+  // Simulate a tiny compute delay (0–5ms) to make response times realistic
+  const delay = Math.random() * 5;
+  setTimeout(() => {
+    const elapsed = Number(process.hrtime.bigint() - start) / 1e6; // ms
+
+    const payload = {
+      status: 'ok',
+      endpoint: '/api/perf-test',
+      hit: perfHitCount,
+      timestamp: new Date().toISOString(),
+      response_time_ms: Math.round(elapsed * 100) / 100,
+      request: {
+        origin,
+        user_agent: userAgent,
+        referer,
+        method: req.method,
+      },
+      server: {
+        uptime: process.uptime(),
+        memory_mb: Math.round(process.memoryUsage().rss / 1024 / 1024 * 100) / 100,
+      },
+    };
+
+    console.log(`[PERF] #${perfHitCount} | ${req.method} /api/perf-test | ${elapsed.toFixed(1)}ms | origin=${origin} | ua=${userAgent.slice(0, 60)}`);
+    res.json(payload);
+  }, delay);
+});
+
 // SPA fallback — serve index.html for all unmatched routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
