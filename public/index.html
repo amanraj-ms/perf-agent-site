@@ -333,7 +333,7 @@
           <h3>Setup Readiness Checker</h3>
           <p>One command to verify your entire environment. Detects tools, validates Azure identity &amp; RBAC roles, inspects subscriptions, resource groups, and registered providers &mdash; then tells you exactly what&rsquo;s ready and what&rsquo;s missing.</p>
           <ul class="feature-list">
-            <li>Auto-detect 9 tools with versions</li>
+            <li>Auto-detect 8 tools with versions</li>
             <li>Azure user identity, tenant &amp; RBAC roles</li>
             <li>Subscription &amp; resource group inventory</li>
             <li>System info: CPU, RAM, disk, OS, shell</li>
@@ -1142,21 +1142,6 @@ terraform --version</code></pre>
                 <span class="prereq-tag">Commit analysis</span>
               </div>
             </div>
-            <div class="prereq-group">
-              <h5>Optional (Enhanced Analysis)</h5>
-              <div class="prereq-item optional">
-                <span class="prereq-name">Radon</span>
-                <span class="prereq-tag">Python complexity metrics</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="code-block">
-<pre><code># Install Radon for Python code analysis (optional)
-pip install radon
-
-# Verify
-radon cc --version</code></pre>
           </div>
         </div>
 
@@ -1221,8 +1206,7 @@ jmeter --version        # Or: which jmeter
 k6 version              # Or: which k6
 
 # Code Analysis
-git --version           # Required for commit analysis
-radon --version         # Optional, for Python analysis</code></pre>
+git --version           # Required for commit analysis</code></pre>
           </div>
         </div>
 
@@ -1286,14 +1270,7 @@ radon --version         # Optional, for Python analysis</code></pre>
             </ol>
           </div>
         </details>
-        <details class="faq-item">
-          <summary>"radon not installed" warning</summary>
-          <div class="faq-answer">
-            <p>Radon is optional but recommended for Python analysis. Install with:</p>
-            <div class="code-block"><code>pip install radon</code></div>
-            <p>The analyzer works without radon (uses regex fallback) but gives more accurate results with it.</p>
-          </div>
-        </details>
+
       </div>
     </div>
   </section>
@@ -1407,12 +1384,7 @@ radon --version         # Optional, for Python analysis</code></pre>
               <span class="check-label">Python 3.x</span>
               <span class="check-tag tag-optional">Optional</span>
             </label>
-            <label class="readiness-check">
-              <input type="checkbox" data-tool="radon" data-weight="2" data-category="analysis" />
-              <span class="check-mark"></span>
-              <span class="check-label">Radon</span>
-              <span class="check-tag tag-optional">Python complexity</span>
-            </label>
+
           </div>
 
           <button class="btn btn-primary readiness-reset-btn" onclick="resetReadinessCheck()">
@@ -1527,7 +1499,7 @@ radon --version         # Optional, for Python analysis</code></pre>
                 <div class="info-block__icon">🛠️</div>
                 <div>
                   <strong>Tool Detection</strong>
-                  <span>Auto-detects 9 tools (Node.js, Git, JMeter, k6, Azure CLI, Terraform, Java, Python, Radon) with exact version numbers and install paths.</span>
+                  <span>Auto-detects 8 tools (Node.js, Git, JMeter, k6, Azure CLI, Terraform, Java, and SSH) with exact version numbers and install paths.</span>
                 </div>
               </div>
               <div class="info-block">
