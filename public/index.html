@@ -50,17 +50,17 @@
           all from GitHub Copilot Chat. Local, cloud, or distributed. No API keys needed.
         </p>
         <div class="hero-pipeline">
-          <span class="pipeline-step">Commit</span>
-          <span class="pipeline-arrow">&rarr;</span>
           <span class="pipeline-step">Analyze</span>
           <span class="pipeline-arrow">&rarr;</span>
-          <span class="pipeline-step">Fix</span>
+          <span class="pipeline-step">Spec</span>
           <span class="pipeline-arrow">&rarr;</span>
-          <span class="pipeline-step">Generate</span>
+          <span class="pipeline-step">Script</span>
           <span class="pipeline-arrow">&rarr;</span>
-          <span class="pipeline-step">Test</span>
+          <span class="pipeline-step">Execute</span>
           <span class="pipeline-arrow">&rarr;</span>
-          <span class="pipeline-step">Ship</span>
+          <span class="pipeline-step">Scale</span>
+          <span class="pipeline-arrow">&rarr;</span>
+          <span class="pipeline-step">Results</span>
         </div>
         <div class="hero-actions">
           <a href="#downloads" class="btn btn-primary">Download Extension</a>
@@ -240,32 +240,32 @@
         <div class="pipeline-item">
           <div class="pipeline-num">1</div>
           <div class="pipeline-info">
-            <h4>Commit Your Code</h4>
-            <p>Write code as usual. The agent works with any language &mdash; Python, Go, Java, C#, TypeScript, Rust, and more.</p>
+            <h4>Analyze Code</h4>
+            <p>Commit as usual, then ask the agent to analyze your diff. It detects performance smells, architecture violations, and code quality issues &mdash; any language &mdash; and offers auto-fix patches.</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
         <div class="pipeline-item">
           <div class="pipeline-num">2</div>
           <div class="pipeline-info">
-            <h4>Analyze &amp; Fix</h4>
-            <p>Ask the agent to analyze your last commit. It detects anti-patterns (performance smells, architecture violations) and offers auto-fix patches.</p>
+            <h4>Generate OpenAPI Spec</h4>
+            <p>Auto-generate OpenAPI 3.0 specs from your source code with agent-powered semantic analysis. Extracts routes, models, auth patterns, and validation rules &mdash; works for any language.</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
         <div class="pipeline-item">
           <div class="pipeline-num">3</div>
           <div class="pipeline-info">
-            <h4>Generate OpenAPI &amp; Tests</h4>
-            <p>Auto-generate Swagger specs from your Python code, then create JMeter/k6 test scripts from those specs &mdash; all template-based, fully offline.</p>
+            <h4>Create &amp; Sanitize Test Scripts</h4>
+            <p>Generate JMeter JMX and k6 JavaScript test scripts from your OpenAPI specs. Scripts are automatically sanitized and validated &mdash; no API keys required, fully offline.</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
         <div class="pipeline-item">
           <div class="pipeline-num">4</div>
           <div class="pipeline-info">
-            <h4>Execute &amp; Measure</h4>
-            <p>Run tests locally, on a single Azure VM, or on a distributed cluster with a single chat command. Get p95/p99 percentiles, throughput, and error rates.</p>
+            <h4>Execute Tests</h4>
+            <p>Run locally, on a single Azure VM, across a distributed master-slave cluster, or on your own infrastructure via SSH &mdash; all from a single chat command.</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
@@ -273,7 +273,15 @@
           <div class="pipeline-num">5</div>
           <div class="pipeline-info">
             <h4>Scale &amp; Re-Run</h4>
-            <p>Need more load? Reuse existing clusters to run heavier tests instantly &mdash; skip provisioning entirely. Or bring your own VMs for zero-cost execution.</p>
+            <p>Need more load? Reuse existing clusters for instant re-runs, add more slave VMs, or bring your own servers. Skip provisioning and re-test in minutes.</p>
+          </div>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-item">
+          <div class="pipeline-num">6</div>
+          <div class="pipeline-info">
+            <h4>Analyze Results</h4>
+            <p>Get comprehensive reports with p95/p99 percentiles, per-endpoint breakdown, throughput, error rates, and correlated Azure VM metrics (CPU, memory, network, disk). Includes actionable optimization recommendations.</p>
           </div>
         </div>
 
