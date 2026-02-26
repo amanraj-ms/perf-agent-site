@@ -125,12 +125,14 @@
         <div class="feature-card">
           <div class="feature-icon">🔧</div>
           <h3>OpenAPI / Swagger Generation</h3>
-          <p>Generate OpenAPI 3.0 specs from Python source code. Full semantic analysis for FastAPI and Azure Functions (v1 &amp; v2). No manual spec writing.</p>
+          <p>Generate OpenAPI 3.0 specs from your source code. Agent-powered semantic analysis &mdash; works for any language. No separate API key required, works fully offline.</p>
           <ul class="feature-list">
-            <li>Pydantic model &amp; dataclass extraction</li>
-            <li>Auth detection (JWT, API Key, OAuth2)</li>
+            <li>FastAPI, Flask, Django REST, Sanic, Starlette support</li>
+            <li>Azure Functions v1 &amp; v2 support</li>
+            <li>Model &amp; schema extraction</li>
+            <li>Auth detection (JWT, API Key, OAuth2, Azure Entra ID)</li>
             <li>Validation rules extraction</li>
-            <li>FastAPI &amp; Azure Functions v1/v2</li>
+            <li>Multi-step workflow: collect &rarr; analyze &rarr; generate &rarr; validate</li>
           </ul>
         </div>
         <div class="feature-card">
@@ -166,7 +168,7 @@
         <div class="feature-card">
           <div class="feature-icon">🌐</div>
           <h3>Distributed Load Testing</h3>
-          <p>Master-agent architecture for heavy workloads. Provisions 1 master + N agent VMs in a shared VNet, installs JMeter, runs distributed tests, and downloads results &mdash; all from a single chat command.</p>
+          <p>Master-slave architecture for heavy workloads. Provisions 1 master + N slave VMs in a shared VNet, installs JMeter, runs distributed tests, and downloads results &mdash; all from a single chat command.</p>
           <ul class="feature-list">
             <li>Auto-provisioned Azure VNet with private IPs</li>
             <li>Parallel JMeter install via VNet SCP (10Gbps)</li>
@@ -177,8 +179,9 @@
         <div class="feature-card">
           <div class="feature-icon">🔌</div>
           <h3>Bring Your Own Infrastructure</h3>
-          <p>Already have VMs or bare-metal servers? Run JMeter tests on any machine you can SSH into. No Azure provisioning needed &mdash; just provide the host, user, and key.</p>
+          <p>Already have a VM or bare-metal server? Run JMeter tests on any single machine you can SSH into. Currently supports single-VM execution &mdash; just provide the host, user, and key.</p>
           <ul class="feature-list">
+            <li>Single VM execution via SSH</li>
             <li>Auto-detect or install JMeter via SSH</li>
             <li>Upload JMX, execute, download results</li>
             <li>Works with any cloud or on-prem server</li>
@@ -199,28 +202,28 @@
       </div>
       <div class="upcoming-grid">
         <div class="upcoming-card">
-          <div class="upcoming-badge">Planned</div>
+          <div class="upcoming-badge badge--progress">In Progress</div>
           <div class="upcoming-icon">🏗️</div>
           <h3>BYOI &mdash; Distributed Testing</h3>
-          <p>Bring Your Own Infrastructure for distributed load testing. Orchestrate tests across multiple VMs or agents simultaneously to generate massive traffic volumes from your own fleet.</p>
+          <p>Bring Your Own Infrastructure for distributed load testing. Orchestrate tests across multiple VMs or slaves simultaneously to generate massive traffic volumes from your own fleet.</p>
+        </div>
+        <div class="upcoming-card">
+          <div class="upcoming-badge badge--progress">In Progress</div>
+          <div class="upcoming-icon">⚙️</div>
+          <h3>Advanced JMX Capabilities</h3>
+          <p>Richer JMeter script generation &mdash; CSV data-driven tests, think times, assertions, correlation extractors, parameterized headers, and multi-step transaction controllers.</p>
         </div>
         <div class="upcoming-card">
           <div class="upcoming-badge">Planned</div>
-          <div class="upcoming-icon">☸️</div>
-          <h3>AKS &amp; Container Apps Support</h3>
-          <p>Native support for Azure Kubernetes Service and Azure Container Apps as test targets. Auto-discover endpoints, correlate pod-level metrics, and scale test infra alongside your workloads.</p>
-        </div>
-        <div class="upcoming-card">
-          <div class="upcoming-badge">In Progress</div>
           <div class="upcoming-icon">🔗</div>
           <h3>Correlation &amp; Tracing</h3>
           <p>End-to-end correlation between load test requests and backend traces. Link JMeter/k6 transactions to Application Insights distributed traces for deep root-cause analysis.</p>
         </div>
         <div class="upcoming-card">
-          <div class="upcoming-badge">Planned</div>
-          <div class="upcoming-icon">⚙️</div>
-          <h3>Advanced JMX Capabilities</h3>
-          <p>Richer JMeter script generation &mdash; CSV data-driven tests, think times, assertions, correlation extractors, parameterized headers, and multi-step transaction controllers.</p>
+          <div class="upcoming-badge badge--discussion">In Discussion</div>
+          <div class="upcoming-icon">☸️</div>
+          <h3>AKS &amp; Container Apps Support</h3>
+          <p>Native support for Azure Kubernetes Service and Azure Container Apps as test targets. Auto-discover endpoints, correlate pod-level metrics, and scale test infra alongside your workloads.</p>
         </div>
       </div>
     </div>
@@ -440,13 +443,13 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
             <div class="tool-header">
               <code>collectCodeForSwagger</code>
             </div>
-            <span>Collect and analyze Python source code for OpenAPI spec generation. Scans project structure, extracts routes, models, and auth patterns.</span>
+            <span>Collect and analyze source code for OpenAPI spec generation. Scans project structure, extracts routes, models, and auth patterns. Works for any language.</span>
           </div>
           <div class="tool-item">
             <div class="tool-header">
               <code>generateSwaggerFromCode</code>
             </div>
-            <span>Generate OpenAPI 3.0 specs from Python code (FastAPI, Azure Functions v1 &amp; v2). Full semantic analysis with Pydantic model support, auth extraction, and output in JSON or YAML.</span>
+            <span>Generate OpenAPI 3.0 specs from source code. Agent-powered semantic analysis with model support, auth extraction, and output in JSON or YAML. Works for any language.</span>
           </div>
         </div>
         <div class="tool-category">
@@ -515,7 +518,7 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
             <div class="tool-header">
               <code>runDistributedPerformanceTest</code>
             </div>
-            <span>Master-agent distributed JMeter testing. Provisions master + N agents in a shared VNet, installs JMeter, runs distributed test, downloads results. Supports cluster reuse for instant re-runs.</span>
+            <span>Master-slave distributed JMeter testing. Provisions master + N slaves in a shared VNet, installs JMeter, runs distributed test, downloads results. Supports cluster reuse for instant re-runs.</span>
           </div>
           <div class="tool-item">
             <div class="tool-header">
@@ -876,10 +879,10 @@ npm install && npm run build</code></pre>
         </div>
         <div class="feature-card">
           <div class="feature-icon">🌐</div>
-          <h3>Distributed (Master + Agents)</h3>
-          <p>1 master VM + N agent VMs in a private VNet. JMeter distributed mode for heavy workloads (thousands of concurrent users).</p>
+          <h3>Distributed (Master + Slaves)</h3>
+          <p>1 master VM + N slave VMs in a private VNet. JMeter distributed mode for heavy workloads (thousands of concurrent users).</p>
           <ul class="feature-list">
-            <li>Auto-scaled agent clusters</li>
+            <li>Auto-scaled slave clusters</li>
             <li>VNet-based private communication</li>
             <li>Cluster reuse for rapid re-runs</li>
           </ul>
@@ -887,9 +890,9 @@ npm install && npm run build</code></pre>
         <div class="feature-card">
           <div class="feature-icon">🔌</div>
           <h3>BYOI (Bring Your Own)</h3>
-          <p>Run tests on any machine you can SSH into &mdash; your own VMs, bare-metal servers, or any cloud provider. No Azure required.</p>
+          <p>Run tests on any single machine you can SSH into &mdash; your own VM, bare-metal server, or any cloud provider. Currently supports single-VM execution.</p>
           <ul class="feature-list">
-            <li>Any cloud or on-prem server</li>
+            <li>Single VM via SSH (any cloud or on-prem)</li>
             <li>Auto-install JMeter if missing</li>
             <li>Just provide host, user, SSH key</li>
           </ul>

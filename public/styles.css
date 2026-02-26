@@ -286,10 +286,15 @@ img { max-width: 100%; display: block; }
   color: var(--primary-light);
   border: 1px solid rgba(129, 140, 248, 0.2);
 }
-.upcoming-card:nth-child(4) .upcoming-badge {
+.upcoming-badge.badge--progress {
   background: rgba(52, 211, 153, 0.12);
   color: var(--accent);
   border-color: rgba(52, 211, 153, 0.2);
+}
+.upcoming-badge.badge--discussion {
+  background: rgba(251, 191, 36, 0.12);
+  color: var(--warning);
+  border-color: rgba(251, 191, 36, 0.2);
 }
 .upcoming-icon {
   font-size: 2.2rem;
