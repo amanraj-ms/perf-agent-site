@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollEffects();
   initReleases();
   initVideoPlayer();
+  initReadinessChecker();
 });
 
 // --- Navigation ---
@@ -352,5 +353,149 @@ function initVideoPlayer() {
 
   video.addEventListener('ended', () => {
     overlay.classList.remove('hidden');
+  });
+}
+
+/* ========================================
+   Readiness Checker
+   ======================================== */
+
+function initReadinessChecker() {
+  const boxes = document.querySelectorAll('.readiness-check input[type=checkbox]');
+  if (!boxes.length) return;
+  boxes.forEach(cb => cb.addEventListener('change', computeReadiness));
+}
+
+function resetReadinessCheck() {
+  document.querySelectorAll('.readiness-check input[type=checkbox]').forEach(cb => { cb.checked = false; });
+  computeReadiness();
+}
+
+function computeReadiness() {
+  const boxes = document.querySelectorAll('.readiness-check input[type=checkbox]');
+  const checked = new Set();
+  let totalWeight = 0;
+  let earnedWeight = 0;
+  const catTotals = {};
+  const catEarned = {};
+
+  boxes.forEach(cb => {
+    const tool = cb.dataset.tool;
+    const weight = parseFloat(cb.dataset.weight) || 0;
+    const cat = cb.dataset.category || 'other';
+    totalWeight += weight;
+    catTotals[cat] = (catTotals[cat] || 0) + weight;
+    if (cb.checked) {
+      checked.add(tool);
+      earnedWeight += weight;
+      catEarned[cat] = (catEarned[cat] || 0) + weight;
+    }
+  });
+
+  // VS Code + Copilot Chat are hard prerequisites — nothing works without them
+  const hasPrereqs = checked.has('vscode') && checked.has('copilot');
+  const effectivePct = hasPrereqs
+    ? (totalWeight > 0 ? Math.round((earnedWeight / totalWeight) * 100) : 0)
+    : (checked.size > 0 ? Math.round((earnedWeight / totalWeight) * 100) : 0);
+  // Even if they check other tools, features are blocked without VS Code + Copilot
+  const pct = effectivePct;
+
+  // Update score ring
+  const ring = document.getElementById('score-ring-fill');
+  const circumference = 2 * Math.PI * 52; // r=52
+  if (ring) ring.style.strokeDashoffset = circumference - (circumference * pct / 100);
+
+  // Update score color
+  if (ring) {
+    if (!hasPrereqs) ring.style.stroke = '#f43f5e';
+    else if (pct >= 80) ring.style.stroke = '#34d399';
+    else if (pct >= 50) ring.style.stroke = '#fbbf24';
+    else ring.style.stroke = '#818cf8';
+  }
+
+  // Update score text
+  const scoreVal = document.getElementById('score-value');
+  if (scoreVal) scoreVal.textContent = pct + '%';
+
+  // Blocker banner
+  let banner = document.getElementById('readiness-blocker');
+  if (!hasPrereqs && checked.size > 0) {
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = 'readiness-blocker';
+      banner.className = 'readiness-blocker';
+      const scoreCard = document.querySelector('.readiness-score-card');
+      if (scoreCard) scoreCard.parentNode.insertBefore(banner, scoreCard);
+    }
+    const missingList = [];
+    if (!checked.has('vscode')) missingList.push('VS Code 1.95+');
+    if (!checked.has('copilot')) missingList.push('GitHub Copilot Chat');
+    banner.innerHTML =
+      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' +
+      '<div><strong>Blocked:</strong> ' + missingList.join(' & ') +
+      ' required. Performance Agent is a VS Code MCP extension — it cannot function without these.</div>';
+    banner.style.display = 'flex';
+  } else if (banner) {
+    banner.style.display = 'none';
+  }
+
+  // Update level label
+  const lvl = document.getElementById('score-level');
+  const desc = document.getElementById('score-desc');
+  if (lvl && desc) {
+    if (!hasPrereqs && checked.size > 0) {
+      lvl.textContent = 'Prerequisites Missing';
+      desc.textContent = 'VS Code and GitHub Copilot Chat are mandatory. Install them first — no features will work without them.';
+    } else if (pct === 0) {
+      lvl.textContent = 'Not Started';
+      desc.textContent = 'Select the tools installed on your system to calculate your readiness score.';
+    } else if (pct < 40) {
+      lvl.textContent = 'Getting Started';
+      desc.textContent = 'Install more tools to unlock additional features. Focus on Core Requirements first.';
+    } else if (pct < 70) {
+      lvl.textContent = 'Partially Ready';
+      desc.textContent = 'You can run local tests. Install Azure CLI & Terraform for cloud testing.';
+    } else if (pct < 90) {
+      lvl.textContent = 'Almost There!';
+      desc.textContent = 'You have most tools ready. A few optional tools will complete your setup.';
+    } else {
+      lvl.textContent = 'Fully Ready 🚀';
+      desc.textContent = 'Your environment is fully configured for all Performance Agent features!';
+    }
+  }
+
+  // Feature matrix — all blocked when prereqs missing
+  const featureMap = {
+    'feat-jmx':        ['nodejs'],
+    'feat-k6gen':      ['nodejs'],
+    'feat-swagger':    ['nodejs'],
+    'feat-commit':     ['nodejs', 'git'],
+    'feat-localjmeter':['jmeter', 'java'],
+    'feat-localk6':    ['k6'],
+    'feat-provision':  ['azcli', 'azlogin', 'terraform'],
+    'feat-cloud':      ['azcli', 'azlogin', 'terraform'],
+    'feat-distributed':['azcli', 'azlogin', 'terraform'],
+    'feat-byoi':       ['ssh'],
+    'feat-metrics':    ['azcli', 'azlogin'],
+  };
+
+  Object.entries(featureMap).forEach(([id, deps]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const ok = hasPrereqs && deps.every(d => checked.has(d));
+    el.textContent = ok ? '✔' : '✖';
+    el.classList.toggle('available', ok);
+    el.closest('.feature-row').classList.toggle('available', ok);
+  });
+
+  // Category bars — zero out non-core categories when prerequisites missing
+  ['core', 'local', 'cloud', 'analysis'].forEach(cat => {
+    const bar = document.getElementById('cat-bar-' + cat);
+    const lbl = document.getElementById('cat-pct-' + cat);
+    const t = catTotals[cat] || 1;
+    const e = catEarned[cat] || 0;
+    const p = Math.round((e / t) * 100);
+    if (bar) bar.style.width = p + '%';
+    if (lbl) lbl.textContent = p + '%';
   });
 }
