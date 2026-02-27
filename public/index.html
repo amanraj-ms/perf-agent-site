@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Performance Agent — AI-Powered Developer Tools for VS Code</title>
-  <meta name="description" content="AI-powered code analysis, auto-fix, OpenAPI generation, and performance testing — all from GitHub Copilot Chat. Shift left with intelligent developer tools." />
+  <meta name="description" content="AI-powered code analysis, auto-fix, code complexity analysis, OpenAPI generation, and performance testing — all from GitHub Copilot Chat. Shift left with intelligent developer tools." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -186,7 +186,7 @@
         <div class="hero-badge">Open Source &middot; MCP Powered &middot; VS Code Extension &middot; Shift Left</div>
         <h1>AI-Powered<br />Developer Tools</h1>
         <p class="hero-subtitle">
-          Code analysis, auto-fix, OpenAPI generation, and performance testing &mdash;
+          Code analysis, auto-fix, code complexity analysis, OpenAPI generation, and performance testing &mdash;
           all from GitHub Copilot Chat. Local, cloud, or distributed. No API keys needed.
         </p>
         <div class="hero-pipeline">
@@ -260,6 +260,19 @@
             <li>Architecture violations &amp; code smells</li>
             <li>Auto-fix with unified diff patches</li>
             <li>Shift left &mdash; catch issues before code review</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Code Complexity Analysis</h3>
+          <p>Multi-language static analysis engine that computes cyclomatic complexity, cognitive complexity, nesting depth, time complexity, and maintainability index per method. Supports Python, TypeScript, JavaScript, Go, Java, and C#/.NET.</p>
+          <ul class="feature-list">
+            <li>Cyclomatic &amp; cognitive complexity per method</li>
+            <li>Time complexity estimation (O(1) to O(n&sup3;), recursive)</li>
+            <li>Max nesting depth &amp; parameter count checks</li>
+            <li>Maintainability index (0&ndash;100 scale)</li>
+            <li>Auto-chained with commit analysis</li>
+            <li>Auto-fix: extract method, early returns, simplify conditions</li>
           </ul>
         </div>
         <div class="feature-card">
@@ -389,8 +402,8 @@
         <div class="pipeline-item">
           <div class="pipeline-num">1</div>
           <div class="pipeline-info">
-            <h4>Analyze Code</h4>
-            <p>Commit as usual, then ask the agent to analyze your diff. It detects performance smells, architecture violations, and code quality issues &mdash; any language &mdash; and offers auto-fix patches.</p>
+            <h4>Analyze Code &amp; Complexity</h4>
+            <p>Commit as usual, then ask the agent to analyze your diff. It detects performance smells, architecture violations, and code quality issues &mdash; any language &mdash; and automatically runs code complexity analysis on changed files. Offers auto-fix patches for both performance and complexity issues.</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
@@ -570,7 +583,7 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
     <div class="container">
       <div class="section-header">
         <h2>MCP Tools Reference</h2>
-        <p>18 tools available through GitHub Copilot Agent Mode</p>
+        <p>20 tools available through GitHub Copilot Agent Mode</p>
       </div>
       <div class="tools-grid">
         <div class="tool-category">
@@ -616,6 +629,12 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
               <code>collectCommitForAnalysis</code>
             </div>
             <span>Collect git diff and changed file contents from last commit for AI-powered performance analysis. Detects performance smell types across all languages.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>analyzeCodeComplexity</code>
+            </div>
+            <span>Multi-language static complexity analysis. Computes cyclomatic complexity, cognitive complexity, nesting depth, time complexity (O(1)&ndash;O(n&sup3;), recursive), parameter count, and maintainability index per method. Supports Python, TypeScript, JavaScript, Go, Java, and C#/.NET. Auto-chained with commit analysis.</span>
           </div>
         </div>
         <div class="tool-category">
@@ -682,6 +701,12 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
               <code>runTestOnExistingVM</code>
             </div>
             <span>BYOI: Run JMeter tests on any user-provided VM via SSH. Auto-detects or installs JMeter, uploads JMX, executes, downloads results. No Azure provisioning needed.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>runDistributedBYOITest</code>
+            </div>
+            <span>BYOI Distributed: Master-slave JMeter execution across your own servers via SSH. Provide a master and N slave hosts &mdash; agent installs JMeter, configures remote hosts, runs distributed test, and collects results.</span>
           </div>
           <div class="tool-item">
             <div class="tool-header">
@@ -1425,6 +1450,10 @@ git --version           # Required for commit analysis</code></pre>
                 <span class="feature-status" id="feat-commit">&#x2716;</span>
                 <span class="feature-name">Commit Analysis &amp; Auto-Fix</span>
               </div>
+              <div class="feature-row" data-requires="nodejs">
+                <span class="feature-status" id="feat-complexity">&#x2716;</span>
+                <span class="feature-name">Code Complexity Analysis</span>
+              </div>
               <div class="feature-row" data-requires="jmeter,java">
                 <span class="feature-status" id="feat-localjmeter">&#x2716;</span>
                 <span class="feature-name">Local JMeter Testing</span>
@@ -1621,11 +1650,12 @@ git --version           # Required for commit analysis</code></pre>
         <div class="feature-card">
           <div class="feature-icon">🔌</div>
           <h3>BYOI (Bring Your Own)</h3>
-          <p>Run tests on any single machine you can SSH into &mdash; your own VM, bare-metal server, or any cloud provider. Currently supports single-VM execution.</p>
+          <p>Run tests on any machine you can SSH into &mdash; your own VMs, bare-metal servers, or any cloud provider. Supports single-VM and distributed master-slave execution.</p>
           <ul class="feature-list">
-            <li>Single VM via SSH (any cloud or on-prem)</li>
+            <li>Single VM or distributed master + N slaves via SSH</li>
             <li>Auto-install JMeter if missing</li>
             <li>Just provide host, user, SSH key</li>
+            <li>Works with any cloud or on-prem server</li>
           </ul>
         </div>
       </div>
@@ -1713,7 +1743,7 @@ git --version           # Required for commit analysis</code></pre>
   <section class="cta-section">
     <div class="container">
       <h2>Ready to level up your development workflow?</h2>
-      <p>Open source. Code analysis, OpenAPI generation, and performance testing &mdash; local, single-VM, distributed, or BYOI. Windows, macOS, and Linux.</p>
+      <p>Open source. Code analysis, complexity analysis, OpenAPI generation, and performance testing &mdash; local, single-VM, distributed, or BYOI. Windows, macOS, and Linux.</p>
       <div class="cta-actions">
         <a href="#downloads" class="btn btn-primary btn-lg">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
