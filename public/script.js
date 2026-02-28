@@ -466,10 +466,12 @@ function computeReadiness() {
 
   // Feature matrix — all blocked when prereqs missing
   const featureMap = {
+    'feat-nfr':        ['nodejs'],
     'feat-jmx':        ['nodejs'],
     'feat-k6gen':      ['nodejs'],
     'feat-swagger':    ['nodejs'],
     'feat-commit':     ['nodejs', 'git'],
+    'feat-complexity': ['nodejs'],
     'feat-localjmeter':['jmeter', 'java'],
     'feat-localk6':    ['k6'],
     'feat-provision':  ['azcli', 'azlogin', 'terraform'],
@@ -477,6 +479,7 @@ function computeReadiness() {
     'feat-distributed':['azcli', 'azlogin', 'terraform'],
     'feat-byoi':       ['ssh'],
     'feat-metrics':    ['azcli', 'azlogin'],
+    'feat-appinsights':['azcli', 'azlogin'],
   };
 
   Object.entries(featureMap).forEach(([id, deps]) => {

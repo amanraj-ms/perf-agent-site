@@ -1400,6 +1400,41 @@ img { max-width: 100%; display: block; }
 .feature-card--highlight {
   border: 1px solid rgba(129,140,248,.3);
   background: linear-gradient(135deg, rgba(129,140,248,.06) 0%, rgba(52,211,153,.04) 100%);
+  position: relative;
+}
+
+/* Feature "New" badge */
+.feature-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(52, 211, 153, 0.15);
+  color: var(--accent);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+/* Tool "New" badge */
+.tool-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.tool-badge--new {
+  background: rgba(52, 211, 153, 0.15);
+  color: var(--accent);
+  border: 1px solid rgba(52, 211, 153, 0.3);
 }
 .feature-card-link {
   display: inline-block;

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Performance Agent — AI-Powered Developer Tools for VS Code</title>
-  <meta name="description" content="AI-powered code analysis, auto-fix, code complexity analysis, OpenAPI generation, and performance testing — all from GitHub Copilot Chat. Shift left with intelligent developer tools." />
+  <meta name="description" content="AI-powered NFR capture, workload modeling, smart test recommendations, code analysis, OpenAPI generation, and performance testing — all from GitHub Copilot Chat. Shift left with intelligent developer tools." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -186,19 +186,21 @@
         <div class="hero-badge">Open Source &middot; MCP Powered &middot; VS Code Extension &middot; Shift Left</div>
         <h1>AI-Powered<br />Developer Tools</h1>
         <p class="hero-subtitle">
-          Code analysis, auto-fix, code complexity analysis, OpenAPI generation, and performance testing &mdash;
+          NFR capture, workload modeling, smart test recommendations, code complexity analysis, OpenAPI generation, and performance testing &mdash;
           all from GitHub Copilot Chat. Local, cloud, or distributed. No API keys needed.
         </p>
         <div class="hero-pipeline">
           <span class="pipeline-step">Analyze</span>
           <span class="pipeline-arrow">&rarr;</span>
+          <span class="pipeline-step">NFR &amp; Workload</span>
+          <span class="pipeline-arrow">&rarr;</span>
           <span class="pipeline-step">Spec</span>
           <span class="pipeline-arrow">&rarr;</span>
           <span class="pipeline-step">Script</span>
           <span class="pipeline-arrow">&rarr;</span>
-          <span class="pipeline-step">Execute</span>
+          <span class="pipeline-step">Recommend</span>
           <span class="pipeline-arrow">&rarr;</span>
-          <span class="pipeline-step">Scale</span>
+          <span class="pipeline-step">Execute</span>
           <span class="pipeline-arrow">&rarr;</span>
           <span class="pipeline-step">Results</span>
         </div>
@@ -248,9 +250,37 @@
     <div class="container">
       <div class="section-header">
         <h2>Everything You Need to Ship Better Code</h2>
-        <p>A complete developer toolkit that lives inside your IDE &mdash; from code analysis to distributed load testing</p>
+        <p>A complete developer toolkit that lives inside your IDE &mdash; from NFR capture to distributed load testing with smart recommendations</p>
       </div>
       <div class="features-grid">
+        <div class="feature-card feature-card--highlight">
+          <div class="feature-badge">New</div>
+          <div class="feature-icon">🎯</div>
+          <h3>NFR Capture &amp; Workload Modeling</h3>
+          <p>Capture Non-Functional Requirements and define workload models before generating test scripts. Drives all downstream testing with realistic traffic patterns and SLA targets.</p>
+          <ul class="feature-list">
+            <li>Capture concurrency, response time (p50/p95/p99), throughput, error rate</li>
+            <li>6 workload presets: e-commerce, api-gateway, read-heavy, write-heavy, crud-app, equal</li>
+            <li>Custom per-endpoint traffic distribution &amp; think times</li>
+            <li>Load patterns: load, stress, spike, soak, step</li>
+            <li>3 input modes: paste text, file path, or interactive Q&amp;A</li>
+            <li>Saved to <code>.perf-output/nfr/</code> for downstream tools</li>
+          </ul>
+        </div>
+        <div class="feature-card feature-card--highlight">
+          <div class="feature-badge">New</div>
+          <div class="feature-icon">📊</div>
+          <h3>Smart Test Recommendations</h3>
+          <p>AI-powered analysis of your test scripts to recommend optimal infrastructure. Calculates VM sizing, agent count, and cost estimates based on workload math &mdash; not guesswork.</p>
+          <ul class="feature-list">
+            <li>Workload profiling: threads, samplers, write ratio, payload size</li>
+            <li>Infrastructure math: 250 users/core, TCP port limits, memory</li>
+            <li>Automatic agent count calculation for distributed tests</li>
+            <li>Cost-per-hour estimation for Azure VMs</li>
+            <li>Binding constraint detection (CPU vs TCP vs memory)</li>
+            <li>Smart VM size selection from workload facts</li>
+          </ul>
+        </div>
         <div class="feature-card">
           <div class="feature-icon">🔍</div>
           <h3>Git Diff Analysis &amp; Auto-Fix</h3>
@@ -288,14 +318,19 @@
             <li>Multi-step workflow: collect &rarr; analyze &rarr; generate &rarr; validate</li>
           </ul>
         </div>
-        <div class="feature-card">
+        <div class="feature-card feature-card--highlight">
+          <div class="feature-badge">New</div>
           <div class="feature-icon">📝</div>
-          <h3>Test Script Generation</h3>
-          <p>Create JMeter JMX and k6 JavaScript test scripts from OpenAPI/Swagger specs. Template-based generation &mdash; no API keys required, works fully offline.</p>
+          <h3>Test Script Generation with Load Profiles</h3>
+          <p>Create JMeter JMX and k6 JavaScript test scripts from OpenAPI/Swagger specs &mdash; now with 5 load profile types, NFR-driven enhancements, workload model integration, and auto-correlation.</p>
           <ul class="feature-list">
-            <li>JMeter (.jmx) and k6 (.js) support</li>
-            <li>Automatic script sanitization &amp; validation</li>
-            <li>Realistic load scenarios from API specs</li>
+            <li>JMeter (.jmx) and k6 (.js) with automatic sanitization</li>
+            <li>5 load profiles: basic, ramp, spike, soak, step-load</li>
+            <li>Workload model &rarr; weighted thread groups per endpoint</li>
+            <li>Auto-correlation: POST &rarr; GET/PUT/DELETE chain extraction</li>
+            <li>App Insights BackendListener for real-time server metrics</li>
+            <li>Duration assertions from NFR response time SLAs</li>
+            <li>Bearer token injection for authenticated APIs</li>
           </ul>
         </div>
         <div class="feature-card">
@@ -309,13 +344,16 @@
           </ul>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <h3>Result Analysis &amp; Metrics</h3>
-          <p>Comprehensive reports with response times, throughput, error rates, and correlated Azure VM metrics (CPU, memory, network, disk).</p>
+          <div class="feature-icon">�</div>
+          <h3>Result Analysis &amp; App Insights</h3>
+          <p>Comprehensive reports with response times, throughput, error rates, correlated Azure VM metrics, and server-side Application Insights telemetry &mdash; the complete picture.</p>
           <ul class="feature-list">
-            <li>p95/p99 percentile calculations</li>
-            <li>Infrastructure bottleneck detection</li>
-            <li>Actionable recommendations</li>
+            <li>p50/p90/p95/p99 percentile calculations</li>
+            <li>Per-endpoint breakdown with error analysis</li>
+            <li>Azure VM metrics: CPU, memory, network, disk</li>
+            <li>App Insights: server-side latency, dependencies, exceptions</li>
+            <li>Anomaly detection &amp; bottleneck identification</li>
+            <li>Actionable optimization recommendations</li>
           </ul>
         </div>
         <div class="feature-card">
@@ -371,15 +409,27 @@
       <div class="upcoming-grid">
         <div class="upcoming-card">
           <div class="upcoming-badge badge--progress">In Progress</div>
-          <div class="upcoming-icon">⚙️</div>
+          <div class="upcoming-icon">�</div>
+          <h3>Advanced Correlation Engine</h3>
+          <p>Dynamic correlation rule extraction with regex-based extractors, JSON path support, and chained variable substitution across requests. Auto-detect session tokens, CSRF tokens, and dynamic IDs from response bodies and headers.</p>
+        </div>
+        <div class="upcoming-card">
+          <div class="upcoming-badge badge--progress">In Progress</div>
+          <div class="upcoming-icon">🧩</div>
           <h3>Advanced JMX Capabilities</h3>
-          <p>Richer JMeter script generation &mdash; CSV data-driven tests, think times, assertions, correlation extractors, parameterized headers, and multi-step transaction controllers.</p>
+          <p>Custom thread group configurations, parameterized data-driven tests with CSV datasets, conditional controllers, transaction grouping, and advanced timer strategies for realistic user simulation patterns.</p>
+        </div>
+        <div class="upcoming-card">
+          <div class="upcoming-badge badge--progress">In Progress</div>
+          <div class="upcoming-icon">📊</div>
+          <h3>App Insights Deep Integration</h3>
+          <p>Real-time correlation between load test transactions and Application Insights distributed traces. Live dashboards during test execution with server-side latency, dependency failures, and exception spikes.</p>
         </div>
         <div class="upcoming-card">
           <div class="upcoming-badge">Planned</div>
-          <div class="upcoming-icon">🔗</div>
-          <h3>Correlation &amp; Tracing</h3>
-          <p>End-to-end correlation between load test requests and backend traces. Link JMeter/k6 transactions to Application Insights distributed traces for deep root-cause analysis.</p>
+          <div class="upcoming-icon">🔍</div>
+          <h3>End-to-End Tracing</h3>
+          <p>Link JMeter/k6 transactions to Application Insights distributed traces for deep root-cause analysis. Correlate client-side metrics with server-side spans, database calls, and external dependencies.</p>
         </div>
         <div class="upcoming-card">
           <div class="upcoming-badge badge--discussion">In Discussion</div>
@@ -396,7 +446,7 @@
     <div class="container">
       <div class="section-header">
         <h2>How It Works</h2>
-        <p>From commit to confidence &mdash; multiple workflows, one tool, all from Copilot Chat</p>
+        <p>From commit to confidence &mdash; a complete workflow powered by NFR-driven testing, all from Copilot Chat</p>
       </div>
       <div class="pipeline-visual">
         <div class="pipeline-item">
@@ -410,21 +460,37 @@
         <div class="pipeline-item">
           <div class="pipeline-num">2</div>
           <div class="pipeline-info">
-            <h4>Generate OpenAPI Spec</h4>
-            <p>Auto-generate OpenAPI 3.0 specs from your source code with agent-powered semantic analysis. Extracts routes, models, auth patterns, and validation rules &mdash; works for any language.</p>
+            <h4>Capture NFR &amp; Workload Model</h4>
+            <p>Define your non-functional requirements &mdash; concurrency targets, response time SLAs (p50/p95/p99), throughput, error rate budgets, and load patterns. Choose from 6 workload presets (e-commerce, api-gateway, read-heavy, etc.) or define custom per-endpoint traffic distributions. All captured data drives downstream script generation.</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
         <div class="pipeline-item">
           <div class="pipeline-num">3</div>
           <div class="pipeline-info">
-            <h4>Create &amp; Sanitize Test Scripts</h4>
-            <p>Generate JMeter JMX and k6 JavaScript test scripts from your OpenAPI specs. Scripts are automatically sanitized and validated &mdash; no API keys required, fully offline.</p>
+            <h4>Generate OpenAPI Spec</h4>
+            <p>Auto-generate OpenAPI 3.0 specs from your source code with agent-powered semantic analysis. Extracts routes, models, auth patterns, and validation rules &mdash; works for any language.</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
         <div class="pipeline-item">
           <div class="pipeline-num">4</div>
+          <div class="pipeline-info">
+            <h4>Create &amp; Sanitize Test Scripts</h4>
+            <p>Generate JMeter JMX and k6 scripts from your OpenAPI specs with NFR-driven enhancements &mdash; 5 load profile types (ramp, spike, soak, step, basic), workload-weighted thread groups, duration assertions, auto-correlation, and optional App Insights BackendListener. Scripts are automatically sanitized and validated.</p>
+          </div>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-item">
+          <div class="pipeline-num">5</div>
+          <div class="pipeline-info">
+            <h4>Smart Recommendations</h4>
+            <p>Before execution, the agent deep-analyzes your test script &mdash; thread counts, sampler complexity, write ratio, payload sizes, SSL usage &mdash; and calculates the optimal infrastructure: VM size, agent count, TCP port constraints, and estimated cost per hour. No guesswork, just math.</p>
+          </div>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-item">
+          <div class="pipeline-num">6</div>
           <div class="pipeline-info">
             <h4>Execute Tests</h4>
             <p>Run locally, on a single Azure VM, across a distributed master-slave cluster, or on your own infrastructure via SSH &mdash; all from a single chat command.</p>
@@ -432,7 +498,7 @@
         </div>
         <div class="pipeline-connector"></div>
         <div class="pipeline-item">
-          <div class="pipeline-num">5</div>
+          <div class="pipeline-num">7</div>
           <div class="pipeline-info">
             <h4>Scale &amp; Re-Run</h4>
             <p>Need more load? Reuse existing clusters for instant re-runs, add more slave VMs, or bring your own servers. Skip provisioning and re-test in minutes.</p>
@@ -440,10 +506,10 @@
         </div>
         <div class="pipeline-connector"></div>
         <div class="pipeline-item">
-          <div class="pipeline-num">6</div>
+          <div class="pipeline-num">8</div>
           <div class="pipeline-info">
-            <h4>Analyze Results</h4>
-            <p>Get comprehensive reports with p95/p99 percentiles, per-endpoint breakdown, throughput, error rates, and correlated Azure VM metrics (CPU, memory, network, disk). Includes actionable optimization recommendations.</p>
+            <h4>Analyze Results &amp; App Insights</h4>
+            <p>Get comprehensive reports with p50/p90/p95/p99 percentiles, per-endpoint breakdown, throughput, error rates, correlated Azure VM metrics, and server-side Application Insights telemetry (request latency, dependencies, exceptions). Includes anomaly detection and actionable optimization recommendations.</p>
           </div>
         </div>
 
@@ -583,16 +649,26 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
     <div class="container">
       <div class="section-header">
         <h2>MCP Tools Reference</h2>
-        <p>20 tools available through GitHub Copilot Agent Mode</p>
+        <p>22+ tools available through GitHub Copilot Agent Mode</p>
       </div>
       <div class="tools-grid">
+        <div class="tool-category">
+          <h3>🎯 NFR &amp; Workload</h3>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>captureNFR</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Capture Non-Functional Requirements and workload models. Supports text input, file path, or interactive Q&amp;A. 6 workload presets (e-commerce, api-gateway, read-heavy, write-heavy, crud-app, equal) with custom per-endpoint traffic distribution, think times, and read/write ratios. Saves to <code>.perf-output/nfr/</code>.</span>
+          </div>
+        </div>
         <div class="tool-category">
           <h3>🧪 Test Generation</h3>
           <div class="tool-item">
             <div class="tool-header">
               <code>generatePerfScript</code>
             </div>
-            <span>Generate JMeter (.jmx) or k6 (.js) performance test scripts from Swagger/OpenAPI specs. Template-based, no API keys required.</span>
+            <span>Generate JMeter (.jmx) or k6 (.js) performance test scripts from Swagger/OpenAPI specs. Supports 5 load profiles (basic, ramp, spike, soak, step), workload model-weighted thread groups, auto-correlation (POST&rarr;GET chains), duration assertions from NFR SLAs, App Insights BackendListener integration, and bearer token injection. Template-based, no API keys required.</span>
           </div>
           <div class="tool-item">
             <div class="tool-header">
@@ -688,7 +764,7 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
             <div class="tool-header">
               <code>getCloudTestRecommendation</code>
             </div>
-            <span>Analyze scripts and recommend optimal Azure VM size with cost estimates.</span>
+            <span>Deep-analyze JMX/k6 scripts and return workload profile (threads, samplers, write ratio, payload size, SSL, auth) plus infrastructure math (250 users/core, TCP port limits, agent count, cost/hour). Smart VM sizing recommendations.</span>
           </div>
           <div class="tool-item">
             <div class="tool-header">
@@ -725,6 +801,13 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
               <code>getVMMetrics</code>
             </div>
             <span>Fetch Azure VM performance metrics: CPU, memory, network, disk with anomaly detection.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>getAppInsightsMetrics</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Query Application Insights via KQL for server-side metrics: per-endpoint p50/p95/p99 latency, dependency call performance, server exceptions under load, and CPU/memory/GC pressure. Anomaly detection flags high error rates (&gt;1%), slow p95 (&gt;1s), and critical endpoints.</span>
           </div>
         </div>
       </div>
@@ -1435,6 +1518,10 @@ git --version           # Required for commit analysis</code></pre>
             <h4>Feature Availability</h4>
             <div class="feature-matrix">
               <div class="feature-row" data-requires="nodejs">
+                <span class="feature-status" id="feat-nfr">&#x2716;</span>
+                <span class="feature-name">NFR Capture &amp; Workload Modeling</span>
+              </div>
+              <div class="feature-row" data-requires="nodejs">
                 <span class="feature-status" id="feat-jmx">&#x2716;</span>
                 <span class="feature-name">Generate JMX Scripts</span>
               </div>
@@ -1481,6 +1568,10 @@ git --version           # Required for commit analysis</code></pre>
               <div class="feature-row" data-requires="azcli,azlogin">
                 <span class="feature-status" id="feat-metrics">&#x2716;</span>
                 <span class="feature-name">VM Metrics Collection</span>
+              </div>
+              <div class="feature-row" data-requires="azcli,azlogin">
+                <span class="feature-status" id="feat-appinsights">&#x2716;</span>
+                <span class="feature-name">App Insights Metrics</span>
               </div>
             </div>
           </div>
@@ -1743,7 +1834,7 @@ git --version           # Required for commit analysis</code></pre>
   <section class="cta-section">
     <div class="container">
       <h2>Ready to level up your development workflow?</h2>
-      <p>Open source. Code analysis, complexity analysis, OpenAPI generation, and performance testing &mdash; local, single-VM, distributed, or BYOI. Windows, macOS, and Linux.</p>
+      <p>Open source. NFR capture, workload modeling, smart recommendations, code &amp; complexity analysis, OpenAPI generation, and performance testing &mdash; local, single-VM, distributed, or BYOI. Windows, macOS, and Linux.</p>
       <div class="cta-actions">
         <a href="#downloads" class="btn btn-primary btn-lg">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
