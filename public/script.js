@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initReleases();
   initVideoPlayer();
   initReadinessChecker();
+  initMermaidDiagrams();
 });
 
 // --- Navigation ---
@@ -502,3 +503,77 @@ function computeReadiness() {
     if (lbl) lbl.textContent = p + '%';
   });
 }
+
+// --- Mermaid Diagrams ---
+function initMermaidDiagrams() {
+  if (typeof mermaid !== 'undefined') {
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#16161f',
+        primaryColor: '#818cf8',
+        primaryTextColor: '#e4e4e7',
+        primaryBorderColor: '#6366f1',
+        lineColor: '#6b7280',
+        secondaryColor: '#1c1c28',
+        tertiaryColor: '#12121a',
+        fontSize: '14px'
+      },
+      flowchart: {
+        htmlLabels: true,
+        curve: 'basis',
+        padding: 12
+      }
+    });
+  }
+
+  // Observe workflow cards for scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.workflow-card').forEach(el => {
+    el.classList.add('fade-in');
+    observer.observe(el);
+  });
+}
+
+// --- Workflow Lightbox ---
+function openWorkflowLightbox(card) {
+  const lightbox = document.getElementById('workflow-lightbox');
+  const titleEl = document.getElementById('lightbox-title');
+  const bodyEl = document.getElementById('lightbox-body');
+
+  const title = card.querySelector('.workflow-card__title').textContent;
+  const diagramSvg = card.querySelector('.workflow-card__diagram svg');
+
+  titleEl.textContent = title;
+  bodyEl.innerHTML = '';
+
+  if (diagramSvg) {
+    const clone = diagramSvg.cloneNode(true);
+    clone.removeAttribute('style');
+    clone.setAttribute('width', '100%');
+    clone.style.maxWidth = '90vw';
+    clone.style.maxHeight = '78vh';
+    bodyEl.appendChild(clone);
+  }
+
+  lightbox.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeWorkflowLightbox() {
+  const lightbox = document.getElementById('workflow-lightbox');
+  lightbox.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Close lightbox on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeWorkflowLightbox();
+});

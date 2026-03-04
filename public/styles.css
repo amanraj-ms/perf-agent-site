@@ -351,6 +351,16 @@ img { max-width: 100%; display: block; }
   color: var(--warning);
   border-color: rgba(251, 191, 36, 0.2);
 }
+.upcoming-badge.badge--done {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  border-color: rgba(34, 197, 94, 0.3);
+}
+.upcoming-badge.badge--hold {
+  background: rgba(244, 63, 94, 0.12);
+  color: #f43f5e;
+  border-color: rgba(244, 63, 94, 0.25);
+}
 .upcoming-icon {
   font-size: 2.2rem;
   margin-bottom: 16px;
@@ -1517,4 +1527,167 @@ img { max-width: 100%; display: block; }
 @media (max-width: 600px) {
   .readiness-score-card { flex-direction: column; text-align: center; }
   .score-ring-wrapper { width: 100px; height: 100px; }
+}
+
+/* ========================================
+   Workflow Diagrams Section
+   ======================================== */
+.workflow-diagrams-section {
+  padding: 80px 0;
+  background: var(--bg-alt);
+  border-top: 1px solid var(--border);
+}
+
+.workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+  gap: 24px;
+  margin-top: 2rem;
+}
+
+.workflow-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  cursor: pointer;
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.workflow-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+}
+
+.workflow-card__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.workflow-card__title::before {
+  content: '📊';
+  font-size: 1.2rem;
+}
+
+.workflow-card__diagram {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  overflow: hidden;
+  max-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.workflow-card__diagram .mermaid {
+  width: 100%;
+}
+.workflow-card__diagram svg {
+  max-width: 100%;
+  max-height: 360px;
+  height: auto;
+}
+
+.workflow-card__hint {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-top: 12px;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.workflow-card:hover .workflow-card__hint {
+  opacity: 1;
+}
+
+/* --- Workflow Lightbox --- */
+.workflow-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.workflow-lightbox.active {
+  display: flex;
+}
+.workflow-lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+}
+.workflow-lightbox__content {
+  position: relative;
+  z-index: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  max-width: 95vw;
+  max-height: 92vh;
+  overflow: auto;
+  box-shadow: var(--shadow-lg);
+  animation: lightbox-in 0.25s ease;
+}
+@keyframes lightbox-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.workflow-lightbox__close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: color var(--transition);
+  z-index: 2;
+}
+.workflow-lightbox__close:hover {
+  color: var(--text);
+}
+.workflow-lightbox__title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+  padding-right: 40px;
+}
+.workflow-lightbox__body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.workflow-lightbox__body svg {
+  max-width: 90vw;
+  max-height: 78vh;
+  height: auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .workflow-grid {
+    grid-template-columns: 1fr;
+  }
+  .workflow-card__diagram {
+    max-height: 300px;
+  }
+  .workflow-lightbox__content {
+    padding: 20px;
+    margin: 8px;
+  }
 }

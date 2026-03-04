@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=2" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
   <style>
     /* Prerequisites Section Additional Styles */
     .prereqs-section {
@@ -155,6 +156,7 @@
       <div class="nav-links" id="nav-links">
         <a href="#features">Features</a>
         <a href="#pipeline">How It Works</a>
+        <a href="#workflow-diagrams">Workflows</a>
         <a href="#tools">Tools</a>
         <a href="#downloads">Downloads</a>
         <a href="#getting-started">Get Started</a>
@@ -328,6 +330,7 @@
             <li>5 load profiles: basic, ramp, spike, soak, step-load</li>
             <li>Workload model &rarr; weighted thread groups per endpoint</li>
             <li>Auto-correlation: POST &rarr; GET/PUT/DELETE chain extraction</li>
+            <li><strong>App Insights integration:</strong> collects connection details during script creation &mdash; test data sent directly to App Insights</li>
             <li>App Insights BackendListener for real-time server metrics</li>
             <li>Duration assertions from NFR response time SLAs</li>
             <li>Bearer token injection for authenticated APIs</li>
@@ -343,14 +346,16 @@
             <li>Terraform-based infra &amp; auto-cleanup</li>
           </ul>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">�</div>
-          <h3>Result Analysis &amp; App Insights</h3>
-          <p>Comprehensive reports with response times, throughput, error rates, correlated Azure VM metrics, and server-side Application Insights telemetry &mdash; the complete picture.</p>
+        <div class="feature-card feature-card--highlight">
+          <div class="feature-badge">New</div>
+          <div class="feature-icon">📈</div>
+          <h3>Result Analysis &amp; End-to-End Tracing</h3>
+          <p>Comprehensive reports with response times, throughput, error rates, correlated Azure VM metrics, and <strong>full end-to-end tracing</strong> &mdash; client-side JMeter/k6 results automatically correlated with server-side Application Insights telemetry.</p>
           <ul class="feature-list">
             <li>p50/p90/p95/p99 percentile calculations</li>
             <li>Per-endpoint breakdown with error analysis</li>
             <li>Azure VM metrics: CPU, memory, network, disk</li>
+            <li><strong>End-to-end tracing:</strong> correlate client metrics with App Insights server spans, dependency calls &amp; exceptions</li>
             <li>App Insights: server-side latency, dependencies, exceptions</li>
             <li>Anomaly detection &amp; bottleneck identification</li>
             <li>Actionable optimization recommendations</li>
@@ -409,30 +414,18 @@
       <div class="upcoming-grid">
         <div class="upcoming-card">
           <div class="upcoming-badge badge--progress">In Progress</div>
-          <div class="upcoming-icon">�</div>
+          <div class="upcoming-icon">🔗</div>
           <h3>Advanced Correlation Engine</h3>
           <p>Dynamic correlation rule extraction with regex-based extractors, JSON path support, and chained variable substitution across requests. Auto-detect session tokens, CSRF tokens, and dynamic IDs from response bodies and headers.</p>
         </div>
         <div class="upcoming-card">
           <div class="upcoming-badge badge--progress">In Progress</div>
-          <div class="upcoming-icon">🧩</div>
-          <h3>Advanced JMX Capabilities</h3>
-          <p>Custom thread group configurations, parameterized data-driven tests with CSV datasets, conditional controllers, transaction grouping, and advanced timer strategies for realistic user simulation patterns.</p>
+          <div class="upcoming-icon">📋</div>
+          <h3>Business Scenario Creation</h3>
+          <p>Upload a business scenario file or use a provided template, and the agent will generate detailed JMX test plans on top of it &mdash; complete with thread groups, controllers, assertions, and parameterized data. Turn business requirements into production-grade test scripts in one step.</p>
         </div>
         <div class="upcoming-card">
-          <div class="upcoming-badge badge--progress">In Progress</div>
-          <div class="upcoming-icon">📊</div>
-          <h3>App Insights Deep Integration</h3>
-          <p>Real-time correlation between load test transactions and Application Insights distributed traces. Live dashboards during test execution with server-side latency, dependency failures, and exception spikes.</p>
-        </div>
-        <div class="upcoming-card">
-          <div class="upcoming-badge">Planned</div>
-          <div class="upcoming-icon">🔍</div>
-          <h3>End-to-End Tracing</h3>
-          <p>Link JMeter/k6 transactions to Application Insights distributed traces for deep root-cause analysis. Correlate client-side metrics with server-side spans, database calls, and external dependencies.</p>
-        </div>
-        <div class="upcoming-card">
-          <div class="upcoming-badge badge--discussion">In Discussion</div>
+          <div class="upcoming-badge badge--hold">On Hold</div>
           <div class="upcoming-icon">☸️</div>
           <h3>AKS &amp; Container Apps Support</h3>
           <p>Native support for Azure Kubernetes Service and Azure Container Apps as test targets. Auto-discover endpoints, correlate pod-level metrics, and scale test infra alongside your workloads.</p>
@@ -516,6 +509,398 @@
       </div>
     </div>
   </section>
+
+  <!-- Workflow Diagrams Section -->
+  <section class="workflow-diagrams-section" id="workflow-diagrams">
+    <div class="container">
+      <div class="section-header">
+        <h2>Workflow Diagrams</h2>
+        <p>Visual architecture of every workflow &mdash; from intent detection to execution. Click any diagram to enlarge.</p>
+      </div>
+      <div class="workflow-grid">
+
+        <!-- Diagram 1: Master Architecture -->
+        <div class="workflow-card" onclick="openWorkflowLightbox(this)">
+          <h4 class="workflow-card__title">Master Architecture</h4>
+          <div class="workflow-card__diagram">
+            <pre class="mermaid">
+flowchart TD
+    START((User Request)) --> INTENT{Intent Detection}
+
+    INTENT -->|"capture NFR"| W0[WF 0: NFR Capture\ncaptureNFR]
+    INTENT -->|"test plan"| W0B[WF 0B: Test Plan\nGeneration]
+    INTENT -->|"generate script"| W1[WF 1: Script Generation\ngeneratePerfScript]
+    INTENT -->|"auth setup"| W1AUTH[WF 1-Auth: Auth Flow\nanalyzeSwaggerAuth\ncreateAuthConfig\nvalidateAuthConfig]
+    INTENT -->|"recommend"| W1A[WF 1A: Smart Advisor\ngetCloudTestRecommendation]
+    INTENT -->|"run local"| W1B[WF 1B: Local Execution\ncheckLocalToolAvailability\nrunLocalPerformanceTest]
+    INTENT -->|"run cloud"| W1C[WF 1C: Cloud Single VM\nprovisionAzureVM\nrunCloudPerformanceTest\ngetVMMetrics]
+    INTENT -->|"distributed test"| W1D[WF 1D: Distributed Cloud\nrunDistributedPerformanceTest]
+    INTENT -->|"BYOI test"| W1E[WF 1E: Existing VM\nrunTestOnExistingVM]
+    INTENT -->|"distributed BYOI"| W1F[WF 1F: Distributed BYOI\nrunDistributedBYOITest]
+    INTENT -->|"app insights"| W1G[WF 1G: App Insights\ngetAppInsightsMetrics]
+    INTENT -->|"commit analysis"| W2[WF 2: Commit Analysis\ncollectCommitForAnalysis]
+    INTENT -->|"provision VM"| W3[WF 3: VM Provisioning\nprovisionAzureVM]
+    INTENT -->|"auto-fix perf"| W6[WF 6: Auto-Fix\nAnalyze + Refactor]
+    INTENT -->|"code to swagger"| W7[WF 7: Swagger Gen\nCode Collector + Analyzer]
+    INTENT -->|"complexity"| W8[WF 8: Code Complexity\nanalyzeCodeComplexity]
+
+    W1B --> POST{Post-Test Actions}
+    W1C --> POST
+    W1D --> POST
+    W1E --> POST
+    W1F --> POST
+
+    POST -->|"get metrics"| METRICS[getVMMetrics\ngetAppInsightsMetrics]
+    POST -->|"analyze"| ANALYZE[analyzeTestResults]
+    POST -->|"fix issues"| W6
+
+    style START fill:#4CAF50,color:#fff
+    style INTENT fill:#FF9800,color:#fff
+    style POST fill:#2196F3,color:#fff
+            </pre>
+          </div>
+          <div class="workflow-card__hint">Click to enlarge</div>
+        </div>
+
+        <!-- Diagram 2: Master 13-Stage Flow -->
+        <div class="workflow-card" onclick="openWorkflowLightbox(this)">
+          <h4 class="workflow-card__title">Master 13-Stage Flow</h4>
+          <div class="workflow-card__diagram">
+            <pre class="mermaid">
+flowchart TD
+    S1[Stage 1: Swagger Detection&lt;br&gt;Search ENTIRE workspace] --> S1A{Files Found?}
+    S1A -->|Multiple| S1B[List files → User picks one]
+    S1A -->|Single| S1C[Confirm with user]
+    S1A -->|None| S1D{User Choice}
+    S1D -->|Provide path| S1C
+    S1D -->|Generate from code| WF7([→ Workflow 7: Code-to-Swagger])
+    S1D -->|Cancel| CANCEL([End])
+
+    S1B --> S2
+    S1C --> S2
+    WF7 --> S2
+
+    S2[Stage 2: NFR Checkpoint&lt;br&gt;captureNFR tool] --> S2A{User has NFR?}
+    S2A -->|Provides NFR/SLAs| S3
+    S2A -->|Skip| S3
+
+    S3[Stage 3: Workload Model&lt;br&gt;Equal / Weighted / Custom] --> S4
+
+    S4[Stage 4: Load Profile &amp; Users&lt;br&gt;Ramp / Steady / Spike / Step] --> S5
+
+    S5[Stage 5: Tool Selection&lt;br&gt;JMeter .jmx OR k6 .js] --> S6
+
+    S6[Stage 6: 📋 Test Plan — GATE&lt;br&gt;Workflow 0B] --> S6A{User Decision}
+    S6A -->|✅ Approve| S8
+    S6A -->|✏️ Modify| S6B[Agent adjusts plan] --> S6
+    S6A -->|📄 Own plan| S8
+    S6A -->|⏭️ Skip| S7
+
+    S7[Stage 7: Test Type Selection&lt;br&gt;Load/Stress/Spike/Soak/Baseline] --> S8
+
+    S8{JMeter Selected?}
+    S8 -->|Yes| S8A[Stage 8: App Insights Config&lt;br&gt;Connection string or Skip]
+    S8 -->|k6| S9
+    S8A --> S9
+
+    S9[Stage 9: Script Generation&lt;br&gt;generatePerfScript tool] --> S10
+
+    S10[Stage 10: Script Tree Display&lt;br&gt;Full ASCII tree + Stats] --> S11
+
+    S11{Stage 11: Validate Script?}
+    S11 -->|Yes| S11A[User edits → Show diff] --> S12
+    S11 -->|No| S12
+
+    S12[Stage 12: Smart Advisor&lt;br&gt;Workflow 1A — 5 Options] --> S12A{Execution Mode}
+    S12A -->|🖥️ Local| WF1B([Workflow 1B])
+    S12A -->|☁️ Cloud Single| WF1C([Workflow 1C])
+    S12A -->|☁️ Distributed Cloud| WF1D([Workflow 1D])
+    S12A -->|🖥️ BYOI| WF1E([Workflow 1E])
+    S12A -->|🏗️ Distributed BYOI| WF1F([Workflow 1F])
+
+    WF1B --> S13
+    WF1C --> S13
+    WF1D --> S13
+    WF1E --> S13
+    WF1F --> S13
+
+    S13[Stage 13: Results &amp; Analysis&lt;br&gt;analyzeTestResults] --> POST{Post-Test}
+    POST -->|App Insights available| WF1G([Workflow 1G: App Insights])
+    POST -->|Failures detected| WF6([Workflow 6: Auto-Fix])
+    POST -->|Plan exists| VERDICT[NFR Pass/Fail Verdict]
+
+    style S6 fill:#FF9800,color:#fff,stroke:#E65100,stroke-width:3px
+    style S9 fill:#4CAF50,color:#fff
+    style S10 fill:#4CAF50,color:#fff
+    style S12 fill:#2196F3,color:#fff
+    style CANCEL fill:#ff4444,color:#fff
+            </pre>
+          </div>
+          <div class="workflow-card__hint">Click to enlarge</div>
+        </div>
+
+        <!-- Diagram 3: Auth Sub-Flow -->
+        <div class="workflow-card" onclick="openWorkflowLightbox(this)">
+          <h4 class="workflow-card__title">Auth Sub-Flow</h4>
+          <div class="workflow-card__diagram">
+            <pre class="mermaid">
+flowchart TD
+    SCRIPT[Script Generated&lt;br&gt;JMX or k6] --> ANALYZE[Tool 12: analyzeSwaggerAuth&lt;br&gt;Scan swagger for security schemes]
+    ANALYZE --> HAS_AUTH{Has Secured Endpoints?}
+
+    HAS_AUTH -->|allPublic = true| SKIP[Skip Auth Setup&lt;br&gt;Proceed to execution]
+    HAS_AUTH -->|hasSecuredEndpoints = true| SHOW[Show Summary&lt;br&gt;X secured, Y public endpoints]
+
+    SHOW --> DETECT[Detect grant type&lt;br&gt;OAuth2 / Bearer / API Key]
+    DETECT --> CREATE[Tool 10: createAuthConfig&lt;br&gt;Create authconfig.json]
+
+    CREATE --> EXISTS{File Already Exists?}
+    EXISTS -->|Yes, all filled| CONFIRM{User confirms existing?}
+    EXISTS -->|Yes, partially filled| FILL[Show empty fields&lt;br&gt;Ask user to fill]
+    EXISTS -->|No, created new| FILL
+
+    CONFIRM -->|Use existing| VALIDATE
+    CONFIRM -->|Recreate| FILL
+    FILL --> USER_FILLS[User fills authconfig.json] --> VALIDATE
+
+    VALIDATE[Tool 11: validateAuthConfig&lt;br&gt;Check completeness] --> VALID{All Fields Filled?}
+    VALID -->|valid: true| READY[✅ Auth Ready&lt;br&gt;Proceed to execution]
+    VALID -->|valid: false| FILL
+
+    style ANALYZE fill:#9C27B0,color:#fff
+    style CREATE fill:#FF9800,color:#fff
+    style VALIDATE fill:#4CAF50,color:#fff
+    style READY fill:#4CAF50,color:#fff
+    style SKIP fill:#2196F3,color:#fff
+            </pre>
+          </div>
+          <div class="workflow-card__hint">Click to enlarge</div>
+        </div>
+
+        <!-- Diagram 4: Execution Modes (1B-1F) -->
+        <div class="workflow-card" onclick="openWorkflowLightbox(this)">
+          <h4 class="workflow-card__title">Execution Modes (1B-1F)</h4>
+          <div class="workflow-card__diagram">
+            <pre class="mermaid">
+flowchart TD
+    ADVISOR[Workflow 1A: Smart Advisor&lt;br&gt;getCloudTestRecommendation] --> MENU{5 Execution Options}
+
+    MENU -->|1. Local| WF1B
+    MENU -->|2. Cloud Single VM| WF1C
+    MENU -->|3. Distributed Cloud| WF1D
+    MENU -->|4. BYOI| WF1E
+    MENU -->|5. Distributed BYOI| WF1F
+
+    subgraph WF1B_BOX ["Workflow 1B: Local Execution"]
+        WF1B[checkLocalToolAvailability] --> LOCAL_OK{Tool Installed?}
+        LOCAL_OK -->|Yes| RUN_LOCAL[runLocalPerformanceTest&lt;br&gt;JMeter or k6]
+        LOCAL_OK -->|No| INSTALL[Show install instructions]
+    end
+
+    subgraph WF1C_BOX ["Workflow 1C: Cloud Single VM"]
+        WF1C[getCloudTestRecommendation&lt;br&gt;Recommend VM size] --> CONFIRM_VM{User Confirms?}
+        CONFIRM_VM -->|Yes| RUN_CLOUD[runCloudPerformanceTest&lt;br&gt;Auto: Provision → Upload → Execute → Results]
+    end
+
+    subgraph WF1D_BOX ["Workflow 1D: Distributed Cloud"]
+        WF1D[getCloudTestRecommendation&lt;br&gt;Multi-VM sizing] --> DIST_CONFIRM{User Confirms?}
+        DIST_CONFIRM -->|Yes| RUN_DIST[runDistributedPerformanceTest&lt;br&gt;N agents, split load]
+    end
+
+    subgraph WF1E_BOX ["Workflow 1E: BYOI"]
+        WF1E[Collect VM details&lt;br&gt;IP, username, key path] --> RUN_BYOI[runTestOnExistingVM&lt;br&gt;Upload → Execute on user VM]
+    end
+
+    subgraph WF1F_BOX ["Workflow 1F: Distributed BYOI"]
+        WF1F[Collect multiple VM details] --> RUN_DBYOI[runDistributedBYOITest&lt;br&gt;Split across user VMs]
+    end
+
+    RUN_LOCAL --> RESULTS
+    RUN_CLOUD --> RESULTS
+    RUN_DIST --> RESULTS
+    RUN_BYOI --> RESULTS
+    RUN_DBYOI --> RESULTS
+
+    RESULTS[analyzeTestResults&lt;br&gt;Parse JTL/JSON] --> POST_TEST{Post-Test Actions}
+    POST_TEST -->|Failures detected| WF6([🔥 Workflow 6&lt;br&gt;Auto-Fix])
+    POST_TEST -->|App Insights available| WF1G([📊 Workflow 1G&lt;br&gt;Server Metrics])
+    POST_TEST -->|All passing| DONE([✅ Test Complete])
+
+    style ADVISOR fill:#2196F3,color:#fff
+    style RESULTS fill:#4CAF50,color:#fff
+    style WF6 fill:#ff4444,color:#fff
+    style WF1G fill:#9C27B0,color:#fff
+    style DONE fill:#4CAF50,color:#fff
+            </pre>
+          </div>
+          <div class="workflow-card__hint">Click to enlarge</div>
+        </div>
+
+        <!-- Diagram 5: AI-Powered Workflows -->
+        <div class="workflow-card" onclick="openWorkflowLightbox(this)">
+          <h4 class="workflow-card__title">AI-Powered Workflows</h4>
+          <div class="workflow-card__diagram">
+            <pre class="mermaid">
+flowchart TD
+    subgraph WF2 ["Workflow 2: Last Commit Perf Analysis"]
+        C1[User: analyze last commit] --> C2[collectCommitForAnalysis]
+        C2 --> C3[Extract changed files\nand diff context]
+        C3 --> C4{Performance\nissues found?}
+        C4 -->|Yes| C5[Report perf issues\nwith line numbers]
+        C4 -->|No| C6[Report: No perf\nissues detected]
+        C5 --> C7{User wants fix?}
+        C7 -->|Yes| C8[Route to WF 6\nAuto-Fix]
+        C7 -->|No| C9[Done]
+    end
+
+    subgraph WF6 ["Workflow 6: Auto-Fix Performance Issues"]
+        F1[Receive perf issues] --> F2[Classify issue type]
+        F2 --> F3{Issue Category}
+        F3 -->|N+1 Query| F4A[Pattern A:\nBatch queries]
+        F3 -->|Missing Index| F4B[Pattern B:\nAdd DB index]
+        F3 -->|No Caching| F4C[Pattern C:\nAdd cache layer]
+        F3 -->|Sync Bottleneck| F4D[Pattern D:\nAsync conversion]
+        F3 -->|Memory Leak| F4E[Pattern E:\nResource cleanup]
+        F3 -->|Large Payload| F4F[Pattern F:\nPagination]
+        F3 -->|No Connection Pool| F4G[Pattern G:\nPool config]
+        F3 -->|Inefficient Loop| F4H[Pattern H:\nBulk operations]
+        F3 -->|Missing Compression| F4I[Pattern I:\nGzip/Brotli]
+        F4A --> F5[Generate refactored code]
+        F4B --> F5
+        F4C --> F5
+        F4D --> F5
+        F4E --> F5
+        F4F --> F5
+        F4G --> F5
+        F4H --> F5
+        F4I --> F5
+        F5 --> F6[Show before/after diff]
+        F6 --> F7{User approves?}
+        F7 -->|Yes| F8[Apply fix]
+        F7 -->|No| F9[Discard]
+    end
+
+    subgraph WF7 ["Workflow 7: Code-to-Swagger Generation"]
+        S1[User: generate swagger\nfrom code] --> S2[Scan project for\nAPI frameworks]
+        S2 --> S3{Framework\nDetected}
+        S3 -->|FastAPI| S4A[Python Analyzer]
+        S3 -->|Express| S4B[Node Analyzer]
+        S3 -->|Spring| S4C[Java Analyzer]
+        S3 -->|ASP.NET| S4D[.NET Analyzer]
+        S4A --> S5[Extract endpoints\nparams, schemas]
+        S4B --> S5
+        S4C --> S5
+        S4D --> S5
+        S5 --> S6[Generate OpenAPI 3.0\nSwagger JSON]
+        S6 --> S7[Save swagger.json]
+        S7 --> S8[Route to WF 1\nfor script gen]
+    end
+
+    subgraph WF8 ["Workflow 8: Code Complexity Analysis"]
+        X1[User: analyze\ncomplexity] --> X2[analyzeCodeComplexity]
+        X2 --> X3[Calculate metrics:\nCyclomatic, Halstead,\nMaintainability Index]
+        X3 --> X4{Complexity\nLevel}
+        X4 -->|Low: MI over 70| X5[Report: Healthy]
+        X4 -->|Medium: MI 40-70| X6[Report: Needs\nattention with suggestions]
+        X4 -->|High: MI under 40| X7[Report: Critical\nwith refactoring plan]
+        X7 --> X8{User wants\nrefactoring?}
+        X8 -->|Yes| X9[Route to WF 6\nAuto-Fix]
+        X8 -->|No| X10[Done]
+    end
+
+    style WF2 fill:#E8F5E9
+    style WF6 fill:#FFF3E0
+    style WF7 fill:#E3F2FD
+    style WF8 fill:#F3E5F5
+            </pre>
+          </div>
+          <div class="workflow-card__hint">Click to enlarge</div>
+        </div>
+
+        <!-- Diagram 6: Tool↔Workflow Map -->
+        <div class="workflow-card" onclick="openWorkflowLightbox(this)">
+          <h4 class="workflow-card__title">Tool&#8596;Workflow Map</h4>
+          <div class="workflow-card__diagram">
+            <pre class="mermaid">
+flowchart LR
+    subgraph TOOLS ["MCP Tools (17 total)"]
+        T0[Tool 0: captureNFR]
+        T1[Tool 1: generatePerfScript]
+        T1B[Tool 1B: checkLocalToolAvailability]
+        T1C[Tool 1C: runLocalPerformanceTest]
+        T1D[Tool 1D: prepareK6ForTest]
+        T2[Tool 2: collectCommitForAnalysis]
+        T5[Tool 5: provisionAzureVM]
+        T6[Tool 6: runCloudPerformanceTest]
+        T7[Tool 7: getCloudTestRecommendation]
+        T7B[Tool 7b: runDistributedPerformanceTest]
+        T7C[Tool 7c: runTestOnExistingVM]
+        T7D[Tool 7d: runDistributedBYOITest]
+        T8[Tool 8: getVMMetrics]
+        T9[Tool 9: getAppInsightsMetrics]
+        T10[Tool 10: createAuthConfig]
+        T11[Tool 11: validateAuthConfig]
+        T12[Tool 12: analyzeSwaggerAuth]
+    end
+
+    subgraph WORKFLOWS ["Workflows"]
+        W0[WF 0: NFR Capture]
+        W0B[WF 0B: Test Plan]
+        W1[WF 1: Script Generation]
+        W1AUTH[WF 1-Auth: Auth Setup]
+        W1A[WF 1A: Smart Advisor]
+        W1B_W[WF 1B: Local Execution]
+        W1C_W[WF 1C: Cloud Single]
+        W1D_W[WF 1D: Distributed Cloud]
+        W1E_W[WF 1E: BYOI]
+        W1F_W[WF 1F: Distributed BYOI]
+        W1G_W[WF 1G: App Insights]
+        W2_W[WF 2: Commit Analysis]
+        W3_W[WF 3: Provision VM]
+        W6_W[WF 6: Auto-Fix]
+        W7_W[WF 7: Code-to-Swagger]
+        W8_W[WF 8: Code Complexity]
+    end
+
+    T0 --> W0
+    T1 --> W1
+    T1B --> W1B_W
+    T1C --> W1B_W
+    T1D --> W1
+    T2 --> W2_W
+    T5 --> W3_W
+    T5 --> W1C_W
+    T6 --> W1C_W
+    T7 --> W1A
+    T7B --> W1D_W
+    T7C --> W1E_W
+    T7D --> W1F_W
+    T8 --> W1C_W
+    T9 --> W1G_W
+    T10 --> W1AUTH
+    T11 --> W1AUTH
+    T12 --> W1AUTH
+
+    style TOOLS fill:#f5f5f5
+    style WORKFLOWS fill:#e3f2fd
+            </pre>
+          </div>
+          <div class="workflow-card__hint">Click to enlarge</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Workflow Lightbox Modal -->
+  <div class="workflow-lightbox" id="workflow-lightbox">
+    <div class="workflow-lightbox__backdrop" onclick="closeWorkflowLightbox()"></div>
+    <div class="workflow-lightbox__content">
+      <button class="workflow-lightbox__close" onclick="closeWorkflowLightbox()" aria-label="Close">&times;</button>
+      <h3 class="workflow-lightbox__title" id="lightbox-title"></h3>
+      <div class="workflow-lightbox__body" id="lightbox-body"></div>
+    </div>
+  </div>
 
   <!-- Downloads Section -->
   <section class="downloads-section" id="downloads">
@@ -624,20 +1009,42 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
               <span class="post-install__check">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
-              <span>Open Command Palette &rarr; <strong>MCP: List Servers</strong></span>
+              <span><strong>Open a repo or folder</strong> in VS Code &mdash; the extension activates per-workspace</span>
             </div>
             <div class="post-install__step">
               <span class="post-install__check">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
-              <span>Select <strong>Performance Agent</strong> &rarr; <strong>Start Server</strong></span>
+              <span>On successful installation, an <strong>agent file</strong> is auto-created at <code>.github/agents/</code> in your workspace</span>
             </div>
             <div class="post-install__step">
               <span class="post-install__check">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
-              <span>Or enable autostart: <code>"chat.mcp.autostart": "newAndOutdated"</code></span>
+              <span>Open <strong>GitHub Copilot Chat</strong> (<kbd>Cmd+Shift+I</kbd> / <kbd>Ctrl+Shift+I</kbd>)</span>
             </div>
+            <div class="post-install__step">
+              <span class="post-install__check">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span>Click the <strong>mode dropdown</strong> at the top of Copilot Chat &mdash; you&rsquo;ll see a list of available agents. Select <strong>&ldquo;AgentPT.ai&rdquo;</strong> from the list.</span>
+            </div>
+            <div class="post-install__step">
+              <span class="post-install__check">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span>Once selected, <strong>AgentPT.ai</strong> will appear at the <strong>bottom of the Copilot Chat panel</strong> &mdash; you&rsquo;re good to go!</span>
+            </div>
+          </div>
+
+          <!-- Visual guide -->
+          <div class="post-install__visual" style="margin-top: 1.25rem;">
+            <p style="font-size: 0.9rem; color: var(--text-secondary, #a0a0a0); margin-bottom: 0.75rem;"><strong>Visual Guide:</strong> Click the dropdown &rarr; select <strong>AgentPT.ai</strong> &rarr; confirmed at bottom</p>
+            <img src="images/select-agentpt.png" alt="Screenshot showing how to select AgentPT.ai from the Copilot Chat dropdown" style="max-width: 100%; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.3);" loading="lazy" />
+          </div>
+
+          <div class="post-install__note" style="margin-top: 0.75rem; padding: 0.75rem 1rem; background: rgba(99, 102, 241, 0.08); border-radius: 8px; border-left: 3px solid var(--primary-light); font-size: 0.88rem; color: var(--text-secondary, #a0a0a0);">
+            <strong>Tip:</strong> Always open VS Code in a <em>repo or project folder</em> (not a bare window). The extension needs a workspace to create the <code>.github/agents/</code> directory and register the agent file.
           </div>
         </div>
       </div>
@@ -954,13 +1361,16 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
           <h3>VS Code Extension</h3>
           <p>One-click setup &mdash; bundles the MCP server automatically. Zero configuration.</p>
           <ol>
-            <li>Download the <code>.vsix</code> from <a href="#downloads">Downloads</a></li>
+            <li>Download the <code>.vsix</code> for your platform from <a href="#downloads">Downloads</a></li>
             <li>Open VS Code &rarr; Extensions &rarr; <strong>&hellip;</strong> &rarr; <strong>Install from VSIX</strong></li>
-            <li>Open GitHub Copilot Chat (<kbd>Cmd+Shift+I</kbd>)</li>
-            <li>Switch to <strong>Agent Mode</strong></li>
-            <li>Start using all developer tools!</li>
+            <li><strong>Open a repo or project folder</strong> in VS Code (required for activation)</li>
+            <li>Verify the agent file is created at <code>.github/agents/</code> in your workspace</li>
+            <li>Open GitHub Copilot Chat (<kbd>Cmd+Shift+I</kbd> / <kbd>Ctrl+Shift+I</kbd>)</li>
+            <li>Click the <strong>mode dropdown</strong> in Copilot Chat and select <strong>&ldquo;AgentPT.ai&rdquo;</strong> from the list</li>
+            <li>Once <strong>AgentPT.ai</strong> appears at the bottom of the chat panel, you&rsquo;re good to go!</li>
           </ol>
-          <a href="#downloads" class="btn btn-primary">Download Extension</a>
+          <img src="images/select-agentpt.png" alt="Select AgentPT.ai from Copilot Chat dropdown" style="margin-top: 1rem; max-width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);" loading="lazy" />
+          <a href="#downloads" class="btn btn-primary" style="margin-top: 1rem;">Download Extension</a>
         </div>
         <div class="install-card">
           <h3>npm Package</h3>
