@@ -1599,11 +1599,20 @@ img { max-width: 100%; display: block; }
   color: var(--text-muted);
   font-size: 0.8rem;
   margin-top: 12px;
-  opacity: 0;
+  opacity: 0.5;
   transition: opacity var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.workflow-card__hint::before {
+  content: '🔍';
+  font-size: 0.85rem;
 }
 .workflow-card:hover .workflow-card__hint {
   opacity: 1;
+  color: var(--primary-light);
 }
 
 /* --- Workflow Lightbox --- */
@@ -1690,4 +1699,37 @@ img { max-width: 100%; display: block; }
     padding: 20px;
     margin: 8px;
   }
+}
+
+/* --- Enlargeable Images --- */
+.enlargeable-image {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  transition: transform var(--transition);
+}
+.enlargeable-image:hover {
+  transform: scale(1.01);
+}
+.enlargeable-image img {
+  transition: box-shadow var(--transition);
+}
+.enlargeable-image:hover img {
+  box-shadow: 0 6px 28px rgba(99, 102, 241, 0.2);
+}
+.enlarge-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-top: 8px;
+  opacity: 0.5;
+  transition: opacity var(--transition), color var(--transition);
+}
+.enlargeable-image:hover .enlarge-hint {
+  opacity: 1;
+  color: var(--primary-light);
 }

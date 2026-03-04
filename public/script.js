@@ -549,7 +549,8 @@ function openWorkflowLightbox(card) {
   const bodyEl = document.getElementById('lightbox-body');
 
   const title = card.querySelector('.workflow-card__title').textContent;
-  const diagramSvg = card.querySelector('.workflow-card__diagram svg');
+  const diagramContainer = card.querySelector('.workflow-card__diagram');
+  const diagramSvg = diagramContainer ? diagramContainer.querySelector('svg') : null;
 
   titleEl.textContent = title;
   bodyEl.innerHTML = '';
@@ -557,10 +558,34 @@ function openWorkflowLightbox(card) {
   if (diagramSvg) {
     const clone = diagramSvg.cloneNode(true);
     clone.removeAttribute('style');
-    clone.setAttribute('width', '100%');
-    clone.style.maxWidth = '90vw';
+    clone.removeAttribute('width');
+    clone.removeAttribute('height');
+    clone.style.width = '100%';
     clone.style.maxHeight = '78vh';
+    clone.style.height = 'auto';
     bodyEl.appendChild(clone);
+  } else if (diagramContainer) {
+    // Fallback: re-render mermaid source in lightbox
+    const pre = diagramContainer.querySelector('pre.mermaid, [data-processed]');
+    if (pre) {
+      const source = pre.getAttribute('data-original') || pre.textContent;
+      const tempId = 'lightbox-mermaid-' + Date.now();
+      const tempDiv = document.createElement('div');
+      tempDiv.id = tempId;
+      tempDiv.textContent = source;
+      bodyEl.appendChild(tempDiv);
+      if (typeof mermaid !== 'undefined') {
+        mermaid.render(tempId + '-svg', source).then(({ svg }) => {
+          bodyEl.innerHTML = svg;
+          const rendered = bodyEl.querySelector('svg');
+          if (rendered) {
+            rendered.style.width = '100%';
+            rendered.style.maxHeight = '78vh';
+            rendered.style.height = 'auto';
+          }
+        }).catch(() => {});
+      }
+    }
   }
 
   lightbox.classList.add('active');
@@ -577,3 +602,29 @@ function closeWorkflowLightbox() {
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeWorkflowLightbox();
 });
+
+// --- Image Lightbox (reuses workflow lightbox) ---
+function openImageLightbox(container) {
+  const lightbox = document.getElementById('workflow-lightbox');
+  const titleEl = document.getElementById('lightbox-title');
+  const bodyEl = document.getElementById('lightbox-body');
+
+  const img = container.querySelector('img');
+  if (!img) return;
+
+  titleEl.textContent = img.alt || 'Image Preview';
+  bodyEl.innerHTML = '';
+
+  const clone = img.cloneNode(true);
+  clone.style.maxWidth = '90vw';
+  clone.style.maxHeight = '82vh';
+  clone.style.width = 'auto';
+  clone.style.height = 'auto';
+  clone.style.borderRadius = '12px';
+  clone.style.cursor = 'default';
+  clone.style.objectFit = 'contain';
+  bodyEl.appendChild(clone);
+
+  lightbox.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
