@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initReleases();
   initVideoPlayer();
   initReadinessChecker();
-  initMermaidDiagrams();
 });
 
 // --- Navigation ---
@@ -471,9 +470,12 @@ function computeReadiness() {
     'feat-jmx':        ['nodejs'],
     'feat-k6gen':      ['nodejs'],
     'feat-swagger':    ['nodejs'],
+    'feat-codeswagger':['nodejs'],
+    'feat-scenarios':  ['nodejs'],
     'feat-commit':     ['nodejs', 'git'],
     'feat-complexity': ['nodejs'],
     'feat-localjmeter':['jmeter', 'java'],
+    'feat-sanity':     ['jmeter', 'java'],
     'feat-localk6':    ['k6'],
     'feat-provision':  ['azcli', 'azlogin', 'terraform'],
     'feat-cloud':      ['azcli', 'azlogin', 'terraform'],
@@ -504,94 +506,7 @@ function computeReadiness() {
   });
 }
 
-// --- Mermaid Diagrams ---
-function initMermaidDiagrams() {
-  if (typeof mermaid !== 'undefined') {
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: 'dark',
-      themeVariables: {
-        darkMode: true,
-        background: '#16161f',
-        primaryColor: '#818cf8',
-        primaryTextColor: '#e4e4e7',
-        primaryBorderColor: '#6366f1',
-        lineColor: '#6b7280',
-        secondaryColor: '#1c1c28',
-        tertiaryColor: '#12121a',
-        fontSize: '14px'
-      },
-      flowchart: {
-        htmlLabels: true,
-        curve: 'basis',
-        padding: 12
-      }
-    });
-  }
-
-  // Observe workflow cards for scroll reveal
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.workflow-card').forEach(el => {
-    el.classList.add('fade-in');
-    observer.observe(el);
-  });
-}
-
-// --- Workflow Lightbox ---
-function openWorkflowLightbox(card) {
-  const lightbox = document.getElementById('workflow-lightbox');
-  const titleEl = document.getElementById('lightbox-title');
-  const bodyEl = document.getElementById('lightbox-body');
-
-  const title = card.querySelector('.workflow-card__title').textContent;
-  const diagramContainer = card.querySelector('.workflow-card__diagram');
-  const diagramSvg = diagramContainer ? diagramContainer.querySelector('svg') : null;
-
-  titleEl.textContent = title;
-  bodyEl.innerHTML = '';
-
-  if (diagramSvg) {
-    const clone = diagramSvg.cloneNode(true);
-    clone.removeAttribute('style');
-    clone.removeAttribute('width');
-    clone.removeAttribute('height');
-    clone.style.width = '100%';
-    clone.style.maxHeight = '78vh';
-    clone.style.height = 'auto';
-    bodyEl.appendChild(clone);
-  } else if (diagramContainer) {
-    // Fallback: re-render mermaid source in lightbox
-    const pre = diagramContainer.querySelector('pre.mermaid, [data-processed]');
-    if (pre) {
-      const source = pre.getAttribute('data-original') || pre.textContent;
-      const tempId = 'lightbox-mermaid-' + Date.now();
-      const tempDiv = document.createElement('div');
-      tempDiv.id = tempId;
-      tempDiv.textContent = source;
-      bodyEl.appendChild(tempDiv);
-      if (typeof mermaid !== 'undefined') {
-        mermaid.render(tempId + '-svg', source).then(({ svg }) => {
-          bodyEl.innerHTML = svg;
-          const rendered = bodyEl.querySelector('svg');
-          if (rendered) {
-            rendered.style.width = '100%';
-            rendered.style.maxHeight = '78vh';
-            rendered.style.height = 'auto';
-          }
-        }).catch(() => {});
-      }
-    }
-  }
-
-  lightbox.classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-
+// --- Lightbox ---
 function closeWorkflowLightbox() {
   const lightbox = document.getElementById('workflow-lightbox');
   lightbox.classList.remove('active');
