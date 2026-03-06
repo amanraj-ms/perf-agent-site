@@ -4,13 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Performance Agent — AI-Powered Developer Tools for VS Code</title>
-  <meta name="description" content="AI-powered NFR capture, workload modeling, smart test recommendations, code analysis, OpenAPI generation, and performance testing — all from GitHub Copilot Chat. Shift left with intelligent developer tools." />
+  <meta name="description" content="AI-powered NFR capture, business scenario modeling, smart test recommendations, code analysis, OpenAPI generation, and performance testing — all from GitHub Copilot Chat. Shift left with intelligent developer tools." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=2" />
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
   <style>
     /* Prerequisites Section Additional Styles */
     .prereqs-section {
@@ -154,9 +153,9 @@
         <span>Performance Agent</span>
       </a>
       <div class="nav-links" id="nav-links">
+        <a href="#testing-modes">Testing Modes</a>
         <a href="#features">Features</a>
         <a href="#pipeline">How It Works</a>
-        <a href="#workflow-diagrams">Workflows</a>
         <a href="#tools">Tools</a>
         <a href="#downloads">Downloads</a>
         <a href="#getting-started">Get Started</a>
@@ -188,13 +187,13 @@
         <div class="hero-badge">Open Source &middot; MCP Powered &middot; VS Code Extension &middot; Shift Left</div>
         <h1>AI-Powered<br />Developer Tools</h1>
         <p class="hero-subtitle">
-          NFR capture, workload modeling, smart test recommendations, code complexity analysis, OpenAPI generation, and performance testing &mdash;
-          all from GitHub Copilot Chat. Local, cloud, or distributed. No API keys needed.
+          Two testing modes &mdash; <strong>Business Scenarios</strong> for multi-step user journeys and <strong>Individual API Testing</strong> for endpoint-level load &mdash;
+          plus NFR capture, smart recommendations, code analysis, and more. All from GitHub Copilot Chat. No API keys needed.
         </p>
         <div class="hero-pipeline">
           <span class="pipeline-step">Analyze</span>
           <span class="pipeline-arrow">&rarr;</span>
-          <span class="pipeline-step">NFR &amp; Workload</span>
+          <span class="pipeline-step">NFR &amp; SLAs</span>
           <span class="pipeline-arrow">&rarr;</span>
           <span class="pipeline-step">Spec</span>
           <span class="pipeline-arrow">&rarr;</span>
@@ -247,6 +246,94 @@
     </div>
   </section>
 
+  <!-- Testing Modes Showcase -->
+  <section class="testing-modes-section" id="testing-modes">
+    <div class="container">
+      <div class="section-header">
+        <h2>Two Powerful Testing Modes</h2>
+        <p>Choose the right approach for your load testing needs &mdash; test full user journeys or stress individual endpoints. Both support CSV/Excel template upload or interactive Q&amp;A.</p>
+      </div>
+      <div class="testing-modes-grid">
+        <div class="testing-mode-card testing-mode-card--scenario">
+          <div class="testing-mode-badge">Most Popular</div>
+          <div class="testing-mode-icon">📋</div>
+          <h3>Business Scenario Mode</h3>
+          <p class="testing-mode-tagline">Multi-step user journeys with correlation between steps</p>
+          <div class="testing-mode-example">
+            <span class="example-label">Example Journey</span>
+            <div class="example-flow">
+              <span class="flow-step">Login</span>
+              <span class="flow-arrow">&rarr;</span>
+              <span class="flow-step">Search</span>
+              <span class="flow-arrow">&rarr;</span>
+              <span class="flow-step">Add to Cart</span>
+              <span class="flow-arrow">&rarr;</span>
+              <span class="flow-step">Checkout</span>
+              <span class="flow-arrow">&rarr;</span>
+              <span class="flow-step">Payment</span>
+            </div>
+          </div>
+          <ul class="testing-mode-features">
+            <li><strong>Scenario-based thread groups</strong> &mdash; each journey runs as a realistic user flow</li>
+            <li><strong>Step-level correlation</strong> &mdash; extract tokens, IDs, and session data between steps</li>
+            <li><strong>Per-step NFR overrides</strong> &mdash; different SLAs for Login (1s) vs Payment (3s)</li>
+            <li><strong>Concurrent user distribution</strong> &mdash; 30% Purchase, 20% Browse, 50% Search</li>
+            <li><strong>CSV/Excel template upload</strong> &mdash; define all journeys in one file</li>
+            <li><strong>Arrow syntax</strong> &mdash; Login &rarr; Search &rarr; Cart &rarr; Checkout</li>
+          </ul>
+          <div class="testing-mode-use-cases">
+            <span class="use-case-label">Best for:</span>
+            <span class="use-case-tag">E-commerce flows</span>
+            <span class="use-case-tag">User onboarding</span>
+            <span class="use-case-tag">Checkout pipelines</span>
+            <span class="use-case-tag">Multi-API workflows</span>
+          </div>
+        </div>
+        <div class="testing-mode-card testing-mode-card--api">
+          <div class="testing-mode-badge testing-mode-badge--api">High Precision</div>
+          <div class="testing-mode-icon">🎯</div>
+          <h3>Individual API Mode</h3>
+          <p class="testing-mode-tagline">Test each endpoint independently with its own RPS or Concurrent User %</p>
+          <div class="testing-mode-example">
+            <span class="example-label">Example Config</span>
+            <div class="example-table">
+              <div class="example-row example-row--header">
+                <span>API</span><span>Method</span><span>Load</span>
+              </div>
+              <div class="example-row">
+                <span>/api/users</span><span>GET</span><span>40% CU</span>
+              </div>
+              <div class="example-row">
+                <span>/api/orders</span><span>POST</span><span>25% CU</span>
+              </div>
+              <div class="example-row">
+                <span>/api/products</span><span>GET</span><span>100 RPS</span>
+              </div>
+            </div>
+          </div>
+          <ul class="testing-mode-features">
+            <li><strong>Per-endpoint load control</strong> &mdash; set RPS or Concurrent Users % per API</li>
+            <li><strong>Independent thread groups</strong> &mdash; each endpoint tested in isolation</li>
+            <li><strong>Flexible load types</strong> &mdash; mix RPS-based and CU%-based in one test</li>
+            <li><strong>Auto-validation</strong> &mdash; CU% sums to ~100%, no RPS+CU conflicts</li>
+            <li><strong>CSV/Excel template upload</strong> &mdash; bulk define all endpoints</li>
+            <li><strong>Method defaults</strong> &mdash; GET assumed if omitted</li>
+          </ul>
+          <div class="testing-mode-use-cases">
+            <span class="use-case-label">Best for:</span>
+            <span class="use-case-tag">API benchmarking</span>
+            <span class="use-case-tag">Microservice testing</span>
+            <span class="use-case-tag">Endpoint capacity</span>
+            <span class="use-case-tag">SLA validation</span>
+          </div>
+        </div>
+      </div>
+      <div class="testing-modes-cta">
+        <p>Both modes support <strong>6 test types</strong> (baseline, load, stress, spike, soak, capacity), <strong>JMeter &amp; k6</strong>, and <strong>all 5 execution modes</strong> (local, cloud, distributed, BYOI, distributed BYOI).</p>
+      </div>
+    </div>
+  </section>
+
   <!-- Features Section -->
   <section class="features" id="features">
     <div class="container">
@@ -258,15 +345,15 @@
         <div class="feature-card feature-card--highlight">
           <div class="feature-badge">New</div>
           <div class="feature-icon">🎯</div>
-          <h3>NFR Capture &amp; Workload Modeling</h3>
-          <p>Capture Non-Functional Requirements and define workload models before generating test scripts. Drives all downstream testing with realistic traffic patterns and SLA targets.</p>
+          <h3>NFR Capture</h3>
+          <p>Capture Non-Functional Requirements before generating test scripts. Defines the SLAs, concurrency targets, and error budgets that drive load profiles, assertions, and pass/fail verdicts across the entire pipeline.</p>
           <ul class="feature-list">
-            <li>Capture concurrency, response time (p50/p95/p99), throughput, error rate</li>
-            <li>6 workload presets: e-commerce, api-gateway, read-heavy, write-heavy, crud-app, equal</li>
-            <li>Custom per-endpoint traffic distribution &amp; think times</li>
-            <li>Load patterns: load, stress, spike, soak, step</li>
+            <li>Concurrent users (normal + peak), response time SLAs (p50/p95/p99)</li>
+            <li>Throughput targets (TPS), error rate budget, availability %</li>
+            <li>Test duration per type (load, soak, spike, stress)</li>
+            <li>Infrastructure limits (max CPU %, max memory %)</li>
             <li>3 input modes: paste text, file path, or interactive Q&amp;A</li>
-            <li>Saved to <code>.perf-output/nfr/</code> for downstream tools</li>
+            <li>Saved to <code>.perf-output/nfr/</code> &mdash; consumed by script gen, Smart Advisor, and result analysis</li>
           </ul>
         </div>
         <div class="feature-card feature-card--highlight">
@@ -323,17 +410,18 @@
         <div class="feature-card feature-card--highlight">
           <div class="feature-badge">New</div>
           <div class="feature-icon">📝</div>
-          <h3>Test Script Generation with Load Profiles</h3>
-          <p>Create JMeter JMX and k6 JavaScript test scripts from OpenAPI/Swagger specs &mdash; now with 5 load profile types, NFR-driven enhancements, workload model integration, and auto-correlation.</p>
+          <h3>Test Script Generation</h3>
+          <p>Create JMeter JMX and k6 JavaScript test scripts from OpenAPI/Swagger specs with <a href="#testing-modes" style="color: var(--primary-light); text-decoration: underline;">two testing modes</a> &mdash; Business Scenarios and Individual API &mdash; plus 6 test types, auto-correlation, and App Insights integration.</p>
           <ul class="feature-list">
             <li>JMeter (.jmx) and k6 (.js) with automatic sanitization</li>
-            <li>5 load profiles: basic, ramp, spike, soak, step-load</li>
-            <li>Workload model &rarr; weighted thread groups per endpoint</li>
+            <li>6 test types: baseline, load, stress, spike, soak/endurance, capacity</li>
+            <li><strong>2 testing modes:</strong> <a href="#testing-modes" style="color: var(--primary-light);">Business Scenarios &amp; Individual API</a></li>
+            <li>CSV/Excel template upload or interactive Q&amp;A</li>
             <li>Auto-correlation: POST &rarr; GET/PUT/DELETE chain extraction</li>
-            <li><strong>App Insights integration:</strong> collects connection details during script creation &mdash; test data sent directly to App Insights</li>
-            <li>App Insights BackendListener for real-time server metrics</li>
+            <li><strong>App Insights integration:</strong> BackendListener for real-time server metrics</li>
             <li>Duration assertions from NFR response time SLAs</li>
             <li>Bearer token injection for authenticated APIs</li>
+            <li><strong>Baseline auto-saved</strong> for agent vs manual change tracking</li>
           </ul>
         </div>
         <div class="feature-card">
@@ -344,6 +432,21 @@
             <li>Auto-detect local JMeter / k6</li>
             <li>Natural language VM provisioning</li>
             <li>Terraform-based infra &amp; auto-cleanup</li>
+          </ul>
+        </div>
+        <div class="feature-card feature-card--highlight">
+          <div class="feature-badge">New</div>
+          <div class="feature-icon">🧪</div>
+          <h3>Sanity Test Before Full Run</h3>
+          <p>Pre-flight check using the same test script with intelligent JMX overrides. Patches all thread groups to 1 thread and 2 iterations, disables throughput timers and schedulers, then restores the original script automatically. Validates connectivity, auth tokens, and endpoint health before committing to a full test run.</p>
+          <ul class="feature-list">
+            <li><strong>JMX Override System:</strong> patches threads, ramp-up, loops, scheduler, and throughput timers</li>
+            <li><strong>Auto-Restore:</strong> original script restored after sanity, even on error</li>
+            <li><strong>Connectivity Pre-check:</strong> DNS and HTTP reachability validated before JMeter launch</li>
+            <li><strong>Auth Token Handling:</strong> auto-fetches from <code>authconfig.json</code> and injects into script</li>
+            <li><strong>Per-Endpoint Results:</strong> table with HTTP status, latency, and pass/fail per endpoint</li>
+            <li><strong>Robust JTL Parsing:</strong> handles multiline quoted CSV fields from JMeter assertions</li>
+            <li>Runs in ~15 seconds &mdash; catches 5xx, wrong URLs, auth failures before burning cloud time</li>
           </ul>
         </div>
         <div class="feature-card feature-card--highlight">
@@ -359,6 +462,38 @@
             <li>App Insights: server-side latency, dependencies, exceptions</li>
             <li>Anomaly detection &amp; bottleneck identification</li>
             <li>Actionable optimization recommendations</li>
+            <li><strong>Auto-generated downloadable .md report</strong> with NFR verdicts</li>
+          </ul>
+        </div>
+        <div class="feature-card feature-card--highlight">
+          <div class="feature-badge">New</div>
+          <div class="feature-icon">📄</div>
+          <h3>Downloadable Performance Report</h3>
+          <p>After every test run, automatically generates a comprehensive Markdown report. Opens in VS Code preview, renders in GitHub PRs, paste into Confluence &mdash; fully self-contained with zero external dependencies.</p>
+          <ul class="feature-list">
+            <li>Executive summary with overall pass/fail verdict</li>
+            <li>p50/p95/p99 percentiles with color-coded ratings</li>
+            <li>Per-endpoint breakdown sorted by slowest first</li>
+            <li>NFR compliance assessment (per-SLA pass/fail)</li>
+            <li>Infrastructure metrics with over/under-provisioned detection</li>
+            <li>Client vs Server comparison (JMeter/k6 vs App Insights)</li>
+            <li>Agent vs Manual script change tracking section</li>
+            <li>Saved to <code>.perf-output/reports/</code></li>
+          </ul>
+        </div>
+        <div class="feature-card feature-card--highlight">
+          <div class="feature-badge">New</div>
+          <div class="feature-icon">🔬</div>
+          <h3>Agent vs Manual Change Tracking</h3>
+          <p>Structural fingerprinting compares the agent-generated JMX baseline against the version used for testing. Detects exactly which elements were added, removed, or modified. <strong>Unfoolable</strong> &mdash; whitespace, comments, and formatting are ignored.</p>
+          <ul class="feature-list">
+            <li>Baseline auto-saved on script generation</li>
+            <li>Structural diff: compares elements, not lines</li>
+            <li>Classifies changes: high / medium / low significance</li>
+            <li>Ignores cosmetic edits (whitespace, comments, dots)</li>
+            <li>Shown inline before execution + in final .md report</li>
+            <li>Tracks ThreadGroups, Samplers, Assertions, Timers, Extractors</li>
+            <li>Saved to <code>.perf-output/tracking/</code></li>
           </ul>
         </div>
         <div class="feature-card">
@@ -408,29 +543,48 @@
   <section class="upcoming-section" id="upcoming">
     <div class="container">
       <div class="section-header">
-        <h2>Coming Soon</h2>
-        <p>Features on our roadmap &mdash; shaping the future of developer performance tooling</p>
+        <h2>Roadmap</h2>
+        <p>Prioritized features shaping the future of Performance Agent &mdash; organized by impact and effort</p>
       </div>
-      <div class="upcoming-grid">
-        <div class="upcoming-card">
-          <div class="upcoming-badge badge--progress">In Progress</div>
-          <div class="upcoming-icon">🔗</div>
-          <h3>Advanced Correlation Engine</h3>
-          <p>Dynamic correlation rule extraction with regex-based extractors, JSON path support, and chained variable substitution across requests. Auto-detect session tokens, CSRF tokens, and dynamic IDs from response bodies and headers.</p>
+
+      <!-- Tier 2 -->
+      <div class="roadmap-tier">
+        <div class="roadmap-tier-header">
+          <span class="tier-badge tier-badge--t2">Tier 2</span>
+          <h3>Medium Impact, Medium Effort &mdash; Planned</h3>
         </div>
-        <div class="upcoming-card">
-          <div class="upcoming-badge badge--progress">In Progress</div>
-          <div class="upcoming-icon">📋</div>
-          <h3>Business Scenario Creation</h3>
-          <p>Upload a business scenario file or use a provided template, and the agent will generate detailed JMX test plans on top of it &mdash; complete with thread groups, controllers, assertions, and parameterized data. Turn business requirements into production-grade test scripts in one step.</p>
-        </div>
-        <div class="upcoming-card">
-          <div class="upcoming-badge badge--hold">On Hold</div>
-          <div class="upcoming-icon">☸️</div>
-          <h3>AKS &amp; Container Apps Support</h3>
-          <p>Native support for Azure Kubernetes Service and Azure Container Apps as test targets. Auto-discover endpoints, correlate pod-level metrics, and scale test infra alongside your workloads.</p>
+        <div class="upcoming-grid">
+          <div class="upcoming-card">
+            <div class="upcoming-badge badge--planned">Planned</div>
+            <div class="upcoming-icon"></div>
+            <h3>Telemetry Foundation</h3>
+            <p>Instrument the MCP server to track tool call counts, success/failure rates, latencies, most-used tools, and user flow patterns. Enables data-driven product decisions and helps identify the most impactful next features.</p>
+          </div>
         </div>
       </div>
+
+      <!-- Tier 3 -->
+      <div class="roadmap-tier">
+        <div class="roadmap-tier-header">
+          <span class="tier-badge tier-badge--t3">Tier 3</span>
+          <h3>Evaluate Later</h3>
+        </div>
+        <div class="upcoming-grid">
+          <div class="upcoming-card">
+            <div class="upcoming-badge badge--hold">Evaluating</div>
+            <div class="upcoming-icon">🐍</div>
+            <h3>Locust Support</h3>
+            <p>Add Python Locust as a third test engine alongside JMeter and k6. Requires a new generator, executor path, and result parser for Locust&rsquo;s CSV output. Popular in Python shops &mdash; expands reach beyond JMeter/k6.</p>
+          </div>
+          <div class="upcoming-card">
+            <div class="upcoming-badge badge--hold">Evaluating</div>
+            <div class="upcoming-icon">☸️</div>
+            <h3>AKS &amp; Container Apps Support</h3>
+            <p>Native support for Azure Kubernetes Service and Azure Container Apps as test targets. Auto-discover endpoints, correlate pod-level metrics, and scale test infra alongside your workloads.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -442,43 +596,63 @@
         <p>From commit to confidence &mdash; a complete workflow powered by NFR-driven testing, all from Copilot Chat</p>
       </div>
       <div class="pipeline-visual">
+
+        <!-- Parallel Track: Code Analysis -->
+        <div class="pipeline-item pipeline-item--parallel">
+          <div class="pipeline-num" style="background: var(--warning);">⚡</div>
+          <div class="pipeline-info">
+            <h4>Analyze Code &amp; Complexity <span class="pipeline-tag">anytime</span></h4>
+            <p>Commit as usual, then ask the agent to analyze your diff. It detects performance smells (<code>[PERF]</code>: N+1 queries, await-in-loop, missing caching) and architecture violations (<code>[ARCH]</code>: SRP violations, god classes, circular deps) across <strong>any language</strong>. Automatically runs cyclomatic &amp; cognitive complexity analysis on changed files. Offers one-click auto-fix patches for every issue found.</p>
+          </div>
+        </div>
+        <div class="pipeline-connector pipeline-connector--split"></div>
+
+        <!-- Main Flow -->
         <div class="pipeline-item">
           <div class="pipeline-num">1</div>
           <div class="pipeline-info">
-            <h4>Analyze Code &amp; Complexity</h4>
-            <p>Commit as usual, then ask the agent to analyze your diff. It detects performance smells, architecture violations, and code quality issues &mdash; any language &mdash; and automatically runs code complexity analysis on changed files. Offers auto-fix patches for both performance and complexity issues.</p>
+            <h4>Provide or Generate Swagger / OpenAPI</h4>
+            <p>Start by pointing the agent to your Swagger/OpenAPI spec. It auto-discovers specs in your workspace. No spec? The agent generates one from your source code using AI-powered semantic analysis &mdash; extracts routes, models, auth patterns, and validation rules from any framework.</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
         <div class="pipeline-item">
           <div class="pipeline-num">2</div>
           <div class="pipeline-info">
-            <h4>Capture NFR &amp; Workload Model</h4>
-            <p>Define your non-functional requirements &mdash; concurrency targets, response time SLAs (p50/p95/p99), throughput, error rate budgets, and load patterns. Choose from 6 workload presets (e-commerce, api-gateway, read-heavy, etc.) or define custom per-endpoint traffic distributions. All captured data drives downstream script generation.</p>
+            <h4>Choose Testing Mode</h4>
+            <p>Pick one of two modes: <strong>Business Scenarios</strong> &mdash; multi-step user journeys (Browse &rarr; View &rarr; Purchase) with correlation between steps, or <strong>Individual API Testing</strong> &mdash; test each endpoint independently with its own RPS or concurrent-user share. Upload a CSV/Excel template to skip manual Q&amp;A entirely.</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
         <div class="pipeline-item">
           <div class="pipeline-num">3</div>
           <div class="pipeline-info">
-            <h4>Generate OpenAPI Spec</h4>
-            <p>Auto-generate OpenAPI 3.0 specs from your source code with agent-powered semantic analysis. Extracts routes, models, auth patterns, and validation rules &mdash; works for any language.</p>
+            <h4>Capture NFR &amp; Select Test Type</h4>
+            <p>Define your non-functional requirements &mdash; concurrency targets, response time SLAs (p95/p99), throughput, error rate budget, and test duration. Then choose from 6 test types: baseline, load, stress, spike, soak/endurance, or capacity. NFR values drive the load profile, assertions, and pass/fail verdicts downstream.</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
         <div class="pipeline-item">
           <div class="pipeline-num">4</div>
           <div class="pipeline-info">
-            <h4>Create &amp; Sanitize Test Scripts</h4>
-            <p>Generate JMeter JMX and k6 scripts from your OpenAPI specs with NFR-driven enhancements &mdash; 5 load profile types (ramp, spike, soak, step, basic), workload-weighted thread groups, duration assertions, auto-correlation, and optional App Insights BackendListener. Scripts are automatically sanitized and validated.</p>
+            <h4>Generate &amp; Sanitize Test Scripts</h4>
+            <p>The agent generates JMeter (.jmx) or k6 (.js) scripts with NFR-driven enhancements &mdash; duration assertions, auto-correlation (POST &rarr; GET/PUT/DELETE chain extraction), think times, optional App Insights BackendListener, and a complete ASCII tree of every element. Scripts are automatically sanitized and validated before use.</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
         <div class="pipeline-item">
           <div class="pipeline-num">5</div>
           <div class="pipeline-info">
-            <h4>Smart Recommendations</h4>
-            <p>Before execution, the agent deep-analyzes your test script &mdash; thread counts, sampler complexity, write ratio, payload sizes, SSL usage &mdash; and calculates the optimal infrastructure: VM size, agent count, TCP port constraints, and estimated cost per hour. No guesswork, just math.</p>
+            <h4>Smart Infrastructure Advisor &amp; Change Tracking</h4>
+            <p>Before execution, the agent deep-analyzes your test script &mdash; thread counts, sampler complexity, write ratio, payload sizes, SSL usage &mdash; and calculates the optimal infrastructure. It also runs <strong>structural fingerprinting</strong> to compare the current script against the agent-generated baseline, showing exactly what was modified (and ignoring cosmetic changes like whitespace or comments).</p>
+          </div>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-item">
+          <div class="pipeline-num" style="background: var(--warning);">5.5</div>
+          <div class="pipeline-info">
+            <h4>Sanity Test <span class="pipeline-tag">optional</span></h4>
+            <p>Agent asks: &ldquo;Would you like to run a quick sanity test locally first?&rdquo; If yes &mdash; runs the <strong>same script</strong> with 1 thread and 2 iterations (~15 sec). Checks connectivity, auth tokens, and endpoint health. If sanity passes, proceeds to full test. If it fails, shows per-endpoint results and actionable fixes.</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
@@ -486,406 +660,24 @@
           <div class="pipeline-num">6</div>
           <div class="pipeline-info">
             <h4>Execute Tests</h4>
-            <p>Run locally, on a single Azure VM, across a distributed master-slave cluster, or on your own infrastructure via SSH &mdash; all from a single chat command.</p>
+            <p>Run locally, on a single Azure VM, across a distributed master-slave cluster, or on your own infrastructure via SSH (single or distributed BYOI) &mdash; all from a single chat command. Auth is auto-handled via <code>authconfig.json</code> when configured.</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
         <div class="pipeline-item">
           <div class="pipeline-num">7</div>
           <div class="pipeline-info">
-            <h4>Scale &amp; Re-Run</h4>
-            <p>Need more load? Reuse existing clusters for instant re-runs, add more slave VMs, or bring your own servers. Skip provisioning and re-test in minutes.</p>
+            <h4>Analyze Results, Report &amp; App Insights</h4>
+            <p>Get comprehensive analysis with p50/p90/p95/p99 percentiles, per-endpoint breakdown, throughput, and error rates. Automatically generates a <strong>downloadable Markdown report</strong> with NFR pass/fail verdicts, infrastructure utilization, App Insights client-vs-server comparison, agent-vs-manual script change tracking, and actionable recommendations. Saved to <code>.perf-output/reports/</code>.</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
         <div class="pipeline-item">
           <div class="pipeline-num">8</div>
           <div class="pipeline-info">
-            <h4>Analyze Results &amp; App Insights</h4>
-            <p>Get comprehensive reports with p50/p90/p95/p99 percentiles, per-endpoint breakdown, throughput, error rates, correlated Azure VM metrics, and server-side Application Insights telemetry (request latency, dependencies, exceptions). Includes anomaly detection and actionable optimization recommendations.</p>
+            <h4>Proactive Fix &amp; Re-Test</h4>
+            <p>When tests reveal slow endpoints (p95 &gt; SLA), the agent searches your source code for root causes &mdash; N+1 queries, await-in-loop, missing caching &mdash; applies targeted fixes with your approval, re-runs the test, and shows before/after improvement. Reuse existing clusters for instant re-runs.</p>
           </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Workflow Diagrams Section -->
-  <section class="workflow-diagrams-section" id="workflow-diagrams">
-    <div class="container">
-      <div class="section-header">
-        <h2>Workflow Diagrams</h2>
-        <p>Visual architecture of every workflow &mdash; from intent detection to execution. Click any diagram to enlarge.</p>
-      </div>
-      <div class="workflow-grid">
-
-        <!-- Diagram 1: Master Architecture -->
-        <div class="workflow-card" onclick="openWorkflowLightbox(this)">
-          <h4 class="workflow-card__title">Master Architecture</h4>
-          <div class="workflow-card__diagram">
-            <pre class="mermaid">
-flowchart TD
-    START((User Request)) --> INTENT{Intent Detection}
-
-    INTENT -->|"capture NFR"| W0[WF 0: NFR Capture\ncaptureNFR]
-    INTENT -->|"test plan"| W0B[WF 0B: Test Plan\nGeneration]
-    INTENT -->|"generate script"| W1[WF 1: Script Generation\ngeneratePerfScript]
-    INTENT -->|"auth setup"| W1AUTH[WF 1-Auth: Auth Flow\nanalyzeSwaggerAuth\ncreateAuthConfig\nvalidateAuthConfig]
-    INTENT -->|"recommend"| W1A[WF 1A: Smart Advisor\ngetCloudTestRecommendation]
-    INTENT -->|"run local"| W1B[WF 1B: Local Execution\ncheckLocalToolAvailability\nrunLocalPerformanceTest]
-    INTENT -->|"run cloud"| W1C[WF 1C: Cloud Single VM\nprovisionAzureVM\nrunCloudPerformanceTest\ngetVMMetrics]
-    INTENT -->|"distributed test"| W1D[WF 1D: Distributed Cloud\nrunDistributedPerformanceTest]
-    INTENT -->|"BYOI test"| W1E[WF 1E: Existing VM\nrunTestOnExistingVM]
-    INTENT -->|"distributed BYOI"| W1F[WF 1F: Distributed BYOI\nrunDistributedBYOITest]
-    INTENT -->|"app insights"| W1G[WF 1G: App Insights\ngetAppInsightsMetrics]
-    INTENT -->|"commit analysis"| W2[WF 2: Commit Analysis\ncollectCommitForAnalysis]
-    INTENT -->|"provision VM"| W3[WF 3: VM Provisioning\nprovisionAzureVM]
-    INTENT -->|"auto-fix perf"| W6[WF 6: Auto-Fix\nAnalyze + Refactor]
-    INTENT -->|"code to swagger"| W7[WF 7: Swagger Gen\nCode Collector + Analyzer]
-    INTENT -->|"complexity"| W8[WF 8: Code Complexity\nanalyzeCodeComplexity]
-
-    W1B --> POST{Post-Test Actions}
-    W1C --> POST
-    W1D --> POST
-    W1E --> POST
-    W1F --> POST
-
-    POST -->|"get metrics"| METRICS[getVMMetrics\ngetAppInsightsMetrics]
-    POST -->|"analyze"| ANALYZE[analyzeTestResults]
-    POST -->|"fix issues"| W6
-
-    style START fill:#4CAF50,color:#fff
-    style INTENT fill:#FF9800,color:#fff
-    style POST fill:#2196F3,color:#fff
-            </pre>
-          </div>
-          <div class="workflow-card__hint">Click to enlarge</div>
-        </div>
-
-        <!-- Diagram 2: Master 13-Stage Flow -->
-        <div class="workflow-card" onclick="openWorkflowLightbox(this)">
-          <h4 class="workflow-card__title">Master 13-Stage Flow</h4>
-          <div class="workflow-card__diagram">
-            <pre class="mermaid">
-flowchart TD
-    S1[Stage 1: Swagger Detection&lt;br&gt;Search ENTIRE workspace] --> S1A{Files Found?}
-    S1A -->|Multiple| S1B[List files → User picks one]
-    S1A -->|Single| S1C[Confirm with user]
-    S1A -->|None| S1D{User Choice}
-    S1D -->|Provide path| S1C
-    S1D -->|Generate from code| WF7([→ Workflow 7: Code-to-Swagger])
-    S1D -->|Cancel| CANCEL([End])
-
-    S1B --> S2
-    S1C --> S2
-    WF7 --> S2
-
-    S2[Stage 2: NFR Checkpoint&lt;br&gt;captureNFR tool] --> S2A{User has NFR?}
-    S2A -->|Provides NFR/SLAs| S3
-    S2A -->|Skip| S3
-
-    S3[Stage 3: Workload Model&lt;br&gt;Equal / Weighted / Custom] --> S4
-
-    S4[Stage 4: Load Profile &amp; Users&lt;br&gt;Ramp / Steady / Spike / Step] --> S5
-
-    S5[Stage 5: Tool Selection&lt;br&gt;JMeter .jmx OR k6 .js] --> S6
-
-    S6[Stage 6: 📋 Test Plan — GATE&lt;br&gt;Workflow 0B] --> S6A{User Decision}
-    S6A -->|✅ Approve| S8
-    S6A -->|✏️ Modify| S6B[Agent adjusts plan] --> S6
-    S6A -->|📄 Own plan| S8
-    S6A -->|⏭️ Skip| S7
-
-    S7[Stage 7: Test Type Selection&lt;br&gt;Load/Stress/Spike/Soak/Baseline] --> S8
-
-    S8{JMeter Selected?}
-    S8 -->|Yes| S8A[Stage 8: App Insights Config&lt;br&gt;Connection string or Skip]
-    S8 -->|k6| S9
-    S8A --> S9
-
-    S9[Stage 9: Script Generation&lt;br&gt;generatePerfScript tool] --> S10
-
-    S10[Stage 10: Script Tree Display&lt;br&gt;Full ASCII tree + Stats] --> S11
-
-    S11{Stage 11: Validate Script?}
-    S11 -->|Yes| S11A[User edits → Show diff] --> S12
-    S11 -->|No| S12
-
-    S12[Stage 12: Smart Advisor&lt;br&gt;Workflow 1A — 5 Options] --> S12A{Execution Mode}
-    S12A -->|🖥️ Local| WF1B([Workflow 1B])
-    S12A -->|☁️ Cloud Single| WF1C([Workflow 1C])
-    S12A -->|☁️ Distributed Cloud| WF1D([Workflow 1D])
-    S12A -->|🖥️ BYOI| WF1E([Workflow 1E])
-    S12A -->|🏗️ Distributed BYOI| WF1F([Workflow 1F])
-
-    WF1B --> S13
-    WF1C --> S13
-    WF1D --> S13
-    WF1E --> S13
-    WF1F --> S13
-
-    S13[Stage 13: Results &amp; Analysis&lt;br&gt;analyzeTestResults] --> POST{Post-Test}
-    POST -->|App Insights available| WF1G([Workflow 1G: App Insights])
-    POST -->|Failures detected| WF6([Workflow 6: Auto-Fix])
-    POST -->|Plan exists| VERDICT[NFR Pass/Fail Verdict]
-
-    style S6 fill:#FF9800,color:#fff,stroke:#E65100,stroke-width:3px
-    style S9 fill:#4CAF50,color:#fff
-    style S10 fill:#4CAF50,color:#fff
-    style S12 fill:#2196F3,color:#fff
-    style CANCEL fill:#ff4444,color:#fff
-            </pre>
-          </div>
-          <div class="workflow-card__hint">Click to enlarge</div>
-        </div>
-
-        <!-- Diagram 3: Auth Sub-Flow -->
-        <div class="workflow-card" onclick="openWorkflowLightbox(this)">
-          <h4 class="workflow-card__title">Auth Sub-Flow</h4>
-          <div class="workflow-card__diagram">
-            <pre class="mermaid">
-flowchart TD
-    SCRIPT[Script Generated&lt;br&gt;JMX or k6] --> ANALYZE[Tool 12: analyzeSwaggerAuth&lt;br&gt;Scan swagger for security schemes]
-    ANALYZE --> HAS_AUTH{Has Secured Endpoints?}
-
-    HAS_AUTH -->|allPublic = true| SKIP[Skip Auth Setup&lt;br&gt;Proceed to execution]
-    HAS_AUTH -->|hasSecuredEndpoints = true| SHOW[Show Summary&lt;br&gt;X secured, Y public endpoints]
-
-    SHOW --> DETECT[Detect grant type&lt;br&gt;OAuth2 / Bearer / API Key]
-    DETECT --> CREATE[Tool 10: createAuthConfig&lt;br&gt;Create authconfig.json]
-
-    CREATE --> EXISTS{File Already Exists?}
-    EXISTS -->|Yes, all filled| CONFIRM{User confirms existing?}
-    EXISTS -->|Yes, partially filled| FILL[Show empty fields&lt;br&gt;Ask user to fill]
-    EXISTS -->|No, created new| FILL
-
-    CONFIRM -->|Use existing| VALIDATE
-    CONFIRM -->|Recreate| FILL
-    FILL --> USER_FILLS[User fills authconfig.json] --> VALIDATE
-
-    VALIDATE[Tool 11: validateAuthConfig&lt;br&gt;Check completeness] --> VALID{All Fields Filled?}
-    VALID -->|valid: true| READY[✅ Auth Ready&lt;br&gt;Proceed to execution]
-    VALID -->|valid: false| FILL
-
-    style ANALYZE fill:#9C27B0,color:#fff
-    style CREATE fill:#FF9800,color:#fff
-    style VALIDATE fill:#4CAF50,color:#fff
-    style READY fill:#4CAF50,color:#fff
-    style SKIP fill:#2196F3,color:#fff
-            </pre>
-          </div>
-          <div class="workflow-card__hint">Click to enlarge</div>
-        </div>
-
-        <!-- Diagram 4: Execution Modes (1B-1F) -->
-        <div class="workflow-card" onclick="openWorkflowLightbox(this)">
-          <h4 class="workflow-card__title">Execution Modes (1B-1F)</h4>
-          <div class="workflow-card__diagram">
-            <pre class="mermaid">
-flowchart TD
-    ADVISOR[Workflow 1A: Smart Advisor&lt;br&gt;getCloudTestRecommendation] --> MENU{5 Execution Options}
-
-    MENU -->|1. Local| WF1B
-    MENU -->|2. Cloud Single VM| WF1C
-    MENU -->|3. Distributed Cloud| WF1D
-    MENU -->|4. BYOI| WF1E
-    MENU -->|5. Distributed BYOI| WF1F
-
-    subgraph WF1B_BOX ["Workflow 1B: Local Execution"]
-        WF1B[checkLocalToolAvailability] --> LOCAL_OK{Tool Installed?}
-        LOCAL_OK -->|Yes| RUN_LOCAL[runLocalPerformanceTest&lt;br&gt;JMeter or k6]
-        LOCAL_OK -->|No| INSTALL[Show install instructions]
-    end
-
-    subgraph WF1C_BOX ["Workflow 1C: Cloud Single VM"]
-        WF1C[getCloudTestRecommendation&lt;br&gt;Recommend VM size] --> CONFIRM_VM{User Confirms?}
-        CONFIRM_VM -->|Yes| RUN_CLOUD[runCloudPerformanceTest&lt;br&gt;Auto: Provision → Upload → Execute → Results]
-    end
-
-    subgraph WF1D_BOX ["Workflow 1D: Distributed Cloud"]
-        WF1D[getCloudTestRecommendation&lt;br&gt;Multi-VM sizing] --> DIST_CONFIRM{User Confirms?}
-        DIST_CONFIRM -->|Yes| RUN_DIST[runDistributedPerformanceTest&lt;br&gt;N agents, split load]
-    end
-
-    subgraph WF1E_BOX ["Workflow 1E: BYOI"]
-        WF1E[Collect VM details&lt;br&gt;IP, username, key path] --> RUN_BYOI[runTestOnExistingVM&lt;br&gt;Upload → Execute on user VM]
-    end
-
-    subgraph WF1F_BOX ["Workflow 1F: Distributed BYOI"]
-        WF1F[Collect multiple VM details] --> RUN_DBYOI[runDistributedBYOITest&lt;br&gt;Split across user VMs]
-    end
-
-    RUN_LOCAL --> RESULTS
-    RUN_CLOUD --> RESULTS
-    RUN_DIST --> RESULTS
-    RUN_BYOI --> RESULTS
-    RUN_DBYOI --> RESULTS
-
-    RESULTS[analyzeTestResults&lt;br&gt;Parse JTL/JSON] --> POST_TEST{Post-Test Actions}
-    POST_TEST -->|Failures detected| WF6([🔥 Workflow 6&lt;br&gt;Auto-Fix])
-    POST_TEST -->|App Insights available| WF1G([📊 Workflow 1G&lt;br&gt;Server Metrics])
-    POST_TEST -->|All passing| DONE([✅ Test Complete])
-
-    style ADVISOR fill:#2196F3,color:#fff
-    style RESULTS fill:#4CAF50,color:#fff
-    style WF6 fill:#ff4444,color:#fff
-    style WF1G fill:#9C27B0,color:#fff
-    style DONE fill:#4CAF50,color:#fff
-            </pre>
-          </div>
-          <div class="workflow-card__hint">Click to enlarge</div>
-        </div>
-
-        <!-- Diagram 5: AI-Powered Workflows -->
-        <div class="workflow-card" onclick="openWorkflowLightbox(this)">
-          <h4 class="workflow-card__title">AI-Powered Workflows</h4>
-          <div class="workflow-card__diagram">
-            <pre class="mermaid">
-flowchart TD
-    subgraph WF2 ["Workflow 2: Last Commit Perf Analysis"]
-        C1[User: analyze last commit] --> C2[collectCommitForAnalysis]
-        C2 --> C3[Extract changed files\nand diff context]
-        C3 --> C4{Performance\nissues found?}
-        C4 -->|Yes| C5[Report perf issues\nwith line numbers]
-        C4 -->|No| C6[Report: No perf\nissues detected]
-        C5 --> C7{User wants fix?}
-        C7 -->|Yes| C8[Route to WF 6\nAuto-Fix]
-        C7 -->|No| C9[Done]
-    end
-
-    subgraph WF6 ["Workflow 6: Auto-Fix Performance Issues"]
-        F1[Receive perf issues] --> F2[Classify issue type]
-        F2 --> F3{Issue Category}
-        F3 -->|N+1 Query| F4A[Pattern A:\nBatch queries]
-        F3 -->|Missing Index| F4B[Pattern B:\nAdd DB index]
-        F3 -->|No Caching| F4C[Pattern C:\nAdd cache layer]
-        F3 -->|Sync Bottleneck| F4D[Pattern D:\nAsync conversion]
-        F3 -->|Memory Leak| F4E[Pattern E:\nResource cleanup]
-        F3 -->|Large Payload| F4F[Pattern F:\nPagination]
-        F3 -->|No Connection Pool| F4G[Pattern G:\nPool config]
-        F3 -->|Inefficient Loop| F4H[Pattern H:\nBulk operations]
-        F3 -->|Missing Compression| F4I[Pattern I:\nGzip/Brotli]
-        F4A --> F5[Generate refactored code]
-        F4B --> F5
-        F4C --> F5
-        F4D --> F5
-        F4E --> F5
-        F4F --> F5
-        F4G --> F5
-        F4H --> F5
-        F4I --> F5
-        F5 --> F6[Show before/after diff]
-        F6 --> F7{User approves?}
-        F7 -->|Yes| F8[Apply fix]
-        F7 -->|No| F9[Discard]
-    end
-
-    subgraph WF7 ["Workflow 7: Code-to-Swagger Generation"]
-        S1[User: generate swagger\nfrom code] --> S2[Scan project for\nAPI frameworks]
-        S2 --> S3{Framework\nDetected}
-        S3 -->|FastAPI| S4A[Python Analyzer]
-        S3 -->|Express| S4B[Node Analyzer]
-        S3 -->|Spring| S4C[Java Analyzer]
-        S3 -->|ASP.NET| S4D[.NET Analyzer]
-        S4A --> S5[Extract endpoints\nparams, schemas]
-        S4B --> S5
-        S4C --> S5
-        S4D --> S5
-        S5 --> S6[Generate OpenAPI 3.0\nSwagger JSON]
-        S6 --> S7[Save swagger.json]
-        S7 --> S8[Route to WF 1\nfor script gen]
-    end
-
-    subgraph WF8 ["Workflow 8: Code Complexity Analysis"]
-        X1[User: analyze\ncomplexity] --> X2[analyzeCodeComplexity]
-        X2 --> X3[Calculate metrics:\nCyclomatic, Halstead,\nMaintainability Index]
-        X3 --> X4{Complexity\nLevel}
-        X4 -->|Low: MI over 70| X5[Report: Healthy]
-        X4 -->|Medium: MI 40-70| X6[Report: Needs\nattention with suggestions]
-        X4 -->|High: MI under 40| X7[Report: Critical\nwith refactoring plan]
-        X7 --> X8{User wants\nrefactoring?}
-        X8 -->|Yes| X9[Route to WF 6\nAuto-Fix]
-        X8 -->|No| X10[Done]
-    end
-
-    style WF2 fill:#E8F5E9
-    style WF6 fill:#FFF3E0
-    style WF7 fill:#E3F2FD
-    style WF8 fill:#F3E5F5
-            </pre>
-          </div>
-          <div class="workflow-card__hint">Click to enlarge</div>
-        </div>
-
-        <!-- Diagram 6: Tool↔Workflow Map -->
-        <div class="workflow-card" onclick="openWorkflowLightbox(this)">
-          <h4 class="workflow-card__title">Tool&#8596;Workflow Map</h4>
-          <div class="workflow-card__diagram">
-            <pre class="mermaid">
-flowchart LR
-    subgraph TOOLS ["MCP Tools (17 total)"]
-        T0[Tool 0: captureNFR]
-        T1[Tool 1: generatePerfScript]
-        T1B[Tool 1B: checkLocalToolAvailability]
-        T1C[Tool 1C: runLocalPerformanceTest]
-        T1D[Tool 1D: prepareK6ForTest]
-        T2[Tool 2: collectCommitForAnalysis]
-        T5[Tool 5: provisionAzureVM]
-        T6[Tool 6: runCloudPerformanceTest]
-        T7[Tool 7: getCloudTestRecommendation]
-        T7B[Tool 7b: runDistributedPerformanceTest]
-        T7C[Tool 7c: runTestOnExistingVM]
-        T7D[Tool 7d: runDistributedBYOITest]
-        T8[Tool 8: getVMMetrics]
-        T9[Tool 9: getAppInsightsMetrics]
-        T10[Tool 10: createAuthConfig]
-        T11[Tool 11: validateAuthConfig]
-        T12[Tool 12: analyzeSwaggerAuth]
-    end
-
-    subgraph WORKFLOWS ["Workflows"]
-        W0[WF 0: NFR Capture]
-        W0B[WF 0B: Test Plan]
-        W1[WF 1: Script Generation]
-        W1AUTH[WF 1-Auth: Auth Setup]
-        W1A[WF 1A: Smart Advisor]
-        W1B_W[WF 1B: Local Execution]
-        W1C_W[WF 1C: Cloud Single]
-        W1D_W[WF 1D: Distributed Cloud]
-        W1E_W[WF 1E: BYOI]
-        W1F_W[WF 1F: Distributed BYOI]
-        W1G_W[WF 1G: App Insights]
-        W2_W[WF 2: Commit Analysis]
-        W3_W[WF 3: Provision VM]
-        W6_W[WF 6: Auto-Fix]
-        W7_W[WF 7: Code-to-Swagger]
-        W8_W[WF 8: Code Complexity]
-    end
-
-    T0 --> W0
-    T1 --> W1
-    T1B --> W1B_W
-    T1C --> W1B_W
-    T1D --> W1
-    T2 --> W2_W
-    T5 --> W3_W
-    T5 --> W1C_W
-    T6 --> W1C_W
-    T7 --> W1A
-    T7B --> W1D_W
-    T7C --> W1E_W
-    T7D --> W1F_W
-    T8 --> W1C_W
-    T9 --> W1G_W
-    T10 --> W1AUTH
-    T11 --> W1AUTH
-    T12 --> W1AUTH
-
-    style TOOLS fill:#f5f5f5
-    style WORKFLOWS fill:#e3f2fd
-            </pre>
-          </div>
-          <div class="workflow-card__hint">Click to enlarge</div>
         </div>
 
       </div>
@@ -986,16 +778,16 @@ flowchart LR
             </div>
             <div class="code-block">
 <pre><code># macOS Apple Silicon
-code --install-extension performance-agent-1.0.0-darwin-arm64.vsix
+code --install-extension performance-agent-2.0.0-darwin-arm64.vsix
 
 # macOS Intel
-code --install-extension performance-agent-1.0.0-darwin-x64.vsix
+code --install-extension performance-agent-2.0.0-darwin-x64.vsix
 
 # Windows x64
-code --install-extension performance-agent-1.0.0-win32-x64.vsix
+code --install-extension performance-agent-2.0.0-win32-x64.vsix
 
 # Linux x64
-code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
+code --install-extension performance-agent-2.0.0-linux-x64.vsix</code></pre>
             </div>
           </div>
         </div>
@@ -1015,7 +807,7 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
               <span class="post-install__check">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
-              <span>On successful installation, an <strong>agent file</strong> is auto-created at <code>.github/agents/</code> in your workspace</span>
+              <span>On successful installation, an <strong>agent file</strong> is auto-created at <code>.github/agents/</code> and <strong>14 skill files</strong> at <code>.github/skills/</code> in your workspace</span>
             </div>
             <div class="post-install__step">
               <span class="post-install__check">
@@ -1047,7 +839,7 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
           </div>
 
           <div class="post-install__note" style="margin-top: 0.75rem; padding: 0.75rem 1rem; background: rgba(99, 102, 241, 0.08); border-radius: 8px; border-left: 3px solid var(--primary-light); font-size: 0.88rem; color: var(--text-secondary, #a0a0a0);">
-            <strong>Tip:</strong> Always open VS Code in a <em>repo or project folder</em> (not a bare window). The extension needs a workspace to create the <code>.github/agents/</code> directory and register the agent file.
+            <strong>Tip:</strong> Always open VS Code in a <em>repo or project folder</em> (not a bare window). The extension needs a workspace to create the <code>.github/agents/</code> and <code>.github/skills/</code> directories.
           </div>
         </div>
       </div>
@@ -1059,17 +851,27 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
     <div class="container">
       <div class="section-header">
         <h2>MCP Tools Reference</h2>
-        <p>22+ tools available through GitHub Copilot Agent Mode</p>
+        <p>27 tools available through GitHub Copilot Agent Mode</p>
       </div>
       <div class="tools-grid">
         <div class="tool-category">
-          <h3>🎯 NFR &amp; Workload</h3>
+          <h3>🎯 NFR &amp; SLAs</h3>
           <div class="tool-item">
             <div class="tool-header">
               <code>captureNFR</code>
               <span class="tool-badge tool-badge--new">New</span>
             </div>
-            <span>Capture Non-Functional Requirements and workload models. Supports text input, file path, or interactive Q&amp;A. 6 workload presets (e-commerce, api-gateway, read-heavy, write-heavy, crud-app, equal) with custom per-endpoint traffic distribution, think times, and read/write ratios. Saves to <code>.perf-output/nfr/</code>.</span>
+            <span>Capture Non-Functional Requirements &mdash; concurrency targets, response time SLAs (p50/p95/p99), throughput, error rate budgets, test durations, and infrastructure limits. Supports text input, file path, or interactive Q&amp;A. Saved to <code>.perf-output/nfr/</code> and consumed by script generation, Smart Advisor, and result analysis for pass/fail verdicts.</span>
+          </div>
+        </div>
+        <div class="tool-category">
+          <h3>📋 Business Scenarios</h3>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>captureBusinessScenarios</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Capture multi-step user journeys (e.g., Browse &rarr; View &rarr; Purchase) with step-level correlation, per-step NFR overrides, and concurrent user distribution. Accepts CSV/Excel templates or manual input. Drives scenario-based JMX thread group generation.</span>
           </div>
         </div>
         <div class="tool-category">
@@ -1078,7 +880,7 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
             <div class="tool-header">
               <code>generatePerfScript</code>
             </div>
-            <span>Generate JMeter (.jmx) or k6 (.js) performance test scripts from Swagger/OpenAPI specs. Supports 5 load profiles (basic, ramp, spike, soak, step), workload model-weighted thread groups, auto-correlation (POST&rarr;GET chains), duration assertions from NFR SLAs, App Insights BackendListener integration, and bearer token injection. Template-based, no API keys required.</span>
+            <span>Generate JMeter (.jmx) or k6 (.js) performance test scripts from Swagger/OpenAPI specs. Supports 6 test types (baseline, load, stress, spike, soak/endurance, capacity) with auto-derived load profiles, business scenario thread groups, individual API testing, auto-correlation (POST&rarr;GET chains), duration assertions from NFR SLAs, App Insights BackendListener integration, and bearer token injection. Template-based, no API keys required.</span>
           </div>
           <div class="tool-item">
             <div class="tool-header">
@@ -1136,6 +938,20 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
               <code>checkLocalToolAvailability</code>
             </div>
             <span>Check if JMeter or k6 is installed and available on your system.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>runSanityTest</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Pre-flight sanity check &mdash; runs the same JMeter or k6 script with 1 thread and 2 iterations. Validates connectivity, auth tokens, and endpoint health with per-endpoint pass/fail results. Intelligent JMX overrides patch thread groups, disable schedulers and throughput timers, then auto-restore the original script.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>checkSetupReadiness</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Comprehensive environment readiness check. Validates tool installations (JMeter, k6, Terraform, Azure CLI), Azure identity &amp; RBAC roles, subscriptions, resource groups, registered providers, and system info. Returns a feature availability matrix.</span>
           </div>
         </div>
         <div class="tool-category">
@@ -1367,7 +1183,7 @@ code --install-extension performance-agent-1.0.0-linux-x64.vsix</code></pre>
             <li>Download the <code>.vsix</code> for your platform from <a href="#downloads">Downloads</a></li>
             <li>Open VS Code &rarr; Extensions &rarr; <strong>&hellip;</strong> &rarr; <strong>Install from VSIX</strong></li>
             <li><strong>Open a repo or project folder</strong> in VS Code (required for activation)</li>
-            <li>Verify the agent file is created at <code>.github/agents/</code> in your workspace</li>
+            <li>Verify the agent file at <code>.github/agents/</code> and skill files at <code>.github/skills/</code> are created in your workspace</li>
             <li>Open GitHub Copilot Chat (<kbd>Cmd+Shift+I</kbd> / <kbd>Ctrl+Shift+I</kbd>)</li>
             <li>Click the <strong>mode dropdown</strong> in Copilot Chat and select <strong>&ldquo;AgentPT.ai&rdquo;</strong> from the list</li>
             <li>Once <strong>AgentPT.ai</strong> appears at the bottom of the chat panel, you&rsquo;re good to go!</li>
@@ -1789,6 +1605,17 @@ git --version           # Required for commit analysis</code></pre>
             </ol>
           </div>
         </details>
+        <details class="faq-item">
+          <summary>Sanity test shows 0 endpoints or empty results</summary>
+          <div class="faq-answer">
+            <ol>
+              <li>If the JTL file is empty, the test may have timed out before completing. Increase the timeout or check if your API has very slow endpoints (e.g., returning large payloads that take &gt;60s per request).</li>
+              <li>Verify the JMX overrides applied correctly &mdash; the sanity log should show <code>threads=1</code> and <code>ramp-up=0</code>.</li>
+              <li>Check the sanity JMeter log at <code>.perf-output/sanity/sanity-jmeter.log</code> for errors.</li>
+              <li>Ensure the MCP server was rebuilt after any source changes: <code>cd mcp-server &amp;&amp; npm run build</code></li>
+            </ol>
+          </div>
+        </details>
 
       </div>
     </div>
@@ -1935,7 +1762,7 @@ git --version           # Required for commit analysis</code></pre>
             <div class="feature-matrix">
               <div class="feature-row" data-requires="nodejs">
                 <span class="feature-status" id="feat-nfr">&#x2716;</span>
-                <span class="feature-name">NFR Capture &amp; Workload Modeling</span>
+                <span class="feature-name">NFR Capture</span>
               </div>
               <div class="feature-row" data-requires="nodejs">
                 <span class="feature-status" id="feat-jmx">&#x2716;</span>
@@ -1949,6 +1776,14 @@ git --version           # Required for commit analysis</code></pre>
                 <span class="feature-status" id="feat-swagger">&#x2716;</span>
                 <span class="feature-name">Analyze Swagger / OpenAPI</span>
               </div>
+              <div class="feature-row" data-requires="nodejs">
+                <span class="feature-status" id="feat-codeswagger">&#x2716;</span>
+                <span class="feature-name">Code &rarr; Swagger Generation</span>
+              </div>
+              <div class="feature-row" data-requires="nodejs">
+                <span class="feature-status" id="feat-scenarios">&#x2716;</span>
+                <span class="feature-name">Business Scenario Capture</span>
+              </div>
               <div class="feature-row" data-requires="nodejs,git">
                 <span class="feature-status" id="feat-commit">&#x2716;</span>
                 <span class="feature-name">Commit Analysis &amp; Auto-Fix</span>
@@ -1960,6 +1795,10 @@ git --version           # Required for commit analysis</code></pre>
               <div class="feature-row" data-requires="jmeter,java">
                 <span class="feature-status" id="feat-localjmeter">&#x2716;</span>
                 <span class="feature-name">Local JMeter Testing</span>
+              </div>
+              <div class="feature-row" data-requires="jmeter,java">
+                <span class="feature-status" id="feat-sanity">&#x2716;</span>
+                <span class="feature-name">Sanity Test (Pre-flight)</span>
               </div>
               <div class="feature-row" data-requires="k6">
                 <span class="feature-status" id="feat-localk6">&#x2716;</span>
@@ -2072,7 +1911,7 @@ git --version           # Required for commit analysis</code></pre>
                 <div class="info-block__icon">🎯</div>
                 <div>
                   <strong>Feature Availability Matrix</strong>
-                  <span>Maps every feature (script gen, local test, cloud test, distributed, BYOI, metrics) to its required tools &mdash; shows exactly what works and what&rsquo;s blocked.</span>
+                  <span>Maps every feature (NFR capture, script gen, business scenarios, code analysis, local test, cloud test, distributed, BYOI, metrics) to its required tools &mdash; shows exactly what works and what&rsquo;s blocked.</span>
                 </div>
               </div>
               <div class="info-block">
@@ -2250,7 +2089,7 @@ git --version           # Required for commit analysis</code></pre>
   <section class="cta-section">
     <div class="container">
       <h2>Ready to level up your development workflow?</h2>
-      <p>Open source. NFR capture, workload modeling, smart recommendations, code &amp; complexity analysis, OpenAPI generation, and performance testing &mdash; local, single-VM, distributed, or BYOI. Windows, macOS, and Linux.</p>
+      <p>Open source. NFR capture, business scenario modeling, smart recommendations, code &amp; complexity analysis, OpenAPI generation, and performance testing &mdash; local, single-VM, distributed, or BYOI. Windows, macOS, and Linux.</p>
       <div class="cta-actions">
         <a href="#downloads" class="btn btn-primary btn-lg">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
