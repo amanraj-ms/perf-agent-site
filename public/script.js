@@ -89,7 +89,8 @@ function initScrollEffects() {
   // Observe cards and sections
   document.querySelectorAll(
     '.feature-card, .download-card, .install-card, .tool-category, ' +
-    '.pipeline-item, .tutorial-step, .faq-item, .security-item, .reference-table'
+    '.pipeline-item, .tutorial-step, .faq-item, .security-item, .reference-table, ' +
+    '.report-showcase-card'
   ).forEach(el => {
     el.classList.add('fade-in');
     observer.observe(el);

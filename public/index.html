@@ -155,6 +155,7 @@
       <div class="nav-links" id="nav-links">
         <a href="#testing-modes">Testing Modes</a>
         <a href="#features">Features</a>
+        <a href="#report-showcase">Report</a>
         <a href="#pipeline">How It Works</a>
         <a href="#tools">Tools</a>
         <a href="#downloads">Downloads</a>
@@ -204,6 +205,8 @@
           <span class="pipeline-step">Execute</span>
           <span class="pipeline-arrow">&rarr;</span>
           <span class="pipeline-step">Results</span>
+          <span class="pipeline-arrow">&rarr;</span>
+          <span class="pipeline-step pipeline-step--accent">Report</span>
         </div>
         <div class="hero-actions">
           <a href="#downloads" class="btn btn-primary">Download Extension</a>
@@ -468,18 +471,19 @@
         <div class="feature-card feature-card--highlight">
           <div class="feature-badge">New</div>
           <div class="feature-icon">📄</div>
-          <h3>Downloadable Performance Report</h3>
-          <p>After every test run, automatically generates a comprehensive Markdown report. Opens in VS Code preview, renders in GitHub PRs, paste into Confluence &mdash; fully self-contained with zero external dependencies.</p>
+          <h3>Interactive HTML Dashboard &amp; Markdown Report</h3>
+          <p>After every test run, automatically generates <strong>two reports</strong> &mdash; a rich <strong>interactive HTML dashboard</strong> with Chart.js visualizations that opens in your browser, plus a comprehensive <strong>Markdown report</strong> for VS Code, GitHub PRs, and Confluence. Both are fully self-contained with zero external dependencies.</p>
           <ul class="feature-list">
+            <li><strong>HTML Dashboard:</strong> dark/light theme, Chart.js charts, glass-morphism UI</li>
+            <li><strong>Response time charts:</strong> P50/P90/P95/P99 bar visualization</li>
+            <li><strong>Per-endpoint breakdown:</strong> sorted by worst avg, all endpoints shown</li>
+            <li><strong>Error rate doughnut chart</strong> with success/failure split</li>
             <li>Executive summary with overall pass/fail verdict</li>
-            <li>p50/p95/p99 percentiles with color-coded ratings</li>
-            <li>Per-endpoint breakdown sorted by slowest first</li>
             <li>NFR compliance assessment (per-SLA pass/fail)</li>
-            <li>Infrastructure metrics with over/under-provisioned detection</li>
             <li>Client vs Server comparison (JMeter/k6 vs App Insights)</li>
-            <li>Agent vs Manual script change tracking section</li>
-            <li>Saved to <code>.perf-output/reports/</code></li>
+            <li>Auto-opens in browser &mdash; saved to <code>.perf-output/reports/</code></li>
           </ul>
+          <a href="#report-showcase" class="feature-card-link">See the dashboard &darr;</a>
         </div>
         <div class="feature-card feature-card--highlight">
           <div class="feature-badge">New</div>
@@ -535,6 +539,62 @@
           <a href="#readiness" class="feature-card-link">Try the interactive checker &darr;</a>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- Report Showcase Section -->
+  <section class="report-showcase-section" id="report-showcase">
+    <div class="container">
+      <div class="section-header">
+        <h2>Interactive HTML Report Dashboard</h2>
+        <p>Every test run auto-generates a stunning, self-contained HTML dashboard with Chart.js visualizations &mdash; dark/light theme toggle, response time charts, per-endpoint breakdown, and error analysis. Opens automatically in your browser.</p>
+      </div>
+      <div class="report-showcase-grid">
+        <div class="report-showcase-card">
+          <div class="report-showcase-label">
+            <span class="report-showcase-badge">Dashboard Overview</span>
+            <span class="report-showcase-desc">Executive summary, verdict badge, response time percentiles, and throughput metrics at a glance</span>
+          </div>
+          <div class="enlargeable-image" onclick="openImageLightbox(this)">
+            <img src="images/report_1.png" alt="Performance Report Dashboard — Overview with charts and metrics" loading="lazy" />
+            <div class="enlarge-hint">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              Click to enlarge
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-view-full" onclick="openImageLightbox(this.previousElementSibling)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            View Full Image
+          </button>
+        </div>
+        <div class="report-showcase-card">
+          <div class="report-showcase-label">
+            <span class="report-showcase-badge">Endpoint Analysis</span>
+            <span class="report-showcase-desc">Per-endpoint response times, error rate doughnut chart, and detailed breakdown sorted by worst performers</span>
+          </div>
+          <div class="enlargeable-image" onclick="openImageLightbox(this)">
+            <img src="images/report_2.png" alt="Performance Report Dashboard — Endpoint breakdown and error analysis" loading="lazy" />
+            <div class="enlarge-hint">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              Click to enlarge
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-view-full" onclick="openImageLightbox(this.previousElementSibling)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            View Full Image
+          </button>
+        </div>
+      </div>
+      <div class="report-showcase-features">
+        <div class="report-feature-pill"><span class="pill-icon">🎨</span> Dark &amp; Light Theme</div>
+        <div class="report-feature-pill"><span class="pill-icon">📊</span> Chart.js Visualizations</div>
+        <div class="report-feature-pill"><span class="pill-icon">🔍</span> All Endpoints Shown</div>
+        <div class="report-feature-pill"><span class="pill-icon">✅</span> Pass/Fail Verdict</div>
+        <div class="report-feature-pill"><span class="pill-icon">📈</span> P50/P90/P95/P99 Percentiles</div>
+        <div class="report-feature-pill"><span class="pill-icon">🌐</span> Auto-Opens in Browser</div>
+        <div class="report-feature-pill"><span class="pill-icon">📄</span> Zero Dependencies</div>
+        <div class="report-feature-pill"><span class="pill-icon">🖥️</span> Glass-morphism UI</div>
       </div>
     </div>
   </section>
