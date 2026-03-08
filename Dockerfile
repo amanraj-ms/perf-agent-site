@@ -4,10 +4,11 @@ WORKDIR /app
 
 # Copy package files and install dependencies
 COPY package.json package-lock.json* ./
+ARG CACHEBUST=1
 RUN npm ci --omit=dev 2>/dev/null || npm install --omit=dev
 
 # Copy application files
-COPY server.js ./
+COPY server.js storage.js ./
 COPY public/ ./public/
 
 # Expose the port

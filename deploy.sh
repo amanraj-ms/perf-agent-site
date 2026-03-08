@@ -164,7 +164,7 @@ deploy_full() {
         --registry "$ACR_NAME" \
         --image "${IMAGE_NAME}:${IMAGE_TAG}" \
         --image "${IMAGE_NAME}:latest" \
-        --no-cache \
+        --build-arg CACHEBUST="$(date +%s)" \
         . 2>&1 | tail -5
 
     ok "Image built: ${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG}"
