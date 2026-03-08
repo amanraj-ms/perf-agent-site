@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initReleases();
   initVideoPlayer();
   initReadinessChecker();
+  initInterestForm();
+  initApprovalChecker();
 });
 
 // --- Navigation ---
@@ -122,6 +124,161 @@ function copyCommand(btn) {
   });
 }
 
+
+
+// --- Prefill early-access form & scroll to it ---
+function prefillAccessForm(version) {
+  const section = document.getElementById('early-access');
+  if (section) section.scrollIntoView({ behavior: 'smooth' });
+  // Wait for scroll + ensure dropdown is populated, then select the version
+  setTimeout(() => {
+    const select = document.getElementById('form-version');
+    if (select) {
+      for (const opt of select.options) {
+        if (opt.value === version) { select.value = version; break; }
+      }
+    }
+  }, 400);
+}
+
+// --- Check Approval Status ---
+const DL_ICON_SM = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+
+async function checkApproval() {
+  const input = document.getElementById('approval-email');
+  const resultEl = document.getElementById('approval-result');
+  const btn = document.getElementById('approval-check-btn');
+  const email = (input.value || '').trim();
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    input.style.borderColor = '#ef4444';
+    return;
+  }
+  input.style.borderColor = '';
+
+  btn.disabled = true;
+  btn.textContent = 'Checking...';
+  resultEl.style.display = 'none';
+
+  try {
+    const res = await fetch('/api/check-approval', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+
+    // ── Build active download cards (approvals with valid links) ──
+    let activeHtml = '';
+    if (data.approved && data.approvals && data.approvals.length > 0) {
+      activeHtml = data.approvals.map(a => {
+        const expiryDate = new Date(a.expires_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        const assetsHtml = a.links.map(l =>
+          l.used
+            ? `<div class="approval-asset">
+                <span class="approval-asset__name">${escapeHtmlInline(l.name)}</span>
+                <span class="dl-used-badge">✓ Downloaded</span>
+              </div>`
+            : `<div class="approval-asset">
+                <span class="approval-asset__name">${escapeHtmlInline(l.name)}</span>
+                <a href="${escapeHtmlInline(l.url)}" class="dl-btn dl-btn--sm">${DL_ICON_SM} Download</a>
+              </div>`
+        ).join('');
+        return `<div class="approval-version-card">
+          <div class="approval-version-card__header">
+            <span class="approval-version-card__tag">${escapeHtmlInline(a.version)}</span>
+            <span class="approval-version-card__expiry">Expires: ${expiryDate}</span>
+          </div>
+          ${assetsHtml}
+        </div>`;
+      }).join('');
+    }
+
+    // ── Build unified history timeline ──
+    const events = [];
+    if (data.approvals) data.approvals.forEach(a => {
+      events.push({ type: 'approved', version: a.version, date: a.approved_at || new Date(a.expires_at).toISOString() });
+    });
+    if (data.rejections) data.rejections.forEach(r => events.push({ type: 'rejected', version: r.version, date: r.rejected_at, reason: r.reason }));
+    if (data.deletions) data.deletions.forEach(d => events.push({ type: 'deleted', version: d.version, date: d.deleted_at }));
+    events.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    let historyHtml = '';
+    if (events.length > 0) {
+      const timelineItems = events.map(e => {
+        const evDate = new Date(e.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        if (e.type === 'approved') {
+          return `<div class="timeline-item timeline-item--approved">
+            <div class="timeline-dot timeline-dot--approved"></div>
+            <div class="timeline-content">
+              <span class="timeline-badge timeline-badge--approved">Approved</span>
+              <span class="timeline-version">${escapeHtmlInline(e.version)}</span>
+              <span class="timeline-date">${evDate}</span>
+            </div>
+          </div>`;
+        } else if (e.type === 'rejected') {
+          return `<div class="timeline-item timeline-item--rejected">
+            <div class="timeline-dot timeline-dot--rejected"></div>
+            <div class="timeline-content">
+              <span class="timeline-badge timeline-badge--rejected">Rejected</span>
+              <span class="timeline-version">${escapeHtmlInline(e.version)}</span>
+              <span class="timeline-date">${evDate}</span>
+              ${e.reason ? `<span class="timeline-reason">Reason: ${escapeHtmlInline(e.reason)}</span>` : ''}
+            </div>
+          </div>`;
+        } else {
+          return `<div class="timeline-item timeline-item--deleted">
+            <div class="timeline-dot timeline-dot--deleted"></div>
+            <div class="timeline-content">
+              <span class="timeline-badge timeline-badge--deleted">Removed</span>
+              <span class="timeline-version">${escapeHtmlInline(e.version)}</span>
+              <span class="timeline-date">${evDate}</span>
+            </div>
+          </div>`;
+        }
+      }).join('');
+      historyHtml = `<div class="status-history">
+        <div class="status-history__header" onclick="this.parentElement.classList.toggle('open')">
+          <span>📋 History (${events.length} event${events.length > 1 ? 's' : ''})</span>
+          <span class="status-history__toggle">▸</span>
+        </div>
+        <div class="status-history__timeline">${timelineItems}</div>
+      </div>`;
+    }
+
+    // ── Render combined output ──
+    if (!activeHtml && events.length === 0) {
+      resultEl.className = 'approval-result approval-result--not-found';
+      resultEl.innerHTML = `<p>No active approvals found for <strong>${escapeHtmlInline(email)}</strong>.</p><p style="margin-top:8px;">Haven\u2019t requested yet? <a href="#early-access">Request Early Access</a></p>`;
+    } else if (!activeHtml) {
+      resultEl.className = 'approval-result';
+      resultEl.innerHTML = `<div class="approval-version-card" style="border-color:var(--border-color);"><p style="margin:0;font-size:0.9rem;color:var(--text-secondary);">No active download links. Your previous request was processed — see history below.</p></div>` + historyHtml;
+    } else {
+      resultEl.className = 'approval-result';
+      resultEl.innerHTML = activeHtml + historyHtml;
+    }
+    resultEl.style.display = 'block';
+  } catch (err) {
+    resultEl.className = 'approval-result approval-result--not-found';
+    resultEl.innerHTML = '<p>Something went wrong. Please try again.</p>';
+    resultEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Check Status';
+  }
+}
+
+function escapeHtmlInline(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function initApprovalChecker() {
+  const input = document.getElementById('approval-email');
+  if (input) {
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkApproval(); });
+  }
+}
+
 // --- Releases from GitHub (proxied via server) ---
 function initReleases() {
   loadLatestRelease();
@@ -152,6 +309,7 @@ function timeAgo(dateStr) {
 }
 
 const DL_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+const LOCK_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
 
 function detectPlatform(filename) {
   const f = filename.toLowerCase();
@@ -201,6 +359,11 @@ async function loadLatestRelease() {
         const platform = detectPlatform(asset.name);
         const arch = detectArch(asset.name);
         const label = [platform.os, arch].filter(Boolean).join(' ');
+        const gated = release.gated;
+
+        const actionBtn = gated
+          ? `<a href="#early-access" class="dl-btn dl-btn--gated" onclick="prefillAccessForm('${release.tag || ''}')">${LOCK_ICON} Request Access</a>`
+          : `<a href="/api/download/${asset.id}" class="dl-btn">${DL_ICON} Download</a>`;
 
         return `
           <tr class="dl-row">
@@ -210,7 +373,7 @@ async function loadLatestRelease() {
             </td>
             <td class="dl-size">${formatBytes(asset.size)}</td>
             <td class="dl-downloads">${(asset.download_count || 0).toLocaleString()}</td>
-            <td><a href="/api/download/${asset.id}" class="dl-btn">${DL_ICON} Download</a></td>
+            <td>${actionBtn}</td>
           </tr>`;
       }).join('');
       console.log('[releases] Downloads table populated with', release.assets.length, 'rows');
@@ -257,14 +420,20 @@ async function loadAllReleases() {
 
     container.innerHTML = releases.map((release, idx) => {
       const isLatest = idx === 0;
-      const assetsHtml = (release.assets || []).map(a => `
+      const gated = release.gated;
+      const assetsHtml = (release.assets || []).map(a => {
+        const actionBtn = gated
+          ? `<a href="#early-access" class="dl-btn dl-btn--sm dl-btn--gated" onclick="prefillAccessForm('${release.tag || ''}')">${LOCK_ICON}</a>`
+          : `<a href="/api/download/${a.id}" class="dl-btn dl-btn--sm">${DL_ICON}</a>`;
+        return `
         <div class="release-asset">
           <span class="release-asset__name">${a.name}</span>
           <span class="release-asset__size">${formatBytes(a.size)}</span>
           <span class="release-asset__count">${(a.download_count || 0).toLocaleString()} downloads</span>
-          <a href="/api/download/${a.id}" class="dl-btn dl-btn--sm">${DL_ICON}</a>
+          ${actionBtn}
         </div>
-      `).join('');
+      `;
+      }).join('');
 
       return `
         <details class="release-card" ${isLatest ? 'open' : ''}>
@@ -273,6 +442,7 @@ async function loadAllReleases() {
               <span class="release-card__tag">${release.tag || release.name}</span>
               ${isLatest ? '<span class="release-card__badge">Latest</span>' : ''}
               ${release.prerelease ? '<span class="release-card__badge release-card__badge--pre">Pre-release</span>' : ''}
+              ${gated ? '<span class="release-card__badge release-card__badge--gated">Access Required</span>' : ''}
             </div>
             <span class="release-card__date">${timeAgo(release.published_at)}</span>
           </summary>
@@ -544,3 +714,133 @@ function openImageLightbox(container) {
   lightbox.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
+
+/* ========================================
+   Interest / Early Access Form
+   ======================================== */
+
+// ---- CONFIGURATION ----
+// Replace this URL with your Google Apps Script Web App URL after deploying the backend.
+// See admin.html for setup instructions.
+const FORM_ENDPOINT = '/api/interest';
+
+function initInterestForm() {
+  const form = document.getElementById('interest-form');
+  if (!form) return;
+
+  form.addEventListener('submit', handleInterestSubmit);
+  loadVersionDropdown();
+}
+
+async function loadVersionDropdown() {
+  const select = document.getElementById('form-version');
+  if (!select) return;
+
+  try {
+    const res = await fetch('/api/releases');
+    if (!res.ok) throw new Error(`API error ${res.status}`);
+    const releases = await res.json();
+
+    select.innerHTML = '<option value="">Select a version</option>';
+    releases.forEach((release, idx) => {
+      const tag = release.tag || release.name;
+      const label = tag + (idx === 0 ? ' (Latest)' : '') + (release.prerelease ? ' \u2014 Pre-release' : '');
+      const opt = document.createElement('option');
+      opt.value = tag;
+      opt.textContent = label;
+      select.appendChild(opt);
+    });
+  } catch (err) {
+    console.error('[interest-form] Failed to load versions:', err);
+    select.innerHTML = '<option value="">Could not load versions</option>';
+  }
+}
+
+async function handleInterestSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  const btn = document.getElementById('form-submit-btn');
+
+  // Clear previous invalid states
+  form.querySelectorAll('.invalid').forEach(el => el.classList.remove('invalid'));
+
+  // Gather values
+  const name = form.elements.name.value.trim();
+  const email = form.elements.email.value.trim();
+  const organization = form.elements.organization.value.trim();
+  const role = form.elements.role.value;
+  const version = form.elements.version.value;
+  const platform = form.elements.platform.value;
+  const message = form.elements.message.value.trim();
+
+  // Validate
+  let valid = true;
+  if (!name) { form.elements.name.classList.add('invalid'); valid = false; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    form.elements.email.classList.add('invalid'); valid = false;
+  }
+  if (!organization) { form.elements.organization.classList.add('invalid'); valid = false; }
+  if (!role) { form.elements.role.classList.add('invalid'); valid = false; }
+  if (!version) {
+    form.elements.version.classList.add('invalid');
+    valid = false;
+  }
+  if (!platform) { form.elements.platform.classList.add('invalid'); valid = false; }
+  if (!message) { form.elements.message.classList.add('invalid'); valid = false; }
+  if (!valid) return;
+
+  const payload = {
+    name, email, organization, role, version, platform, message,
+    timestamp: new Date().toISOString(),
+    userAgent: navigator.userAgent
+  };
+
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) throw new Error(`Server error ${res.status}`);
+
+    // Show success
+    form.style.display = 'none';
+    const success = document.getElementById('form-success');
+    document.getElementById('form-success-email').textContent = email;
+    success.style.display = 'block';
+
+  } catch (err) {
+    console.error('[interest-form] Submission failed:', err);
+    // Fallback: save locally and show success anyway so user isn't stuck
+    saveSubmissionLocally(payload);
+    form.style.display = 'none';
+    const success = document.getElementById('form-success');
+    document.getElementById('form-success-email').textContent = email;
+    success.style.display = 'block';
+  } finally {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+}
+
+function saveSubmissionLocally(payload) {
+  try {
+    const key = 'interest_submissions';
+    const existing = JSON.parse(localStorage.getItem(key) || '[]');
+    existing.push(payload);
+    localStorage.setItem(key, JSON.stringify(existing));
+  } catch (_) { /* quota exceeded or private mode */ }
+}
+
+function resetInterestForm() {
+  const form = document.getElementById('interest-form');
+  const success = document.getElementById('form-success');
+  if (form) { form.reset(); form.style.display = 'flex'; }
+  if (success) success.style.display = 'none';
+}
+
+

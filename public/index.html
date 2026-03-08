@@ -155,18 +155,21 @@
       <div class="nav-links" id="nav-links">
         <a href="#testing-modes">Testing Modes</a>
         <a href="#features">Features</a>
-        <a href="#report-showcase">Report</a>
         <a href="#pipeline">How It Works</a>
-        <a href="#tools">Tools</a>
-        <a href="#downloads">Downloads</a>
-        <a href="#getting-started">Get Started</a>
+        <a href="#downloads">Download</a>
+        <a href="#check-approval">Check Approval</a>
         <div class="nav-dropdown">
           <button class="nav-dropdown-toggle">More <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg></button>
           <div class="nav-dropdown-menu">
+            <a href="#tools"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Tools</a>
+            <a href="#report-showcase"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Report</a>
+            <a href="#getting-started"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg> Get Started</a>
             <a href="#upcoming"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg> Roadmap</a>
             <a href="#architecture"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg> Execution Modes</a>
             <a href="#readiness"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Readiness Check</a>
             <a href="#team"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Team</a>
+            <div class="nav-dropdown-divider"></div>
+            <a href="admin.html" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Admin Portal</a>
           </div>
         </div>
         <a href="https://github.com/amanraj-ms/copilot-perf-agent" class="nav-btn" target="_blank" rel="noopener">
@@ -2163,6 +2166,104 @@ git --version           # Required for commit analysis</code></pre>
     </div>
   </section>
 
+  <!-- Check Approval Status -->
+  <section class="interest-section" id="check-approval">
+    <div class="container">
+      <div class="section-header">
+        <h2>Check Your Approval Status</h2>
+        <p>Already requested access? Enter your email to check if your download has been approved.</p>
+      </div>
+      <div class="interest-form-wrapper" style="max-width:540px;">
+        <div id="approval-checker" class="approval-checker">
+          <div class="approval-checker__input-row">
+            <input type="email" id="approval-email" placeholder="you@company.com" autocomplete="email" />
+            <button class="btn btn-primary" id="approval-check-btn" onclick="checkApproval()">Check Status</button>
+          </div>
+          <div id="approval-result" class="approval-result" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Early Access Interest Form -->
+  <section class="interest-section" id="early-access">
+    <div class="container">
+      <div class="section-header">
+        <h2>Interested in Early Access?</h2>
+        <p>Fill out the form below, choose the version you want to test, and we&rsquo;ll send you a downloadable link directly.</p>
+      </div>
+      <div class="interest-form-wrapper">
+        <form id="interest-form" class="interest-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="form-name">Full Name <span class="required">*</span></label>
+              <input type="text" id="form-name" name="name" required placeholder="Your name" autocomplete="name" />
+            </div>
+            <div class="form-group">
+              <label for="form-email">Email <span class="required">*</span></label>
+              <input type="email" id="form-email" name="email" required placeholder="you@company.com" autocomplete="email" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="form-org">Organization <span class="required">*</span></label>
+              <input type="text" id="form-org" name="organization" required placeholder="Company or team" autocomplete="organization" />
+            </div>
+            <div class="form-group">
+              <label for="form-role">Role <span class="required">*</span></label>
+              <select id="form-role" name="role" required>
+                <option value="">Select your role</option>
+                <option value="Developer">Developer</option>
+                <option value="QA / Test Engineer">QA / Test Engineer</option>
+                <option value="DevOps / SRE">DevOps / SRE</option>
+                <option value="Engineering Manager">Engineering Manager</option>
+                <option value="Architect">Architect</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="form-version">Version Interested In <span class="required">*</span></label>
+            <select id="form-version" name="version" required>
+              <option value="">Loading releases...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="form-platform">Platform <span class="required">*</span></label>
+            <select id="form-platform" name="platform" required>
+              <option value="">Select your platform</option>
+              <option value="macOS (Apple Silicon)">macOS (Apple Silicon)</option>
+              <option value="macOS (Intel)">macOS (Intel)</option>
+              <option value="Windows x64">Windows x64</option>
+              <option value="Linux x64">Linux x64</option>
+              <option value="Linux ARM64">Linux ARM64</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="form-message">Anything else? <span class="required">*</span></label>
+            <textarea id="form-message" name="message" rows="3" required placeholder="How do you plan to use it, specific features you're interested in, etc."></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-lg" id="form-submit-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Request Early Access
+            </button>
+          </div>
+          <p class="form-privacy">We respect your privacy. Your info is only used to send the download link and product updates.</p>
+        </form>
+        <!-- Success state -->
+        <div id="form-success" class="form-success" style="display:none;">
+          <div class="form-success__icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h3>You&rsquo;re on the list!</h3>
+          <p>We&rsquo;ll send the download link to <strong id="form-success-email"></strong> shortly.</p>
+          <button class="btn btn-secondary" onclick="resetInterestForm()">Submit Another Response</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
@@ -2177,6 +2278,7 @@ git --version           # Required for commit analysis</code></pre>
           <a href="https://www.npmjs.com/package/@performance-agent/mcp-server" target="_blank" rel="noopener">npm</a>
           <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener">MCP Docs</a>
           <a href="https://github.com/amanraj-ms/copilot-perf-agent/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+          <a href="admin.html" target="_blank" rel="noopener">Admin</a>
         </div>
       </div>
       <div class="footer-bottom">

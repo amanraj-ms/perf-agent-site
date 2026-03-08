@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Interest Tracker | Performance Agent</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f; --bg-alt: #12121a; --bg-card: #16161f; --bg-card-hover: #1c1c28;
+      --bg-code: #1a1a2e; --border: #2a2a3a; --border-light: #3a3a4a;
+      --text: #e4e4e7; --text-secondary: #9ca3af; --text-muted: #6b7280;
+      --primary: #818cf8; --primary-light: #a5b4fc; --primary-dark: #6366f1;
+      --accent: #34d399; --accent-dark: #059669; --warning: #fbbf24; --danger: #ef4444;
+      --radius: 12px; --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.3);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: var(--primary-light); text-decoration: none; }
+
+    /* -- Layout -- */
+    .admin-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 32px; border-bottom: 1px solid var(--border);
+      background: rgba(10,10,15,0.95); backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .admin-header h1 { font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+    .admin-header .logo { font-size: 1.3rem; }
+    .admin-header .back { font-size: 0.85rem; color: var(--text-secondary); }
+    .admin-header .back:hover { color: var(--text); }
+
+    .admin-body { max-width: 1400px; margin: 0 auto; padding: 32px; }
+
+    /* -- Auth gate -- */
+    .auth-gate {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 60vh; flex-direction: column; gap: 1.25rem;
+    }
+    .auth-gate h2 { font-size: 1.4rem; }
+    .auth-gate input {
+      background: var(--bg-code); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      color: var(--text); font-family: var(--mono); font-size: 1rem;
+      padding: 0.75rem 1.25rem; width: 320px; text-align: center;
+    }
+    .auth-gate input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+    .auth-gate .error { color: var(--danger); font-size: 0.85rem; display: none; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 600;
+      font-size: 0.9rem; border: none; cursor: pointer; transition: all 0.2s ease;
+      background: var(--primary-dark); color: #fff;
+    }
+    .btn:hover { background: var(--primary); }
+    .btn-secondary { background: var(--bg-card); border: 1px solid var(--border); color: var(--text); }
+    .btn-secondary:hover { background: var(--bg-card-hover); }
+    .btn-danger { background: var(--danger); }
+    .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+
+    /* -- Stats cards -- */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px; margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.25rem;
+    }
+    .stat-card__label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.25rem; }
+    .stat-card__value { font-size: 2rem; font-weight: 700; color: var(--text); }
+    .stat-card__sub { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem; }
+    .stat-card--primary .stat-card__value { color: var(--primary-light); }
+    .stat-card--accent .stat-card__value { color: var(--accent); }
+    .stat-card--warning .stat-card__value { color: var(--warning); }
+
+    /* -- Toolbar -- */
+    .toolbar {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; flex-wrap: wrap;
+    }
+    .toolbar input[type="text"] {
+      flex: 1; min-width: 200px;
+      background: var(--bg-code); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      color: var(--text); font-size: 0.9rem; padding: 0.6rem 1rem;
+    }
+    .toolbar input:focus { outline: none; border-color: var(--primary); }
+    .toolbar select {
+      background: var(--bg-code); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      color: var(--text); font-size: 0.85rem; padding: 0.6rem 0.75rem; cursor: pointer;
+    }
+
+    /* -- Table -- */
+    .table-wrapper { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    th { background: var(--bg-alt); color: var(--text-secondary); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.4px; position: sticky; top: 0; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    td code { background: var(--bg-code); padding: 2px 6px; border-radius: 4px; font-family: var(--mono); font-size: 0.8rem; }
+    .badge {
+      display: inline-block; padding: 2px 8px; border-radius: 12px;
+      font-size: 0.75rem; font-weight: 600;
+    }
+    .badge--version { background: rgba(99,102,241,0.15); color: var(--primary-light); }
+
+    /* -- Charts area -- */
+    .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 2rem; }
+    .chart-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.25rem;
+    }
+    .chart-card h3 { font-size: 0.95rem; margin-bottom: 1rem; }
+    .bar-chart { display: flex; flex-direction: column; gap: 8px; }
+    .bar-row { display: flex; align-items: center; gap: 10px; }
+    .bar-label { width: 120px; font-size: 0.8rem; color: var(--text-secondary); text-align: right; flex-shrink: 0; }
+    .bar-track { flex: 1; height: 24px; background: var(--bg-code); border-radius: 4px; overflow: hidden; position: relative; }
+    .bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; display: flex; align-items: center; padding-left: 8px; font-size: 0.75rem; font-weight: 600; color: #fff; min-width: 28px; }
+    .bar-fill--primary { background: var(--primary-dark); }
+    .bar-fill--accent { background: var(--accent-dark); }
+    .bar-fill--warning { background: rgba(251,191,36,0.7); }
+
+    .empty-state { text-align: center; padding: 4rem 1rem; color: var(--text-muted); }
+    .empty-state h3 { color: var(--text-secondary); margin-bottom: 0.5rem; }
+
+    .hidden { display: none !important; }
+
+    /* -- Setup instructions -- */
+    .setup-section {
+      margin-top: 3rem; padding: 2rem;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+    }
+    .setup-section h3 { margin-bottom: 1rem; }
+    .setup-section pre {
+      background: var(--bg-code); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      padding: 1rem; overflow-x: auto; font-family: var(--mono); font-size: 0.8rem;
+      color: var(--text-secondary); line-height: 1.5; margin: 0.75rem 0;
+    }
+    .setup-section ol { padding-left: 1.5rem; }
+    .setup-section ol li { margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.9rem; }
+    .setup-section code { background: var(--bg-code); padding: 2px 6px; border-radius: 4px; font-family: var(--mono); font-size: 0.85rem; }
+
+    @media (max-width: 768px) {
+      .admin-body { padding: 16px; }
+      .charts-row { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* -- Access Config Section -- */
+    .access-config {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1.5rem; margin-bottom: 2rem;
+    }
+    .access-config h3 { font-size: 1rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .access-config__form { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; }
+    .access-config__field { display: flex; flex-direction: column; gap: 4px; }
+    .access-config__field label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; }
+    .access-config__field input {
+      background: var(--bg-code); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      color: var(--text); font-family: var(--mono); font-size: 0.88rem; padding: 0.5rem 0.75rem; width: 140px;
+    }
+    .access-config__field input:focus { outline: none; border-color: var(--primary); }
+    .access-config__status { font-size: 0.82rem; margin-top: 0.5rem; }
+    .access-config__overrides { margin-top: 1rem; font-size: 0.82rem; color: var(--text-secondary); }
+    .access-config__overrides code { font-size: 0.8rem; }
+    .access-config__overrides textarea {
+      display: block; width: 100%; max-width: 400px; margin-top: 4px;
+      background: var(--bg-code); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      color: var(--text); font-family: var(--mono); font-size: 0.82rem; padding: 0.5rem;
+      resize: vertical; min-height: 40px;
+    }
+
+    /* Approve modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; z-index: 200;
+    }
+    .modal {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1.5rem; max-width: 560px; width: 90%;
+    }
+    .modal h3 { font-size: 1rem; margin-bottom: 1rem; }
+    .modal .dl-links { margin: 1rem 0; max-height: 200px; overflow-y: auto; }
+    .modal .dl-link-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .modal .dl-link-url {
+      flex: 1; background: var(--bg-code); border: 1px solid var(--border); border-radius: 4px;
+      color: var(--text-secondary); font-family: var(--mono); font-size: 0.75rem; padding: 8px 10px;
+      word-break: break-all; user-select: all;
+    }
+    .btn-approve { background: var(--accent-dark); }
+    .btn-approve:hover { background: var(--accent); }
+    .btn-reject { background: transparent; border: 1px solid var(--danger); color: var(--danger); }
+    .btn-reject:hover { background: rgba(239,68,68,0.15); }
+    .btn-delete { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); }
+    .btn-delete:hover { background: rgba(255,255,255,0.05); color: var(--danger); border-color: var(--danger); }
+    .btn-actions { background: var(--bg-code); border: 1px solid var(--border); color: var(--text); }
+    .btn-actions:hover { border-color: var(--primary); color: var(--primary-light); }
+    .modal textarea {
+      width: 100%; background: var(--bg-code); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      color: var(--text); font-family: var(--font); font-size: 0.88rem; padding: 0.6rem 0.75rem;
+      resize: vertical; min-height: 60px;
+    }
+    .modal textarea:focus { outline: none; border-color: var(--primary); }
+    .action-modal-btns { display: flex; flex-direction: column; gap: 10px; margin: 1rem 0; }
+    .action-modal-btns .btn { justify-content: flex-start; width: 100%; padding: 12px 16px; font-size: 0.9rem; }
+    .action-modal-btns .btn svg { flex-shrink: 0; }
+
+    /* Status badges */
+    .badge--approved { background: rgba(34,197,94,0.15); color: #22c55e; }
+    .badge--rejected { background: rgba(239,68,68,0.15); color: #ef4444; }
+    .badge--pending  { background: rgba(251,191,36,0.15); color: #fbbf24; }
+    .badge--deleted  { background: rgba(107,114,128,0.15); color: #9ca3af; }
+
+    /* Section headings */
+    .section-heading {
+      font-size: 1.05rem; font-weight: 700; margin: 2rem 0 1rem;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-heading .count {
+      background: var(--bg-code); border: 1px solid var(--border); border-radius: 12px;
+      padding: 2px 10px; font-size: 0.78rem; color: var(--text-secondary); font-weight: 500;
+    }
+
+    /* Data viewer */
+    .data-viewer { margin-top: 3rem; }
+    .data-tabs {
+      display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 1rem; flex-wrap: wrap;
+    }
+    .data-tab {
+      padding: 8px 16px; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      background: transparent; border: none; border-bottom: 2px solid transparent;
+      color: var(--text-muted); transition: all 0.2s ease; font-family: var(--font);
+    }
+    .data-tab:hover { color: var(--text-secondary); }
+    .data-tab.active { color: var(--primary-light); border-bottom-color: var(--primary); }
+    .data-content {
+      background: var(--bg-code); border: 1px solid var(--border); border-radius: var(--radius-sm);
+      padding: 1rem; max-height: 400px; overflow: auto;
+    }
+    .data-content pre {
+      font-family: var(--mono); font-size: 0.78rem; line-height: 1.6;
+      color: var(--text-secondary); white-space: pre-wrap; word-break: break-all; margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-header">
+    <h1><span class="logo">⚡</span> Interest Tracker — Admin</h1>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <button id="logout-btn" class="btn btn-secondary btn-sm hidden" onclick="logout()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Logout
+      </button>
+      <a href="index.html" class="back">&larr; Back to site</a>
+    </div>
+  </div>
+
+  <!-- Auth Gate -->
+  <div id="auth-gate" class="auth-gate">
+    <h2>Admin Access</h2>
+    <p style="color: var(--text-secondary); font-size: 0.9rem;">Enter the admin passphrase to view submissions.</p>
+    <input type="password" id="auth-input" placeholder="Passphrase" autocomplete="off" />
+    <button class="btn" id="auth-btn" onclick="authenticate()">Unlock</button>
+    <p class="error" id="auth-error">Incorrect passphrase. Try again.</p>
+  </div>
+
+  <!-- Dashboard (hidden until auth) -->
+  <div id="dashboard" class="admin-body hidden">
+
+    <!-- Stats -->
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card stat-card--primary">
+        <div class="stat-card__label">Total Requests</div>
+        <div class="stat-card__value" id="stat-total">0</div>
+        <div class="stat-card__sub" id="stat-total-sub"></div>
+      </div>
+      <div class="stat-card stat-card--accent">
+        <div class="stat-card__label">Unique Organizations</div>
+        <div class="stat-card__value" id="stat-orgs">0</div>
+      </div>
+      <div class="stat-card stat-card--warning">
+        <div class="stat-card__label">Most Popular Version</div>
+        <div class="stat-card__value" id="stat-popular" style="font-size:1.3rem;">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__label">This Week</div>
+        <div class="stat-card__value" id="stat-week">0</div>
+      </div>
+    </div>
+
+    <!-- Access Configuration -->
+    <div class="access-config" id="access-config-section">
+      <h3>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        Version Access Control
+      </h3>
+      <div class="access-config__form">
+        <div class="access-config__field">
+          <label>Gated From Version</label>
+          <input type="text" id="cfg-gated-from" placeholder="e.g. 1.0.5" />
+        </div>
+        <button class="btn btn-sm" onclick="saveAccessConfig()">Save</button>
+      </div>
+      <div class="access-config__status" id="cfg-status"></div>
+      <div class="access-config__overrides">
+        <p><strong>Free Overrides</strong> (versions always free, comma-separated):</p>
+        <textarea id="cfg-free-overrides" rows="1" placeholder="e.g. 1.0.6, 1.1.0"></textarea>
+        <p style="margin-top:8px;"><strong>Gated Overrides</strong> (versions always gated, comma-separated):</p>
+        <textarea id="cfg-gated-overrides" rows="1" placeholder="e.g. 1.0.3-beta"></textarea>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-row">
+      <div class="chart-card">
+        <h3>Requests by Version</h3>
+        <div class="bar-chart" id="chart-versions"></div>
+      </div>
+      <div class="chart-card">
+        <h3>Requests by Role</h3>
+        <div class="bar-chart" id="chart-roles"></div>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <input type="text" id="search-input" placeholder="Search by name, email, org..." />
+      <select id="filter-version">
+        <option value="">All Versions</option>
+      </select>
+      <button class="btn btn-secondary btn-sm" onclick="exportCSV()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export CSV
+      </button>
+      <button class="btn btn-secondary btn-sm" onclick="refreshData()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+        Refresh
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Organization</th>
+            <th>Role</th>
+            <th>Version</th>
+            <th>Platform</th>
+            <th>Message</th>
+            <th>Submitted</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="submissions-body">
+          <tr><td colspan="11" class="empty-state"><h3>Loading...</h3></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Approve Modal -->
+    <div id="approve-modal" class="modal-overlay hidden" onclick="if(event.target===this)closeApproveModal()">
+      <div class="modal">
+        <h3 id="modal-title">Download Links</h3>
+        <p style="font-size:0.85rem;color:var(--text-secondary);" id="modal-subtitle"></p>
+        <div class="dl-links" id="modal-links"></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;">
+          <button class="btn btn-secondary btn-sm" onclick="closeApproveModal()">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reject Modal -->
+    <div id="reject-modal" class="modal-overlay hidden" onclick="if(event.target===this)closeRejectModal()">
+      <div class="modal">
+        <h3 id="reject-modal-title">Reject Request</h3>
+        <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1rem;" id="reject-modal-subtitle"></p>
+        <div style="margin-bottom:1rem;">
+          <label style="font-size:0.82rem;font-weight:600;display:block;margin-bottom:6px;">Reason for rejection (shown to the user)</label>
+          <textarea id="reject-reason" placeholder="e.g. Incomplete request, please re-apply with a valid org email."></textarea>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;">
+          <button class="btn btn-secondary btn-sm" onclick="closeRejectModal()">Cancel</button>
+          <button class="btn btn-danger btn-sm" id="reject-confirm-btn" onclick="confirmReject()">Reject</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Modal (single popup with Approve, Reject, Delete) -->
+    <div id="action-modal" class="modal-overlay hidden" onclick="if(event.target===this)closeActionModal()">
+      <div class="modal" style="max-width:400px;">
+        <h3 id="action-modal-title">Manage Request</h3>
+        <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.5rem;" id="action-modal-subtitle"></p>
+        <div class="action-modal-btns">
+          <button class="btn btn-approve" onclick="actionApprove()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Approve &amp; Generate Download Link
+          </button>
+          <button class="btn btn-reject" onclick="actionReject()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            Reject with Reason
+          </button>
+          <button class="btn btn-delete" onclick="actionDelete()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+            Delete Request
+          </button>
+        </div>
+        <div style="display:flex;justify-content:flex-end;">
+          <button class="btn btn-secondary btn-sm" onclick="closeActionModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deleted Submissions -->
+    <h2 class="section-heading" id="deleted-heading" style="display:none;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+      Deleted Requests <span class="count" id="deleted-count">0</span>
+    </h2>
+    <div class="table-wrapper" id="deleted-table-wrapper" style="display:none;">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Email</th>
+            <th>Version</th>
+            <th>Deleted At</th>
+          </tr>
+        </thead>
+        <tbody id="deleted-body"></tbody>
+      </table>
+    </div>
+
+    <!-- Data Viewer -->
+    <div class="data-viewer">
+      <h2 class="section-heading">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Data Files Viewer
+      </h2>
+      <div class="data-tabs">
+        <button class="data-tab active" onclick="loadDataTab('submissions',this)">Submissions</button>
+        <button class="data-tab" onclick="loadDataTab('approvals',this)">Approvals</button>
+        <button class="data-tab" onclick="loadDataTab('rejections',this)">Rejections</button>
+        <button class="data-tab" onclick="loadDataTab('deletions',this)">Deletions</button>
+        <button class="data-tab" onclick="loadDataTab('downloads',this)">Downloads</button>
+        <button class="data-tab" onclick="loadDataTab('access-config',this)">Access Config</button>
+      </div>
+      <div class="data-content" id="data-content">
+        <pre>Click a tab to load data...</pre>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+/* ========================================
+   Admin Dashboard Script — Session Auth
+   ======================================== */
+
+const API_BASE = '/api';
+let authToken = null;  // Bearer token — memory only, never persisted
+let allSubmissions = [];
+let allApprovals = [];
+let allRejections = [];
+let allDeletions = [];
+let inactivityTimer = null;
+const INACTIVITY_TIMEOUT = 5 * 60 * 1000; // 5 minutes
+
+// -- Inactivity auto-logout --
+function resetInactivityTimer() {
+  if (inactivityTimer) clearTimeout(inactivityTimer);
+  if (!authToken) return;
+  inactivityTimer = setTimeout(() => {
+    logout();
+    alert('Session expired due to inactivity. Please log in again.');
+  }, INACTIVITY_TIMEOUT);
+}
+
+['click', 'keydown', 'mousemove', 'scroll'].forEach(evt => {
+  document.addEventListener(evt, resetInactivityTimer, { passive: true });
+});
+
+// -- Auth --
+async function authenticate() {
+  const input = document.getElementById('auth-input');
+  const errorEl = document.getElementById('auth-error');
+  const btn = document.getElementById('auth-btn');
+  const val = input.value.trim();
+  if (!val) return;
+
+  errorEl.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'Verifying...';
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ passphrase: val })
+    });
+
+    if (res.status === 429) {
+      const data = await res.json().catch(() => ({}));
+      errorEl.textContent = data.error || 'Too many attempts. Try again later.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    if (!res.ok) {
+      errorEl.textContent = 'Invalid passphrase.';
+      errorEl.style.display = 'block';
+      input.value = '';
+      input.focus();
+      return;
+    }
+
+    const data = await res.json();
+    authToken = data.token;
+    document.getElementById('auth-gate').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    document.getElementById('logout-btn').classList.remove('hidden');
+    resetInactivityTimer();
+    loadDashboard();
+  } catch (err) {
+    errorEl.textContent = 'Network error. Check your connection.';
+    errorEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Unlock';
+  }
+}
+
+async function logout() {
+  if (authToken) {
+    fetch(`${API_BASE}/admin/logout`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${authToken}` }
+    }).catch(() => {});
+  }
+  authToken = null;
+  if (inactivityTimer) clearTimeout(inactivityTimer);
+  allSubmissions = [];
+  document.getElementById('dashboard').classList.add('hidden');
+  document.getElementById('auth-gate').classList.remove('hidden');
+  document.getElementById('logout-btn').classList.add('hidden');
+  document.getElementById('auth-input').value = '';
+  document.getElementById('auth-error').style.display = 'none';
+}
+
+document.getElementById('auth-input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') authenticate();
+});
+
+async function loadDashboard() {
+  await Promise.all([fetchSubmissions(), fetchStatusData(), loadAccessConfig()]);
+  renderStats();
+  renderCharts();
+  populateVersionFilter();
+  renderTable();
+  renderDeletedTable();
+  bindFilters();
+}
+
+async function fetchSubmissions() {
+  if (!authToken) return;
+  try {
+    const res = await fetch(`${API_BASE}/interest`, {
+      headers: { 'Authorization': `Bearer ${authToken}` }
+    });
+    if (res.status === 401) {
+      logout();
+      alert('Session expired. Please log in again.');
+      return;
+    }
+    if (res.ok) {
+      allSubmissions = await res.json();
+    }
+  } catch (err) {
+    console.error('[admin] Failed to fetch submissions:', err);
+  }
+}
+
+async function fetchStatusData() {
+  if (!authToken) return;
+  const headers = { 'Authorization': `Bearer ${authToken}` };
+  try {
+    const [aRes, rRes, dRes] = await Promise.all([
+      fetch(`${API_BASE}/admin/data/approvals`, { headers }),
+      fetch(`${API_BASE}/admin/data/rejections`, { headers }),
+      fetch(`${API_BASE}/admin/data/deletions`, { headers })
+    ]);
+    allApprovals = aRes.ok ? await aRes.json() : [];
+    allRejections = rRes.ok ? await rRes.json() : [];
+    allDeletions = dRes.ok ? await dRes.json() : [];
+  } catch (err) {
+    console.error('[admin] Failed to fetch status data:', err);
+  }
+}
+
+function refreshData() { loadDashboard(); }
+
+// -- Stats --
+function renderStats() {
+  const now = new Date();
+  const weekAgo = new Date(now - 7 * 86400000);
+  const thisWeek = allSubmissions.filter(s => new Date(s.submitted_at || s.timestamp) >= weekAgo);
+
+  document.getElementById('stat-total').textContent = allSubmissions.length;
+  document.getElementById('stat-total-sub').textContent =
+    allSubmissions.length > 0 ? `Since ${formatDate(allSubmissions[0]?.submitted_at || allSubmissions[0]?.timestamp)}` : '';
+  document.getElementById('stat-week').textContent = thisWeek.length;
+
+  const orgs = new Set(allSubmissions.map(s => s.organization).filter(Boolean));
+  document.getElementById('stat-orgs').textContent = orgs.size;
+
+  const versionCounts = countBy(allSubmissions, 'version');
+  const topVersion = Object.entries(versionCounts).sort((a,b) => b[1] - a[1])[0];
+  document.getElementById('stat-popular').textContent = topVersion ? topVersion[0] : '—';
+}
+
+// -- Charts --
+function renderCharts() {
+  renderBarChart('chart-versions', countBy(allSubmissions, 'version'), ['primary','accent','warning']);
+  renderBarChart('chart-roles', countBy(allSubmissions, 'role'), ['primary','accent','warning','primary','accent']);
+}
+
+function renderBarChart(containerId, data, colors) {
+  const el = document.getElementById(containerId);
+  const entries = Object.entries(data).sort((a,b) => b[1] - a[1]);
+  const max = Math.max(...entries.map(e => e[1]), 1);
+  const colorClasses = colors || ['primary'];
+
+  el.innerHTML = entries.length === 0
+    ? '<p style="color:var(--text-muted);font-size:0.85rem;">No data yet</p>'
+    : entries.map(([label, count], i) => `
+      <div class="bar-row">
+        <span class="bar-label">${escapeHtml(label || 'N/A')}</span>
+        <div class="bar-track">
+          <div class="bar-fill bar-fill--${colorClasses[i % colorClasses.length]}" style="width:${(count/max*100).toFixed(1)}%">${count}</div>
+        </div>
+      </div>
+    `).join('');
+}
+
+// -- Populate version filter dynamically --
+function populateVersionFilter() {
+  const select = document.getElementById('filter-version');
+  const versions = [...new Set(allSubmissions.map(s => s.version).filter(Boolean))].sort();
+  select.innerHTML = '<option value="">All Versions</option>';
+  versions.forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v;
+    opt.textContent = v;
+    select.appendChild(opt);
+  });
+}
+
+// -- Table --
+function renderTable(filtered) {
+  const data = filtered || allSubmissions;
+  const tbody = document.getElementById('submissions-body');
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="11" class="empty-state"><h3>No submissions yet</h3><p>Submissions will appear here once the form is live.</p></td></tr>';
+    return;
+  }
+
+  const now = Date.now();
+  tbody.innerHTML = data.map((s, i) => {
+    const emailEsc = escapeHtml(s.email || '');
+    const versionEsc = escapeHtml(s.version || '');
+    const emailLow = (s.email || '').toLowerCase();
+    const sPlatform = s.platform || '';
+    const isApproved = allApprovals.some(a => a.email.toLowerCase() === emailLow && a.version === s.version && (a.platform || '') === sPlatform && a.expires_at > now);
+    const submittedAt = new Date(s.submitted_at || s.timestamp || 0).getTime();
+    const rejection = allRejections.find(r => r.email.toLowerCase() === emailLow && r.version === s.version && (r.platform || '') === sPlatform);
+    const isRejected = rejection && (rejection.rejected_at || 0) > submittedAt;
+    let statusBadge;
+    if (isApproved) statusBadge = '<span class="badge badge--approved">Approved</span>';
+    else if (isRejected) statusBadge = '<span class="badge badge--rejected">Rejected</span>';
+    else statusBadge = '<span class="badge badge--pending">Pending</span>';
+    return `<tr>
+      <td>${data.length - i}</td>
+      <td><strong>${escapeHtml(s.name || '')}</strong></td>
+      <td><code>${emailEsc}</code></td>
+      <td>${escapeHtml(s.organization || '—')}</td>
+      <td>${escapeHtml(s.role || '—')}</td>
+      <td><span class="badge badge--version">${versionEsc}</span></td>
+      <td>${escapeHtml(s.platform || '—')}</td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(s.message || '')}">${escapeHtml(s.message || '—')}</td>
+      <td>${formatDate(s.submitted_at || s.timestamp)}</td>
+      <td>${statusBadge}</td>
+      <td><button class="btn btn-actions btn-sm" onclick="openActionModal('${emailEsc}','${versionEsc}','${escapeHtml(s.id)}','${escapeHtml(s.platform || '')}')">⚙ Actions</button></td>
+    </tr>`;
+  }).join('');
+}
+
+// -- Deleted Table --
+function renderDeletedTable() {
+  const heading = document.getElementById('deleted-heading');
+  const wrapper = document.getElementById('deleted-table-wrapper');
+  const tbody = document.getElementById('deleted-body');
+  const countEl = document.getElementById('deleted-count');
+
+  if (!allDeletions.length) {
+    heading.style.display = 'none';
+    wrapper.style.display = 'none';
+    return;
+  }
+
+  heading.style.display = 'flex';
+  wrapper.style.display = 'block';
+  countEl.textContent = allDeletions.length;
+  tbody.innerHTML = allDeletions.map((d, i) => `<tr>
+    <td>${allDeletions.length - i}</td>
+    <td><code>${escapeHtml(d.email || '')}</code></td>
+    <td><span class="badge badge--version">${escapeHtml(d.version || '')}</span></td>
+    <td>${formatDate(d.deleted_at)}</td>
+  </tr>`).join('');
+}
+
+// -- Data Viewer --
+async function loadDataTab(name, btnEl) {
+  if (!authToken) return;
+  document.querySelectorAll('.data-tab').forEach(t => t.classList.remove('active'));
+  btnEl.classList.add('active');
+  const container = document.getElementById('data-content');
+  container.innerHTML = '<pre>Loading...</pre>';
+  try {
+    const res = await fetch(`${API_BASE}/admin/data/${encodeURIComponent(name)}`, {
+      headers: { 'Authorization': `Bearer ${authToken}` }
+    });
+    if (res.status === 401) { logout(); return; }
+    const data = await res.json();
+    container.innerHTML = `<pre>${escapeHtml(JSON.stringify(data, null, 2))}</pre>`;
+  } catch (err) {
+    container.innerHTML = '<pre style="color:var(--danger);">Failed to load data.</pre>';
+  }
+}
+
+function bindFilters() {
+  const searchInput = document.getElementById('search-input');
+  const versionFilter = document.getElementById('filter-version');
+
+  function applyFilters() {
+    const q = searchInput.value.toLowerCase().trim();
+    const v = versionFilter.value;
+    const filtered = allSubmissions.filter(s => {
+      const matchSearch = !q || [s.name, s.email, s.organization, s.message]
+        .some(f => (f || '').toLowerCase().includes(q));
+      const matchVersion = !v || s.version === v;
+      return matchSearch && matchVersion;
+    });
+    renderTable(filtered);
+  }
+
+  searchInput.addEventListener('input', applyFilters);
+  versionFilter.addEventListener('change', applyFilters);
+}
+
+// -- Export CSV --
+function exportCSV() {
+  if (!allSubmissions.length) return;
+  const headers = ['submitted_at','name','email','organization','role','version','platform','message'];
+  const rows = allSubmissions.map(s =>
+    headers.map(h => `"${String(s[h] || '').replace(/"/g, '""')}"`)
+  );
+  const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `interest-submissions-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// -- Helpers --
+function countBy(arr, key) {
+  const counts = {};
+  arr.forEach(item => {
+    const val = item[key] || 'N/A';
+    counts[val] = (counts[val] || 0) + 1;
+  });
+  return counts;
+}
+
+function formatDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// -- Access Config --
+async function loadAccessConfig() {
+  if (!authToken) return;
+  try {
+    const res = await fetch(`${API_BASE}/admin/access-config`, {
+      headers: { 'Authorization': `Bearer ${authToken}` }
+    });
+    if (!res.ok) return;
+    const cfg = await res.json();
+    document.getElementById('cfg-gated-from').value = cfg.gatedFromVersion || '';
+    document.getElementById('cfg-free-overrides').value = (cfg.freeOverrides || []).join(', ');
+    document.getElementById('cfg-gated-overrides').value = (cfg.gatedOverrides || []).join(', ');
+  } catch (err) {
+    console.error('[admin] Failed to load access config:', err);
+  }
+}
+
+async function saveAccessConfig() {
+  if (!authToken) return;
+  const statusEl = document.getElementById('cfg-status');
+  const gatedFromVersion = document.getElementById('cfg-gated-from').value.trim();
+  const freeOverrides = document.getElementById('cfg-free-overrides').value
+    .split(',').map(s => s.trim()).filter(Boolean);
+  const gatedOverrides = document.getElementById('cfg-gated-overrides').value
+    .split(',').map(s => s.trim()).filter(Boolean);
+
+  statusEl.textContent = 'Saving...';
+  statusEl.style.color = 'var(--text-secondary)';
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/access-config`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+      body: JSON.stringify({ gatedFromVersion, freeOverrides, gatedOverrides })
+    });
+    if (res.status === 401) { logout(); return; }
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      statusEl.textContent = data.error || 'Failed to save.';
+      statusEl.style.color = 'var(--danger)';
+      return;
+    }
+    statusEl.textContent = 'Saved successfully.';
+    statusEl.style.color = 'var(--accent)';
+    setTimeout(() => { statusEl.textContent = ''; }, 3000);
+  } catch (err) {
+    statusEl.textContent = 'Network error.';
+    statusEl.style.color = 'var(--danger)';
+  }
+}
+
+// -- Approve & Generate Download Link --
+async function approveSubmission(email, version, platform) {
+  if (!authToken) return;
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = 'Generating...';
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/generate-download-link`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+      body: JSON.stringify({ email, version, platform })
+    });
+    if (res.status === 401) { logout(); return; }
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.error || 'Failed to generate link.');
+      return;
+    }
+    showApproveModal(email, version, data.links);
+  } catch (err) {
+    alert('Network error generating link.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Approve';
+  }
+}
+
+function showApproveModal(email, version, links) {
+  document.getElementById('modal-title').textContent = `Download Links for ${version}`;
+  document.getElementById('modal-subtitle').textContent = `Generated for ${email} \u2014 valid for 1 hour. The user can also check approval via the website.`;
+  const container = document.getElementById('modal-links');
+  container.innerHTML = links.map(l => `
+    <div class="dl-link-row">
+      <span style="font-size:0.82rem;min-width:160px;color:var(--text-secondary);font-weight:600;">${escapeHtml(l.name)}</span>
+      <span class="dl-link-url">${escapeHtml(l.url)}</span>
+      <a href="${escapeHtml(l.url)}" class="btn btn-sm" target="_blank" rel="noopener" style="white-space:nowrap;">Download</a>
+      <button class="btn btn-secondary btn-sm" onclick="navigator.clipboard.writeText('${escapeHtml(l.url)}');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1500)">Copy</button>
+    </div>
+  `).join('');
+  document.getElementById('approve-modal').classList.remove('hidden');
+}
+
+function closeApproveModal() {
+  document.getElementById('approve-modal').classList.add('hidden');
+}
+
+// -- Reject --
+let pendingReject = { email: '', version: '', platform: '' };
+
+function openRejectModal(email, version, platform) {
+  pendingReject = { email, version, platform };
+  document.getElementById('reject-modal-title').textContent = `Reject Request`;
+  document.getElementById('reject-modal-subtitle').textContent = `Rejecting ${email} for ${version}. The user will see this reason when they check their approval status.`;
+  document.getElementById('reject-reason').value = '';
+  document.getElementById('reject-modal').classList.remove('hidden');
+}
+
+function closeRejectModal() {
+  document.getElementById('reject-modal').classList.add('hidden');
+  pendingReject = { email: '', version: '', platform: '' };
+}
+
+async function confirmReject() {
+  if (!authToken || !pendingReject.email) return;
+  const reason = document.getElementById('reject-reason').value.trim();
+  const btn = document.getElementById('reject-confirm-btn');
+  btn.disabled = true;
+  btn.textContent = 'Rejecting...';
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/reject-submission`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+      body: JSON.stringify({ email: pendingReject.email, version: pendingReject.version, platform: pendingReject.platform, reason })
+    });
+    if (res.status === 401) { logout(); return; }
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      alert(data.error || 'Failed to reject.');
+      return;
+    }
+    closeRejectModal();
+    loadDashboard();
+  } catch (err) {
+    alert('Network error.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Reject';
+  }
+}
+
+// -- Delete Submission --
+async function deleteSubmission(id) {
+  if (!authToken) return;
+  try {
+    const res = await fetch(`${API_BASE}/admin/submission/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${authToken}` }
+    });
+    if (res.status === 401) { logout(); return; }
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      alert(data.error || 'Failed to delete.');
+      return;
+    }
+    loadDashboard();
+  } catch (err) {
+    alert('Network error.');
+  }
+}
+
+// -- Action Modal (single popup) --
+let pendingAction = { email: '', version: '', id: '', platform: '' };
+
+function openActionModal(email, version, id, platform) {
+  pendingAction = { email, version, id, platform: platform || '' };
+  document.getElementById('action-modal-title').textContent = 'Manage Request';
+  document.getElementById('action-modal-subtitle').textContent = `${email} — ${version}`;
+  document.getElementById('action-modal').classList.remove('hidden');
+}
+
+function closeActionModal() {
+  document.getElementById('action-modal').classList.add('hidden');
+  pendingAction = { email: '', version: '', id: '', platform: '' };
+}
+
+function actionApprove() {
+  const { email, version, platform } = pendingAction;
+  closeActionModal();
+  approveSubmission(email, version, platform);
+}
+
+function actionReject() {
+  const { email, version, platform } = pendingAction;
+  closeActionModal();
+  openRejectModal(email, version, platform);
+}
+
+function actionDelete() {
+  const { id } = pendingAction;
+  closeActionModal();
+  if (confirm('Delete this submission permanently? The user will see a "request deleted" message when they check status.')) {
+    deleteSubmission(id);
+  }
+}
+</script>
+</body>
+</html>
