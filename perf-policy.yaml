@@ -1,0 +1,134 @@
+# ============================================================================
+# Performance Agent Policy Configuration
+# ============================================================================
+#
+# Drop this file as `perf-policy.yaml` in your repository root.
+# The Performance Agent's GitHub Actions workflows read this file to run
+# automated performance checks without human interaction.
+#
+# ============================================================================
+
+# --- Version ----------------------------------------------------------------
+version: "1"
+
+# --- Non-Functional Requirements (NFR) -------------------------------------
+nfr:
+  # Response time SLA thresholds (milliseconds)
+  p95_threshold_ms: 1000
+  p99_threshold_ms: 3000
+  # Maximum acceptable error rate (percentage)
+  error_rate_max_pct: 1.0
+  # Target concurrent users for load tests
+  concurrent_users: 100
+  # Default test duration (e.g., "10m", "30m", "1h")
+  test_duration: "10m"
+
+# --- Test Defaults ----------------------------------------------------------
+test_defaults:
+  # Preferred tool: "jmeter" or "k6"
+  tool: jmeter
+  # Default test type: baseline | load | stress | spike | soak | capacity
+  test_type: load
+  # Default execution mode: local | cloud | distributed
+  execution_mode: local
+  # VM size for cloud tests: small | medium | large
+  vm_size: medium
+  # Azure region for cloud VMs
+  region: eastus
+
+# --- Swagger / OpenAPI Configuration ----------------------------------------
+swagger:
+  # Path(s) to swagger files relative to repo root.
+  # Can be a single path or a list. Glob patterns supported.
+  paths:
+    - "swagger.json"
+    - "openapi.yaml"
+    - "**/swagger*.json"
+    - "**/openapi*.{json,yaml,yml}"
+
+# --- Authentication (optional) ----------------------------------------------
+# auth:
+#   grant_type: client_credentials
+#   config_path: ./auth_files/authconfig.json
+
+# --- Code Analysis Configuration --------------------------------------------
+code_analysis:
+  # Complexity thresholds — methods exceeding these are flagged
+  complexity_thresholds:
+    cyclomatic_warning: 10
+    cyclomatic_critical: 20
+    cognitive_warning: 15
+    cognitive_critical: 30
+    nesting_warning: 4
+    nesting_critical: 6
+  # Directories to analyze (relative to repo root). Default: "src"
+  include_paths:
+    - "src"
+    - "app"
+    - "lib"
+  # Directories to exclude from analysis
+  exclude_paths:
+    - "node_modules"
+    - "dist"
+    - "build"
+    - ".git"
+    - "__pycache__"
+    - "venv"
+
+# --- CI Trigger Configuration -----------------------------------------------
+# Controls which automated checks run on which events.
+
+triggers:
+  # --- On Pull Request -------------------------------------------------------
+  on_pull_request:
+    enabled: true
+    checks:
+      # AI-powered commit analysis (perf + architecture issues)
+      - commit_analysis
+      # Static code complexity analysis on changed files
+      - code_complexity
+    # Only analyze files matching these patterns (glob)
+    file_patterns:
+      - "**/*.py"
+      - "**/*.ts"
+      - "**/*.js"
+      - "**/*.go"
+      - "**/*.java"
+      - "**/*.cs"
+    # Fail the PR check if critical issues are found
+    fail_on_critical: true
+
+  # --- On Push to Main -------------------------------------------------------
+  on_push_main:
+    enabled: true
+    checks:
+      # Quick sanity test against staging (if swagger available)
+      - sanity_test
+      # Update performance baselines
+      - baseline_update
+    # Target URL for sanity tests against staging
+    # staging_url: "https://staging.example.com"
+
+  # --- Nightly Schedule ------------------------------------------------------
+  on_schedule:
+    enabled: false
+    # Cron expression (GitHub Actions syntax)
+    cron: "0 2 * * 1-5"  # 2 AM UTC, weekdays
+    checks:
+      # Full load test
+      - load_test
+      # Code complexity scan of entire codebase
+      - full_complexity_scan
+    # Auto-cleanup cloud resources after nightly test
+    auto_cleanup: true
+
+# --- Reporting ---------------------------------------------------------------
+reporting:
+  # Post results as PR comments
+  pr_comment: true
+  # Upload reports as GitHub Actions artifacts
+  artifacts: true
+  # Generate job summary in GitHub Actions
+  job_summary: true
+  # Threshold for flagging performance regression (percentage)
+  regression_threshold_pct: 10
