@@ -88,33 +88,13 @@ jobs:
               `_🤖 Automated by [Performance Agent](https://github.com/${context.repo.owner}/${context.repo.repo}) · [Configure](perf-policy.yaml)_`,
             ].join('\n');
 
-            // Find existing comment to update (avoid spamming)
-            const { data: comments } = await github.rest.issues.listComments({
+            // Always create a new comment for each commit
+            await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
+              body,
             });
-
-            const botComment = comments.find(c =>
-              c.user?.type === 'Bot' &&
-              c.body?.includes('Performance Agent — PR Check')
-            );
-
-            if (botComment) {
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body,
-              });
-            } else {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body,
-              });
-            }
 
       # ── Step 4: Upload Reports ───────────────────────────────────────────
       - name: "📁 Upload reports"
