@@ -235,7 +235,7 @@
               preload="none"
               poster="https://perfagentdemo.blob.core.windows.net/demo-video/poster.jpg"
               playsinline
-              data-src="https://perfagentdemo.blob.core.windows.net/demo-video/AgentPT.ai.mp4"
+              data-src="https://perfagentdemo.blob.core.windows.net/demo-video/AgentPT_ai_demo.mp4"
             >
               Your browser does not support HTML5 video.
             </video>
@@ -335,7 +335,7 @@
         </div>
       </div>
       <div class="testing-modes-cta">
-        <p>Both modes support <strong>6 test types</strong> (baseline, load, stress, spike, soak, capacity), <strong>JMeter &amp; k6</strong>, and <strong>all 5 execution modes</strong> (local, cloud, distributed, BYOI, distributed BYOI).</p>
+        <p>Both modes support <strong>6 test types</strong> (baseline, load, stress, spike, soak, capacity), <strong>JMeter &amp; k6</strong>, and <strong>all 6 execution modes</strong> (local, cloud, distributed, BYOI, distributed BYOI, Azure Load Testing).</p>
       </div>
     </div>
   </section>
@@ -528,6 +528,46 @@
           </ul>
         </div>
         <div class="feature-card feature-card--highlight">
+          <div class="feature-badge">New</div>
+          <div class="feature-icon">🔌</div>
+          <h3>APIM Integration</h3>
+          <p>Connect directly to Azure API Management to discover and export API specs. Interactive 5-step flow &mdash; select subscription, resource group, APIM instance, and API &mdash; then export the OpenAPI spec for instant test generation. Also parses local APIM exports and raw HTTP requests.</p>
+          <ul class="feature-list">
+            <li><strong>Live discovery:</strong> browse subscriptions &rarr; resource groups &rarr; APIM instances &rarr; APIs</li>
+            <li><strong>Spec export:</strong> fetch OpenAPI spec directly from Azure APIM</li>
+            <li><strong>Policy detection:</strong> rate-limit, auth, caching policies surfaced</li>
+            <li><strong>Raw HTTP parsing:</strong> paste .http/.rest requests for direct testing</li>
+            <li><strong>Subscription key handling:</strong> auto-detect Ocp-Apim-Subscription-Key requirements</li>
+          </ul>
+        </div>
+        <div class="feature-card feature-card--highlight">
+          <div class="feature-badge">New</div>
+          <div class="feature-icon">🧪</div>
+          <h3>Azure Load Testing (Managed)</h3>
+          <p>Run performance tests on Azure Load Testing &mdash; a fully managed service with no VMs to provision. Upload JMX scripts, execute at scale, and get detailed per-API results with automatic ZIP extraction and JTL parsing.</p>
+          <ul class="feature-list">
+            <li><strong>Fully managed:</strong> no VMs, no Terraform, no infrastructure to maintain</li>
+            <li><strong>Create &amp; run:</strong> create ALT resources, upload JMX, execute tests</li>
+            <li><strong>Result parsing:</strong> auto-extract ZIP results with per-sampler breakdown</li>
+            <li><strong>Log extraction:</strong> ERROR/WARN filtering from JMeter logs</li>
+            <li><strong>Resource reuse:</strong> reuse existing ALT resources for rapid re-runs</li>
+            <li><strong>Multi-level cleanup:</strong> 4 granularity levels for resource management</li>
+          </ul>
+        </div>
+        <div class="feature-card feature-card--highlight">
+          <div class="feature-badge">New</div>
+          <div class="feature-icon">🔐</div>
+          <h3>Authentication Setup</h3>
+          <p>Automated 3-step workflow for API authentication. Analyze your OpenAPI spec for auth requirements, generate <code>authconfig.json</code> with OAuth2 client_credentials or ROPC support, and validate completeness &mdash; all before running a single test.</p>
+          <ul class="feature-list">
+            <li><strong>Auth detection:</strong> scans Swagger for OAuth2, API Key, Bearer, Azure AD schemes</li>
+            <li><strong>Config generation:</strong> creates <code>authconfig.json</code> with token endpoint &amp; credentials</li>
+            <li><strong>Validation:</strong> validates config completeness before test execution</li>
+            <li><strong>Auto-injection:</strong> tokens automatically fetched &amp; injected into test scripts</li>
+            <li><strong>Supports:</strong> OAuth2 client_credentials, ROPC, API Key, Bearer token</li>
+          </ul>
+        </div>
+        <div class="feature-card feature-card--highlight">
           <div class="feature-icon">🩺</div>
           <h3>Setup Readiness Checker</h3>
           <p>One command to verify your entire environment. Detects tools, validates Azure identity &amp; RBAC roles, inspects subscriptions, resource groups, and registered providers &mdash; then tells you exactly what&rsquo;s ready and what&rsquo;s missing.</p>
@@ -610,6 +650,40 @@
         <p>Prioritized features shaping the future of Performance Agent &mdash; organized by impact and effort</p>
       </div>
 
+      <!-- Recently Shipped -->
+      <div class="roadmap-tier">
+        <div class="roadmap-tier-header">
+          <span class="tier-badge tier-badge--t1">Recently Shipped</span>
+          <h3>Delivered &mdash; Available Now</h3>
+        </div>
+        <div class="upcoming-grid">
+          <div class="upcoming-card">
+            <div class="upcoming-badge badge--shipped">✅ Shipped</div>
+            <div class="upcoming-icon">🔌</div>
+            <h3>APIM Integration</h3>
+            <p>Live discovery of Azure API Management instances with 5-step interactive flow. Export OpenAPI specs directly from APIM, parse local exports, and detect rate-limit/auth/caching policies.</p>
+          </div>
+          <div class="upcoming-card">
+            <div class="upcoming-badge badge--shipped">✅ Shipped</div>
+            <div class="upcoming-icon">🧪</div>
+            <h3>Azure Load Testing</h3>
+            <p>Fully managed performance testing via Azure Load Testing service. Create resources, upload JMX, execute tests at scale, auto-extract ZIP results with per-sampler breakdown, and resource reuse.</p>
+          </div>
+          <div class="upcoming-card">
+            <div class="upcoming-badge badge--shipped">✅ Shipped</div>
+            <div class="upcoming-icon">🔐</div>
+            <h3>Authentication Setup</h3>
+            <p>Automated 3-tool workflow: detect auth requirements from Swagger, generate authconfig.json with OAuth2/ROPC support, and validate completeness before test execution.</p>
+          </div>
+          <div class="upcoming-card">
+            <div class="upcoming-badge badge--shipped">✅ Shipped</div>
+            <div class="upcoming-icon">📊</div>
+            <h3>App Insights E2E Tracing</h3>
+            <p>Server-side metrics via KQL &mdash; per-endpoint latency, dependency calls, exceptions, and CPU/memory pressure. Client vs server comparison for full end-to-end correlation.</p>
+          </div>
+        </div>
+      </div>
+
       <!-- Tier 2 -->
       <div class="roadmap-tier">
         <div class="roadmap-tier-header">
@@ -675,7 +749,7 @@
           <div class="pipeline-num">1</div>
           <div class="pipeline-info">
             <h4>Provide or Generate Swagger / OpenAPI</h4>
-            <p>Start by pointing the agent to your Swagger/OpenAPI spec. It auto-discovers specs in your workspace. No spec? The agent generates one from your source code using AI-powered semantic analysis &mdash; extracts routes, models, auth patterns, and validation rules from any framework.</p>
+            <p>Start by pointing the agent to your Swagger/OpenAPI spec. It auto-discovers specs in your workspace. No spec? The agent generates one from your source code using AI-powered semantic analysis &mdash; extracts routes, models, auth patterns, and validation rules from any framework. You can also <strong>fetch specs live from Azure API Management</strong> via the APIM integration (subscription &rarr; resource group &rarr; APIM instance &rarr; API).</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
@@ -723,7 +797,7 @@
           <div class="pipeline-num">6</div>
           <div class="pipeline-info">
             <h4>Execute Tests</h4>
-            <p>Run locally, on a single Azure VM, across a distributed master-slave cluster, or on your own infrastructure via SSH (single or distributed BYOI) &mdash; all from a single chat command. Auth is auto-handled via <code>authconfig.json</code> when configured.</p>
+            <p>Run locally, on a single Azure VM, across a distributed master-slave cluster, on your own infrastructure via SSH (single or distributed BYOI), or on <strong>Azure Load Testing</strong> (fully managed, no VMs needed) &mdash; all from a single chat command. Auth is auto-handled via <code>authconfig.json</code> when configured.</p>
           </div>
         </div>
         <div class="pipeline-connector"></div>
@@ -914,7 +988,7 @@ code --install-extension performance-agent-2.0.0-linux-x64.vsix</code></pre>
     <div class="container">
       <div class="section-header">
         <h2>MCP Tools Reference</h2>
-        <p>27 tools available through GitHub Copilot Agent Mode</p>
+        <p>35 tools available through GitHub Copilot Agent Mode</p>
       </div>
       <div class="tools-grid">
         <div class="tool-category">
@@ -1097,6 +1171,80 @@ code --install-extension performance-agent-2.0.0-linux-x64.vsix</code></pre>
               <span class="tool-badge tool-badge--new">New</span>
             </div>
             <span>Query Application Insights via KQL for server-side metrics: per-endpoint p50/p95/p99 latency, dependency call performance, server exceptions under load, and CPU/memory/GC pressure. Anomaly detection flags high error rates (&gt;1%), slow p95 (&gt;1s), and critical endpoints.</span>
+          </div>
+        </div>
+        <div class="tool-category">
+          <h3>🔌 APIM Integration</h3>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>listAPIMInstances</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Discover Azure API Management instances across subscriptions and resource groups. Lists all APIM services with their SKU, region, gateway URL, and available APIs. Interactive 5-step discovery flow.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>fetchSwaggerFromAPIM</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Export OpenAPI specs directly from a live APIM instance (live mode), parse local APIM export files (file mode), or convert raw HTTP requests into testable specs. Detects APIM policies including rate-limit, auth, caching, and subscription key requirements.</span>
+          </div>
+        </div>
+        <div class="tool-category">
+          <h3>🔐 Authentication</h3>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>analyzeSwaggerAuth</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Analyze an OpenAPI/Swagger spec to detect authentication requirements &mdash; OAuth2, API Key, Bearer token, Azure AD / Entra ID. Returns the auth scheme type, token endpoints, scopes, and header names needed for testing.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>createAuthConfig</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Generate an <code>authconfig.json</code> file with OAuth2 client_credentials or ROPC flow configuration. Includes token endpoint, client ID/secret placeholders, scopes, and grant type. Used by all execution modes for automatic token management.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>validateAuthConfig</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Validate that <code>authconfig.json</code> is complete and correctly configured before test execution. Checks required fields, token endpoint reachability, and credential format. Prevents auth failures during expensive cloud test runs.</span>
+          </div>
+        </div>
+        <div class="tool-category">
+          <h3>🧪 Azure Load Testing</h3>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>createALTTest</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Create an Azure Load Testing resource and test definition. Provisions the ALT resource, uploads JMX scripts and CSV data files, and configures test parameters. Supports reusing existing ALT resources for rapid iteration.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>runALTTest</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Execute a test run on Azure Load Testing. Monitors execution progress, downloads categorized results (input/log/result/report), auto-extracts ZIP archives, parses JTL results with per-sampler breakdown, and extracts ERROR/WARN log entries.</span>
+          </div>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>cleanupALTResources</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Clean up Azure Load Testing resources at 4 granularity levels: delete a single test run, delete a test definition, delete the entire ALT resource, or delete the containing resource group. Prevents orphaned resources and unnecessary billing.</span>
+          </div>
+        </div>
+        <div class="tool-category">
+          <h3>🔬 Change Tracking</h3>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>checkJMXChanges</code>
+            </div>
+            <span>Structural fingerprint comparison between agent-generated JMX baseline and the version used for testing. Detects added, removed, or modified elements (ThreadGroups, Samplers, Assertions, Timers, Extractors) while ignoring cosmetic changes like whitespace or comments.</span>
           </div>
         </div>
       </div>
@@ -1679,6 +1827,42 @@ git --version           # Required for commit analysis</code></pre>
             </ol>
           </div>
         </details>
+        <details class="faq-item">
+          <summary>APIM integration fails / Cannot list APIM instances</summary>
+          <div class="faq-answer">
+            <ol>
+              <li>Ensure Azure CLI is logged in: <code>az login</code></li>
+              <li>Verify you have <strong>API Management Service Reader</strong> role on the subscription or resource group</li>
+              <li>Check that the APIM instance is in a <em>Succeeded</em> provisioning state (not creating or failed)</li>
+              <li>If using <code>fetchSwaggerFromAPIM</code> in file mode, ensure the exported file is valid JSON</li>
+              <li>For raw HTTP requests, ensure the request format includes method, URL, and headers</li>
+            </ol>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Azure Load Testing (ALT) test fails or shows NOT_APPLICABLE</summary>
+          <div class="faq-answer">
+            <ol>
+              <li>Verify the <code>Microsoft.LoadTestService</code> resource provider is registered: <code>az provider register --namespace Microsoft.LoadTestService</code></li>
+              <li>Ensure the JMX file is valid and runs locally first (use sanity test)</li>
+              <li>Check that CSV data files referenced in the JMX are included in the upload</li>
+              <li>If results are empty, the test may have been cancelled &mdash; check ALT portal for error details</li>
+              <li>For ZIP extraction issues, ensure the MCP server is on the latest build</li>
+            </ol>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Auth configuration fails / Token not injected</summary>
+          <div class="faq-answer">
+            <ol>
+              <li>Run <code>analyzeSwaggerAuth</code> first to detect the auth scheme from your OpenAPI spec</li>
+              <li>Verify <code>authconfig.json</code> has the correct token endpoint URL and grant type</li>
+              <li>Run <code>validateAuthConfig</code> to check for missing or invalid fields</li>
+              <li>For OAuth2 client_credentials, ensure client ID and secret are correct (not placeholder values)</li>
+              <li>Check that the token endpoint is reachable from your network / Azure VM</li>
+            </ol>
+          </div>
+        </details>
 
       </div>
     </div>
@@ -1891,6 +2075,18 @@ git --version           # Required for commit analysis</code></pre>
                 <span class="feature-status" id="feat-appinsights">&#x2716;</span>
                 <span class="feature-name">App Insights Metrics</span>
               </div>
+              <div class="feature-row" data-requires="azcli,azlogin">
+                <span class="feature-status" id="feat-apim">&#x2716;</span>
+                <span class="feature-name">APIM Live Spec Fetching</span>
+              </div>
+              <div class="feature-row" data-requires="azcli,azlogin">
+                <span class="feature-status" id="feat-alt">&#x2716;</span>
+                <span class="feature-name">Azure Load Testing (Managed)</span>
+              </div>
+              <div class="feature-row" data-requires="nodejs">
+                <span class="feature-status" id="feat-authconfig">&#x2716;</span>
+                <span class="feature-name">Auth Configuration</span>
+              </div>
             </div>
           </div>
 
@@ -2067,6 +2263,18 @@ git --version           # Required for commit analysis</code></pre>
             <li>Works with any cloud or on-prem server</li>
           </ul>
         </div>
+        <div class="feature-card feature-card--highlight">
+          <div class="feature-badge">New</div>
+          <div class="feature-icon">🧪</div>
+          <h3>Azure Load Testing (Managed)</h3>
+          <p>Fully managed cloud performance testing &mdash; no VMs to provision, no Terraform needed. Upload your JMX script to Azure Load Testing, execute at scale, and download parsed results with per-API breakdown.</p>
+          <ul class="feature-list">
+            <li>Zero infrastructure management</li>
+            <li>Auto-scaling test execution</li>
+            <li>Enterprise-grade result reporting</li>
+            <li>Resource reuse for rapid re-runs</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
@@ -2093,6 +2301,14 @@ git --version           # Required for commit analysis</code></pre>
         <div class="security-item good">
           <span class="security-icon">✅</span>
           <span>No sensitive data logging &mdash; credentials never logged</span>
+        </div>
+        <div class="security-item good">
+          <span class="security-icon">✅</span>
+          <span>APIM subscription keys handled securely &mdash; never stored in generated scripts</span>
+        </div>
+        <div class="security-item good">
+          <span class="security-icon">✅</span>
+          <span>Azure Load Testing data stays in your Azure tenant &mdash; no external data transfer</span>
         </div>
         <div class="security-item warn">
           <span class="security-icon">⚠️</span>
@@ -2152,7 +2368,7 @@ git --version           # Required for commit analysis</code></pre>
   <section class="cta-section">
     <div class="container">
       <h2>Ready to level up your development workflow?</h2>
-      <p>Open source. NFR capture, business scenario modeling, smart recommendations, code &amp; complexity analysis, OpenAPI generation, and performance testing &mdash; local, single-VM, distributed, or BYOI. Windows, macOS, and Linux.</p>
+      <p>Open source. NFR capture, business scenario modeling, smart recommendations, code &amp; complexity analysis, OpenAPI generation, APIM integration, auth configuration, and performance testing &mdash; local, single-VM, distributed, BYOI, or Azure Load Testing. Windows, macOS, and Linux.</p>
       <div class="cta-actions">
         <a href="#downloads" class="btn btn-primary btn-lg">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>

@@ -654,6 +654,9 @@ function computeReadiness() {
     'feat-byoi':       ['ssh'],
     'feat-metrics':    ['azcli', 'azlogin'],
     'feat-appinsights':['azcli', 'azlogin'],
+    'feat-apim':       ['azcli', 'azlogin'],
+    'feat-alt':        ['azcli', 'azlogin'],
+    'feat-authconfig': ['nodejs'],
   };
 
   Object.entries(featureMap).forEach(([id, deps]) => {
