@@ -1,6 +1,6 @@
 #!/bin/bash
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#  🚀 Local Deploy Script for Performance Agent Website
+#  🚀 Local Deploy Script for Performance Agent Websites
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #
 #  Usage:

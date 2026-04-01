@@ -1,0 +1,81 @@
+name: '⚡ Performance Agent'
+description: 'Analyze code for performance issues and complexity — runs commit analysis and code complexity checks automatically'
+
+inputs:
+  pipeline:
+    description: 'Pipeline to run: commit-analysis, code-complexity, code-complexity-full'
+    required: true
+  fail-on-critical:
+    description: 'Fail the step if critical issues are found'
+    required: false
+    default: 'false'
+  node-version:
+    description: 'Node.js version'
+    required: false
+    default: '20'
+
+outputs:
+  success:
+    description: 'Whether the pipeline succeeded'
+    value: ${{ steps.run.outputs.success }}
+  has-critical:
+    description: 'Whether critical issues were found'
+    value: ${{ steps.run.outputs.has-critical }}
+  summary:
+    description: 'One-line summary of results'
+    value: ${{ steps.run.outputs.summary }}
+  report-path:
+    description: 'Path to the detailed report file'
+    value: ${{ steps.run.outputs.report-path }}
+  pr-comment-body:
+    description: 'Markdown body for PR comment'
+    value: ${{ steps.run.outputs.pr-comment-body }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: "\U0001F527 Setup Node.js"
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: "\U0001F50D Detect environment"
+      id: detect
+      shell: bash
+      run: |
+        if [ -f "mcp-server/package.json" ]; then
+          echo "mode=local" >> "$GITHUB_OUTPUT"
+        else
+          echo "mode=npm" >> "$GITHUB_OUTPUT"
+        fi
+
+    # ── Local mode: the repo has mcp-server/ (perf-agent repo itself) ──
+    - name: "\U0001F4E6 Install dependencies"
+      if: steps.detect.outputs.mode == 'local'
+      shell: bash
+      working-directory: mcp-server
+      run: npm ci
+
+    - name: "\U0001F3D7\uFE0F Build analyzer"
+      if: steps.detect.outputs.mode == 'local'
+      shell: bash
+      working-directory: mcp-server
+      run: npm run build:bundle
+
+    - name: "\U0001F680 Analyze code"
+      id: run
+      shell: bash
+      env:
+        PERF_WORKSPACE_ROOT: ${{ github.workspace }}
+      run: |
+        FAIL_FLAG=""
+        if [ "${{ inputs.fail-on-critical }}" = "true" ]; then
+          FAIL_FLAG="--fail-on-critical"
+        fi
+
+        if [ "${{ steps.detect.outputs.mode }}" = "local" ]; then
+          node mcp-server/dist/headless.js --pipeline ${{ inputs.pipeline }} $FAIL_FLAG
+        else
+          # headless.js is bundled alongside this action by the extension
+          node ${{ github.action_path }}/headless.js --pipeline ${{ inputs.pipeline }} $FAIL_FLAG
+        fi
