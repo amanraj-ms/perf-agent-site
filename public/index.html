@@ -424,7 +424,7 @@
             <li>6 test types: baseline, load, stress, spike, soak/endurance, capacity</li>
             <li><strong>2 testing modes:</strong> <a href="#testing-modes" style="color: var(--primary-light);">Business Scenarios &amp; Individual API</a></li>
             <li>CSV/Excel template upload or interactive Q&amp;A</li>
-            <li>Auto-correlation: POST &rarr; GET/PUT/DELETE chain extraction</li>
+            <li><strong>Swagger-aware correlation:</strong> auto-correlates API responses across business scenarios using OpenAPI spec knowledge (POST &rarr; GET/PUT/DELETE chain extraction)</li>
             <li><strong>App Insights integration:</strong> BackendListener for real-time server metrics</li>
             <li>Duration assertions from NFR response time SLAs</li>
             <li>Bearer token injection for authenticated APIs</li>
@@ -483,7 +483,9 @@
             <li><strong>Per-endpoint breakdown:</strong> sorted by worst avg, all endpoints shown</li>
             <li><strong>Error rate doughnut chart</strong> with success/failure split</li>
             <li>Executive summary with overall pass/fail verdict</li>
+            <li><strong>Risk assessment:</strong> severity-rated findings with mitigation recommendations</li>
             <li>NFR compliance assessment (per-SLA pass/fail)</li>
+            <li><strong>API-level logging:</strong> per-endpoint request/response details and timing breakdown in reports</li>
             <li>Client vs Server comparison (JMeter/k6 vs App Insights)</li>
             <li>Auto-opens in browser &mdash; saved to <code>.perf-output/reports/</code></li>
           </ul>
@@ -549,6 +551,7 @@
           <ul class="feature-list">
             <li><strong>Fully managed:</strong> no VMs, no Terraform, no infrastructure to maintain</li>
             <li><strong>Create &amp; run:</strong> create ALT resources, upload JMX, execute tests</li>
+            <li><strong>Bearer token injection:</strong> automatically injects auth tokens when uploading JMX scripts to ALT</li>
             <li><strong>Result parsing:</strong> auto-extract ZIP results with per-sampler breakdown</li>
             <li><strong>Log extraction:</strong> ERROR/WARN filtering from JMeter logs</li>
             <li><strong>Resource reuse:</strong> reuse existing ALT resources for rapid re-runs</li>
@@ -581,6 +584,46 @@
             <li>One-click install for missing tools</li>
           </ul>
           <a href="#readiness" class="feature-card-link">Try the interactive checker &darr;</a>
+        </div>
+        <div class="feature-card feature-card--highlight">
+          <div class="feature-badge">New</div>
+          <div class="feature-icon">📦</div>
+          <h3>HAR File Import</h3>
+          <p>Convert browser HAR (HTTP Archive) recordings into performance test scripts. Capture real browser sessions from DevTools Network tab and turn them into JMeter or k6 tests &mdash; no manual scripting required.</p>
+          <ul class="feature-list">
+            <li><strong>DevTools capture:</strong> record any browser session and export as .har file</li>
+            <li><strong>Auto-conversion:</strong> parse HAR entries into JMeter samplers or k6 requests</li>
+            <li><strong>Header &amp; cookie extraction:</strong> preserve auth tokens, session cookies, and custom headers</li>
+            <li><strong>Request filtering:</strong> exclude static assets, analytics, and third-party calls</li>
+            <li><strong>Timing preservation:</strong> think times derived from real user pauses</li>
+            <li><strong>Works with any browser:</strong> Chrome, Edge, Firefox DevTools HAR export</li>
+          </ul>
+        </div>
+        <div class="feature-card feature-card--highlight">
+          <div class="feature-badge">New</div>
+          <div class="feature-icon">🔄</div>
+          <h3>Session Manager</h3>
+          <p>Lifecycle management for performance test sessions. Tracks state across the entire test workflow &mdash; from spec import through script generation, execution, and result analysis &mdash; so you can resume, replay, and audit every step.</p>
+          <ul class="feature-list">
+            <li><strong>Session lifecycle:</strong> create, resume, complete, and archive test sessions</li>
+            <li><strong>State tracking:</strong> persists spec, NFRs, scripts, run config, and results per session</li>
+            <li><strong>Multi-session support:</strong> work on multiple test plans in parallel</li>
+            <li><strong>Audit trail:</strong> every tool call and decision logged to the session</li>
+            <li><strong>Resume from any step:</strong> pick up where you left off after interruptions</li>
+          </ul>
+        </div>
+        <div class="feature-card feature-card--highlight">
+          <div class="feature-badge">New</div>
+          <div class="feature-icon">📈</div>
+          <h3>Run History &amp; Trend Analysis</h3>
+          <p>Track past test runs and compare performance trends over time. See how response times, throughput, and error rates change across builds &mdash; catch regressions before they reach production.</p>
+          <ul class="feature-list">
+            <li><strong>Run history:</strong> browse all past test executions with metadata and results</li>
+            <li><strong>Trend comparison:</strong> overlay response times (p50/p95/p99) across runs</li>
+            <li><strong>Regression detection:</strong> flag runs where key metrics degraded vs previous baseline</li>
+            <li><strong>Per-endpoint trends:</strong> track individual API performance over time</li>
+            <li><strong>Build correlation:</strong> link test runs to git commits and release versions</li>
+          </ul>
         </div>
 
       </div>
@@ -681,6 +724,24 @@
             <div class="upcoming-icon">📊</div>
             <h3>App Insights E2E Tracing</h3>
             <p>Server-side metrics via KQL &mdash; per-endpoint latency, dependency calls, exceptions, and CPU/memory pressure. Client vs server comparison for full end-to-end correlation.</p>
+          </div>
+          <div class="upcoming-card">
+            <div class="upcoming-badge badge--shipped">✅ Shipped</div>
+            <div class="upcoming-icon">📦</div>
+            <h3>HAR File Import</h3>
+            <p>Convert browser HAR (HTTP Archive) recordings from DevTools into JMeter or k6 test scripts. Capture real user sessions and replay them as performance tests &mdash; no manual scripting needed.</p>
+          </div>
+          <div class="upcoming-card">
+            <div class="upcoming-badge badge--shipped">✅ Shipped</div>
+            <div class="upcoming-icon">🔄</div>
+            <h3>Session Manager</h3>
+            <p>Lifecycle management for test sessions &mdash; track state across spec import, script generation, execution, and results. Resume from any step, work on multiple sessions in parallel.</p>
+          </div>
+          <div class="upcoming-card">
+            <div class="upcoming-badge badge--shipped">✅ Shipped</div>
+            <div class="upcoming-icon">📈</div>
+            <h3>Run History &amp; Trends</h3>
+            <p>Track past test runs and compare performance trends over time. Overlay response times across runs, detect regressions, and correlate results with git commits.</p>
           </div>
         </div>
       </div>
@@ -1033,7 +1094,7 @@ code --install-extension performance-agent-2.0.0-linux-x64.vsix</code></pre>
             <div class="tool-header">
               <code>generatePerfScript</code>
             </div>
-            <span>Generate JMeter (.jmx) or k6 (.js) performance test scripts from Swagger/OpenAPI specs. Supports 6 test types (baseline, load, stress, spike, soak/endurance, capacity) with auto-derived load profiles, business scenario thread groups, individual API testing, auto-correlation (POST&rarr;GET chains), duration assertions from NFR SLAs, App Insights BackendListener integration, and bearer token injection. Template-based, no API keys required.</span>
+            <span>Generate JMeter (.jmx) or k6 (.js) performance test scripts from Swagger/OpenAPI specs. Supports 6 test types (baseline, load, stress, spike, soak/endurance, capacity) with auto-derived load profiles, business scenario thread groups, individual API testing, Swagger-aware correlation inference across business scenarios (POST&rarr;GET chains using OpenAPI spec knowledge), duration assertions from NFR SLAs, App Insights BackendListener integration, and bearer token injection. Template-based, no API keys required.</span>
           </div>
           <div class="tool-item">
             <div class="tool-header">
@@ -1237,7 +1298,7 @@ code --install-extension performance-agent-2.0.0-linux-x64.vsix</code></pre>
               <code>createALTTest</code>
               <span class="tool-badge tool-badge--new">New</span>
             </div>
-            <span>Create an Azure Load Testing resource and test definition. Provisions the ALT resource, uploads JMX scripts and CSV data files, and configures test parameters. Supports reusing existing ALT resources for rapid iteration.</span>
+            <span>Create an Azure Load Testing resource and test definition. Provisions the ALT resource, uploads JMX scripts and CSV data files, configures test parameters, and automatically injects bearer tokens for authenticated APIs. Supports reusing existing ALT resources for rapid iteration.</span>
           </div>
           <div class="tool-item">
             <div class="tool-header">
@@ -1261,6 +1322,36 @@ code --install-extension performance-agent-2.0.0-linux-x64.vsix</code></pre>
               <code>checkJMXChanges</code>
             </div>
             <span>Structural fingerprint comparison between agent-generated JMX baseline and the version used for testing. Detects added, removed, or modified elements (ThreadGroups, Samplers, Assertions, Timers, Extractors) while ignoring cosmetic changes like whitespace or comments.</span>
+          </div>
+        </div>
+        <div class="tool-category">
+          <h3>📦 HAR Import</h3>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>convertHARToScript</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Convert browser HAR (HTTP Archive) recordings into JMeter or k6 performance test scripts. Parses HAR entries captured from browser DevTools, extracts requests with headers, cookies, and bodies, filters out static assets, and generates ready-to-run test scripts with realistic think times.</span>
+          </div>
+        </div>
+        <div class="tool-category">
+          <h3>🔄 Session Management</h3>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>manageTestSession</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Lifecycle management for performance test sessions. Create, resume, complete, and archive sessions that track state across the entire workflow &mdash; spec, NFRs, scripts, run config, and results. Enables multi-session parallel work and resume-from-any-step after interruptions.</span>
+          </div>
+        </div>
+        <div class="tool-category">
+          <h3>📈 Run History</h3>
+          <div class="tool-item">
+            <div class="tool-header">
+              <code>getRunHistory</code>
+              <span class="tool-badge tool-badge--new">New</span>
+            </div>
+            <span>Browse past test executions and compare performance trends over time. Shows response time trends (p50/p95/p99), throughput, and error rates across runs. Flags regressions where key metrics degraded vs previous baseline. Links runs to git commits for build correlation.</span>
           </div>
         </div>
       </div>
