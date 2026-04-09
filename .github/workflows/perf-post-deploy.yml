@@ -1,0 +1,76 @@
+# ============================================================================
+# Performance Agent — Post-Deploy Check
+# ============================================================================
+#
+# Runs after a push to main (post-merge). Performs:
+#   1. Commit analysis on the merged code
+#   2. Code complexity on changed files
+#
+# This serves as a post-merge quality gate — results go to the job summary
+# and are uploaded as artifacts for trend tracking.
+#
+# Usage: Drop perf-policy.yaml in your repo root to customize.
+# ============================================================================
+
+name: "Perf Agent: Post-Deploy"
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: perf-deploy-${{ github.sha }}
+  cancel-in-progress: false  # Don't cancel post-deploy checks
+
+jobs:
+  post-deploy-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      # ── Commit Analysis ──────────────────────────────────────────────────
+      - name: "🔍 Commit Analysis"
+        id: commit
+        uses: ./.github/actions/perf-agent
+        with:
+          pipeline: commit-analysis
+
+      # ── Code Complexity ──────────────────────────────────────────────────
+      - name: "📊 Code Complexity (changed files)"
+        id: complexity
+        uses: ./.github/actions/perf-agent
+        with:
+          pipeline: code-complexity
+
+      # ── Summary ──────────────────────────────────────────────────────────
+      - name: "📝 Write deploy summary"
+        if: always()
+        run: |
+          echo "## 🚀 Post-Deploy Performance Check" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** \`${GITHUB_SHA::8}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Result |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit Analysis | ${{ steps.commit.outputs.summary }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Code Complexity | ${{ steps.complexity.outputs.summary }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+      # ── Upload Reports ───────────────────────────────────────────────────
+      - name: "📁 Upload reports"
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: perf-deploy-report-${{ github.sha }}
+          path: .perf-output/ci-reports/
+          retention-days: 90
+          if-no-files-found: ignore

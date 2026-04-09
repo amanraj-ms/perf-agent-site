@@ -1,0 +1,59 @@
+# ============================================================================
+# Performance Agent — Nightly Full Scan
+# ============================================================================
+#
+# Runs on a schedule (default: 2 AM UTC weekdays). Performs:
+#   1. Full code complexity scan of the entire codebase
+#
+# Can also be triggered manually via workflow_dispatch.
+#
+# Usage: Configure schedule via `triggers.on_schedule.cron` in perf-policy.yaml
+# ============================================================================
+
+name: "Perf Agent: Nightly Scan"
+
+on:
+  schedule:
+    - cron: "0 2 * * 1-5"  # 2 AM UTC, Mon-Fri — override in perf-policy.yaml
+  workflow_dispatch:
+    inputs:
+      pipeline:
+        description: 'Pipeline to run'
+        required: true
+        default: 'code-complexity-full'
+        type: choice
+        options:
+          - code-complexity-full
+          - commit-analysis
+
+permissions:
+  contents: read
+
+jobs:
+  nightly-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      # ── Full Codebase Complexity Scan ────────────────────────────────────
+      - name: "📊 Full Code Complexity Scan"
+        id: scan
+        uses: ./.github/actions/perf-agent
+        with:
+          pipeline: ${{ github.event.inputs.pipeline || 'code-complexity-full' }}
+          fail-on-critical: 'false'  # Don't fail nightly — just report
+
+      # ── Upload Reports ───────────────────────────────────────────────────
+      - name: "📁 Upload reports"
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: perf-nightly-report-${{ github.run_number }}
+          path: .perf-output/ci-reports/
+          retention-days: 90
+          if-no-files-found: ignore
